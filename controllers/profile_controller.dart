@@ -28,6 +28,7 @@ class ProfileController extends GetxController{
     VxToast.show(context, msg: e.toString());
    }
 }
+
  //need para sa connection sa firebase storage
 /*uploadProfileImage()async {
   var filename = basename(profileImgPath.value);

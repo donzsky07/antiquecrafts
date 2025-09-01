@@ -135,7 +135,7 @@ class HomeScreen extends StatelessWidget{
           Container(
             padding: const EdgeInsets.all(12),
             width: double.infinity,
-            decoration: const BoxDecoration(color: redColor),
+            decoration: const BoxDecoration(color: softBlueGreen),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

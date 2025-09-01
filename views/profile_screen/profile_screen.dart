@@ -19,7 +19,7 @@ class ProfileScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context){
 
-     var controller = Get.put(ProfileController());
+    var controller = Get.put(ProfileController());
 
     return  bgWidget(
       child: Scaffold(
@@ -38,6 +38,7 @@ class ProfileScreen extends StatelessWidget{
             else {
 
               var data = snapshot.data!.docs[0];
+
               return SafeArea(
           child: Column(
             children: [
@@ -46,7 +47,7 @@ class ProfileScreen extends StatelessWidget{
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: const Align(alignment: Alignment.topRight, child: Icon(Icons.edit, color: whiteColor)).onTap((){
-                  controller.nameController.text = data['name'];
+                 controller.nameController.text = data['name'];
                   controller.passController.text = data['password']; 
                   
                   Get.to(() => EditProfileScreen(data: data));

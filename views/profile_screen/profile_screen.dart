@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget{
             if(!snapshot.hasData) {
               return const Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(redColor),
+                  valueColor: AlwaysStoppedAnimation(softBlueGreen),
               ) 
             );
             }
@@ -58,11 +58,10 @@ class ProfileScreen extends StatelessWidget{
                 padding: const EdgeInsets.symmetric(horizontal: 8.0 ),
                 child: Row(
                 children: [
-                  data['imageUrl'] == '' ?
-                  Image.asset(imgProfile, width: 90, fit: BoxFit.cover ).box.roundedFull.clip(Clip.antiAlias).make()
-                  :
-                  Image.network(data['imageUrl'], width: 90, fit: BoxFit.cover ).box.roundedFull.clip(Clip.antiAlias).make(),
-
+                  //data['imageUrl'] == '' ? 
+                  Image.asset(imgProfile, width: 90, fit: BoxFit.cover ).box.roundedFull.clip(Clip.antiAlias).make(),
+                 /* :
+                  Image.network(data['imageUrl'], width: 90, fit: BoxFit.cover ).box.roundedFull.clip(Clip.antiAlias).make(),*/
 
                   10.widthBox,
                   Expanded(

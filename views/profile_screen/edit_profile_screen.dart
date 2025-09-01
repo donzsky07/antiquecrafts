@@ -26,12 +26,12 @@ class EditProfileScreen extends StatelessWidget{
             mainAxisSize: MainAxisSize.min,
             children: [
 
-                data['imageUrl'] == '' && controller.profileImgPath.isEmpty 
-                ? Image.asset(imgProfile, width: 100, fit: BoxFit.cover ).box.roundedFull.clip(Clip.antiAlias).make() 
-                : data['imageUrl'] != '' && controller.profileImgPath.isEmpty
-                ? Image.network(data['imageUrl']) // for image network 
+               /* data['imageUrl'] == '' && */controller.profileImgPath.isEmpty 
+                ? Image.asset(imgProfile, width: 100, fit: BoxFit.cover ).box.roundedFull.clip(Clip.antiAlias).make()
+               /* : data['imageUrl'] != '' && controller.profileImgPath.isEmpty
+                ? Image.network(data['imageUrl']) // for image network */
       
-                : Image.file(
+                :  Image.file(
                     File(controller.profileImgPath.value),
                      width: 100,
                     fit: BoxFit.cover,
@@ -60,21 +60,21 @@ class EditProfileScreen extends StatelessWidget{
                     ),
                 20.heightBox,
                 controller.isloading.value ? CircularProgressIndicator(
-                  valueColor :AlwaysStoppedAnimation(redColor),
+                  valueColor :AlwaysStoppedAnimation(softBlueGreen),
 
                 ): SizedBox(
                   width: context.screenWidth - 60,
                   child: ourButton(
                     color: redColor, 
                   onPress: () async {
-                    controller.isloading(true);
+                    /*controller.isloading(true);
 
                     await controller.uploadProfileImage();
                     await controller.updateProfile(
                        controller.profileImageLink,
                        controller.nameController.text,
                        controller.passController.text);
-                    VxToast.show(context, msg: "Updated");
+                    VxToast.show(context, msg: "Updated"); */
                   }, 
                   textColor: whiteColor, title: "Save" ),
                 ),

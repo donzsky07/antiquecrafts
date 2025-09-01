@@ -1,18 +1,18 @@
-import 'dart:io';
+//import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projects/consts/consts.dart';
-import 'package:path/path.dart';
+//import 'package:path/path.dart';
 
 class ProfileController extends GetxController{
   var profileImgPath = ''.obs;
 
-  var profileImageLink = '';
-
+// var profileImageLink = '';  
+ 
   var isloading = false.obs;
 
     //textfield
@@ -28,8 +28,8 @@ class ProfileController extends GetxController{
     VxToast.show(context, msg: e.toString());
    }
 }
-
-uploadProfileImage()async {
+ //need para sa connection sa firebase storage
+/*uploadProfileImage()async {
   var filename = basename(profileImgPath.value);
   var destination = 'images/${currentUser!.uid}/ $filename';
   Reference ref = FirebaseStorage.instance.ref().child(destination);
@@ -46,7 +46,7 @@ updateProfile(name, password, imgUrl) async {
   }, SetOptions(merge: true));
   isloading(false);
 
-}
+}*/
 
 
 

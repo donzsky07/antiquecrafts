@@ -63,3 +63,7 @@ const video = "Video",
 const wishlist = "My Wishlist",
       orders = "My Orders",
       messages ="Messages";
+
+//edit profile sstrings
+const oldpass = "Old Password ", newpass = "newpassword ";
+      

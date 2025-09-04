@@ -1,4 +1,5 @@
 import 'package:projects/consts/consts.dart';
+import 'package:projects/controllers/product_controller.dart';
 import 'package:projects/widget/bg_widget.dart';
 import 'package:projects/consts/lists.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,9 @@ class CategoryScreen extends StatelessWidget{
   
   @override
   Widget build(BuildContext context){
+
+    var controller = Get.put(ProductController());
+
     return  bgWidget(
       child: Scaffold(
         appBar: AppBar(
@@ -39,6 +43,7 @@ class CategoryScreen extends StatelessWidget{
               
               ).box.white.rounded.clip(Clip.antiAlias).outerShadowSm.make()
               .onTap((){
+                controller.getSubCategories(categoriesList[index]);
                 Get.to(() => CategoryDetails(title: categoriesList[index]));
 
               }) ;

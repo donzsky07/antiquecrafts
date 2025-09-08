@@ -52,6 +52,7 @@ const icWholeSale = "assets/icons/wholesale.png";
 //images
 const imgProfile3 ="assets/images/donz.jpg";
 const imgBackground = "assets/icons/bg.png";
+const imgBackground1 = "assets/icons/bg1.png ";
 const imgCod = "assets/images/cod.png";
 const imgProfile = "assets/images/profile.png";
 const imgFc1 = "assets/images/fc1.jpeg";

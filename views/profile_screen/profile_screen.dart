@@ -120,7 +120,7 @@ class ProfileScreen extends StatelessWidget{
                   title: profileButtonsList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
                 );
               },
-             ).box.white.rounded.margin(EdgeInsets.all(12)).padding(const EdgeInsets.symmetric(horizontal: 16)).shadowSm.make().box.color(redColor).make(),
+             ).box.white.rounded.margin(EdgeInsets.all(12)).padding(const EdgeInsets.symmetric(horizontal: 16)).shadowSm.make().box.color(softBlueGreen).make(),
             ],
           ));
               

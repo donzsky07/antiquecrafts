@@ -19,7 +19,7 @@ class CategoryDetails extends StatelessWidget{
           title: title!.text.fontFamily(bold).white.make() 
         ),
         body: Container(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment:CrossAxisAlignment.start ,
             children: [
@@ -30,7 +30,7 @@ class CategoryDetails extends StatelessWidget{
              child: Row(
                 children: List.generate(
                   controller.subcat.length,
-                  (index) =>"{controller.subcat[index]}"
+                  (index) =>"${controller.subcat[index]}"
                   .text
                   .size(12)
                   .fontFamily(semibold)

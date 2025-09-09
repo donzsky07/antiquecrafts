@@ -2,7 +2,7 @@ import 'package:projects/consts/consts.dart';
 
 
 Widget applogoWidget(){
-  return Image.asset(icAppLogo)
+  return Image.asset(icAppLogo1)
   .box
   .white
   .size(77, 77)

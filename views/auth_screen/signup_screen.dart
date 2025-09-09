@@ -115,7 +115,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       5.heightBox,
                       controller.isloading.value
                           ? const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(redColor),
+                              valueColor: AlwaysStoppedAnimation( softBlueGreen),
                             )
                           : ourButton(
                               color: isCheck ? redColor : lightGrey,

@@ -57,10 +57,10 @@ class LoginScreen extends StatelessWidget {
                   5.heightBox,
                   controller.isloading.value 
                   ? const CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(redColor),
+                    valueColor: AlwaysStoppedAnimation( softBlueGreen),
                   ) 
                   : ourButton(
-                    color: redColor,
+                    color:  softBlueGreen,
                     title: login,
                     textColor: whiteColor,
                     onPress: () async {

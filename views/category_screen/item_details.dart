@@ -198,7 +198,7 @@ class ItemDetails extends StatelessWidget {
         SizedBox(
             width: double.infinity,
             height: 60,
-            child: ourButton(color: redColor, onPress: () {}, textColor: whiteColor, title: "Add to cart" ),
+            child: ourButton(color: softBlueGreen, onPress: () {}, textColor: whiteColor, title: "Add to cart" ),
           )
         ]
       ),

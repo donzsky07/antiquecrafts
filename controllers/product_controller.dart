@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:projects/models/category_model.dart';
 
 class ProductController extends GetxController {
+  var quantity = 0.obs;
+  var colorIndex = 0.obs; 
+  var totalPrice = 0.obs;
 
   var subcat = [];
 
@@ -16,5 +19,30 @@ class ProductController extends GetxController {
       subcat.add(e);
     }
   }
+
+  changeColorIndex(index) {
+    colorIndex = index;
+
+  }
+
+  increaseQuantity(totalQuantity) {
+    if (quantity.value < totalQuantity) {
+       quantity.value++;
+    }
+  }
+  decreaseQuantity() {
+    if(quantity.value > 0){
+       quantity.value--;
+    }
+  }
+
+  calculateTotalPrice(price) {
+    totalPrice.value = price * quantity.value;
+  }
+
+
+
+
+
 
 }

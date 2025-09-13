@@ -1,15 +1,19 @@
+import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/lists.dart';
+import 'package:projects/controllers/product_controller.dart';
 import 'package:projects/widget/our_button.dart';
 
 
 
 class ItemDetails extends StatelessWidget {
   final String? title;
-  const ItemDetails({super.key, required this.title });
+  final dynamic data;
+  const ItemDetails({super.key, required this.title, this.data});
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.find<ProductController>();
     return Scaffold(
       backgroundColor: lightGrey,
       appBar: AppBar(
@@ -34,11 +38,12 @@ class ItemDetails extends StatelessWidget {
                     VxSwiper.builder(
                       autoPlay: true,
                       height: 350,
-                      itemCount: 3, 
+                      itemCount: data['p_imgs'].length, 
                       aspectRatio: 16 / 9,
+                      viewportFraction: 1.0,
                       itemBuilder: (context, index) {
-                        return Image.asset(
-                        imgFc5,
+                        return Image.network(
+                        data['p_imgs'][index],
                         width: double.infinity,
                         fit: BoxFit.cover,
                         );
@@ -50,15 +55,19 @@ class ItemDetails extends StatelessWidget {
                       
                       //ratings
                       10.heightBox,
-                      VxRating(onRatingUpdate: (value){}, 
+                      VxRating(
+                      isSelectable: false,
+                      value: double.parse(data['p_rating']),
+                      onRatingUpdate: (value){}, 
                       normalColor: textfieldGrey, 
                       selectionColor: golden, 
                       count: 5,
+                      maxRating: 5,
                       size: 25, 
-                      stepInt: true ),
+                     ),
                      
                      10.heightBox,
-                     "₱1,000".text.color(redColor).fontFamily(bold).size(18).make(),
+                     "${data['p_price']}".numCurrency.text.color(redColor).fontFamily(bold).size(18).make(),
 
                      10.heightBox,
 
@@ -71,7 +80,7 @@ class ItemDetails extends StatelessWidget {
                           children: [
                             "Seller".text.white.fontFamily(semibold).make(),
                             5.heightBox,
-                            "In House Brands".text.fontFamily(semibold).color(darkFontGrey).size(16).make(),
+                            "${data['p_seller']}".text.fontFamily(semibold).color(darkFontGrey).size(16).make(),
                           ],
                         )),
                     
@@ -86,7 +95,8 @@ class ItemDetails extends StatelessWidget {
 
                       //color section
                       20.heightBox,
-                      Column(
+                      Obx(
+                        () => Column(
                        children: [
                         Row(
                           children: [
@@ -96,12 +106,26 @@ class ItemDetails extends StatelessWidget {
                             ),
                             Row(
                               children: List.generate(
-                                3, 
-                                (index) => VxBox()
-                                .size(40, 40)
-                                .roundedFull
-                                .color(Vx.randomPrimaryColor)
-                                .margin(EdgeInsets.symmetric(horizontal: 4)).make(),
+                                data['p_colors'].length, 
+                                (index) => Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    VxBox()
+                                    .size(40, 40)
+                                    .roundedFull
+                                    .color(Color(data['p_colors'][index]).withValues(alpha: 255))
+                                    .margin(EdgeInsets.symmetric(horizontal: 4))
+                                    .make()
+                                    .onTap(() {
+                                      controller.changeColorIndex(index);
+                                    }),
+
+                                 Visibility(
+                                  visible: index == controller.colorIndex.value,
+                                   child: const Icon(Icons.done, color: Colors.white),
+                                    ),
+                                  ],
+                                ),    
                             ),
                           ),
                           ],
@@ -114,16 +138,27 @@ class ItemDetails extends StatelessWidget {
                               width: 100,
                               child: "Quantity: ".text.color(textfieldGrey).make(),
                             ),
-                            Row(
+                            Obx(
+                              () => Row(
                              children: [
-                              IconButton(onPressed: (){}, icon: const Icon(Icons.remove)),
-                              "0".text.size(16).color(darkFontGrey).fontFamily(bold).make(),
-                              IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+                              IconButton(
+                                onPressed: (){
+                                 controller.decreaseQuantity();
+                                     controller.calculateTotalPrice(int.parse(data['p_price']));
+                              }, 
+                              icon: const Icon(Icons.remove)),
+                              controller.quantity.value.text.size(16).color(darkFontGrey).fontFamily(bold).make(),
+                              IconButton(
+                                onPressed: () {
+                                  controller.increaseQuantity(int.parse(data['p_quantity']));
+                                  controller.calculateTotalPrice(int.parse(data['p_price']));
+                                }, 
+                                icon: const Icon(Icons.add)),
                               10.widthBox,
-                              "(0 available)".text.color(textfieldGrey).make(),
+                              "(${data['p_quantity']} available)".text.color(textfieldGrey).make(),
                              ],
                           ),
-                      
+                         ),
                           ],
                         ).box.padding(const EdgeInsets.all(8)).make(),
 
@@ -134,12 +169,12 @@ class ItemDetails extends StatelessWidget {
                               width: 100,
                               child: "Total: ".text.color(textfieldGrey).make(),
                             ),
-                            "₱0.00".text.color(redColor).size(16).fontFamily(bold).make(),
+                            "${controller.totalPrice.value}".numCurrency.text.color(redColor).size(16).fontFamily(bold).make(),
                       
                           ],
                         ).box.padding(const EdgeInsets.all(8)).make(),
-                       ],
-                        
+                       ],  
+                        ),
                       ).box.white.shadowSm.make(),
 
                       //description section
@@ -147,7 +182,7 @@ class ItemDetails extends StatelessWidget {
 
                       "Description".text.color(darkFontGrey).fontFamily(semibold).make(),
                       10.heightBox,
-                      "This is a dummy item and dummy description here..".text.color(darkFontGrey).make(),
+                      "${data['p_desc']}".text.color(darkFontGrey).make(),
 
                       //button section
                       10.heightBox,

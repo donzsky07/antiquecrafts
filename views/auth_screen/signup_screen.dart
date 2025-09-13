@@ -118,7 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               valueColor: AlwaysStoppedAnimation( softBlueGreen),
                             )
                           : ourButton(
-                              color: isCheck ? redColor : lightGrey,
+                              color: isCheck ? softBlueGreen: lightGrey,
                               title: signup,
                               textColor: whiteColor,
                               onPress: () async {

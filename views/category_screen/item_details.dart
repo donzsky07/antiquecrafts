@@ -57,7 +57,7 @@ class ItemDetails extends StatelessWidget {
                       10.heightBox,
                       VxRating(
                       isSelectable: false,
-                      value: double.parse(data['p_rating']),
+                      value: double.parse(data['p_ratings']),
                       onRatingUpdate: (value){}, 
                       normalColor: textfieldGrey, 
                       selectionColor: golden, 
@@ -114,13 +114,13 @@ class ItemDetails extends StatelessWidget {
                                     .size(40, 40)
                                     .roundedFull
                                     .color(Color(data['p_colors'][index]).withValues(alpha: 255))
-                                    .margin(EdgeInsets.symmetric(horizontal: 4))
+                                    .margin(const EdgeInsets.symmetric(horizontal: 4))
                                     .make()
                                     .onTap(() {
                                       controller.changeColorIndex(index);
                                     }),
 
-                                 Visibility(
+                              Visibility(
                                   visible: index == controller.colorIndex.value,
                                    child: const Icon(Icons.done, color: Colors.white),
                                     ),

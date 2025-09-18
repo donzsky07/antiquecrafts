@@ -5,6 +5,7 @@ import 'package:projects/views/home_screen/home_screen.dart';
 import 'package:projects/views/category_screen/category_screen.dart';
 import 'package:projects/views/cart_screen/cart_screen.dart';
 import 'package:projects/views/profile_screen/profile_screen.dart';
+import 'package:projects/widget/exit_dialog.dart';
 
 
 
@@ -30,7 +31,21 @@ class Home extends StatelessWidget{
      const ProfileScreen(),
     ];
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult:(didPop, result) async {
+        if (!didPop) {
+          final shouldExit = await  showDialog<bool>(
+            context: context, 
+            builder: (context) => exitDialog(context),
+            );
+          if (shouldExit == true) {
+            Navigator.of(context).pop();
+          }
+        }
+        
+      },
+    child: Scaffold(
       body: Column(
         children: [
           Obx (() => Expanded (child: navBody.elementAt(controller.currentNavIndex.value))),
@@ -49,6 +64,6 @@ class Home extends StatelessWidget{
           },
         )
       ),
-    );
+    ));
   }
 }

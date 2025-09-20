@@ -16,9 +16,22 @@ class ItemDetails extends StatelessWidget {
 
     var controller = Get.find<ProductController>();
 
-    return Scaffold(
+    return PopScope(
+      canPop: true, 
+      onPopInvokedWithResult: (didPop, result) {
+        if(didPop) return;
+        controller.resetValues();
+       
+      },
+      child: Scaffold(
       backgroundColor: lightGrey,
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){
+            controller.resetValues();
+            Get.back();
+          }, 
+          icon: const Icon(Icons.arrow_back) ),
         title: title!.text.color(darkFontGrey).fontFamily(bold).make(),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
@@ -237,10 +250,24 @@ class ItemDetails extends StatelessWidget {
         SizedBox(
             width: double.infinity,
             height: 60,
-            child: ourButton(color: softBlueGreen, onPress: () {}, textColor: whiteColor, title: "Add to cart" ),
+            child: ourButton(
+              color: softBlueGreen, 
+              onPress: () {
+                controller.addToCart(
+                  color: data['p_colors'][controller.colorIndex.value],
+                  context: context,
+                  img: data['p_imgs'][0],
+                  qty: controller.quantity.value,
+                  sellername: data['p_seller'],
+                  title: data['p_name'],
+                  tprice: controller.totalPrice.value);
+                  VxToast.show(context, msg: "Added to Cart");
+              }, 
+              textColor: whiteColor, 
+              title: "Add to cart" ),
           )
         ]
       ),
-    );
+    ));
   }
 }

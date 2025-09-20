@@ -20,8 +20,8 @@ class ProductController extends GetxController {
     }
   }
 
-  changeColorIndex(index) {
-    colorIndex = index;
+  changeColorIndex(int index) {
+    colorIndex.value = index;
 
   }
 

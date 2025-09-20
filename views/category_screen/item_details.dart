@@ -13,7 +13,9 @@ class ItemDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     var controller = Get.find<ProductController>();
+
     return Scaffold(
       backgroundColor: lightGrey,
       appBar: AppBar(
@@ -122,7 +124,7 @@ class ItemDetails extends StatelessWidget {
 
                               Visibility(
                                   visible: index == controller.colorIndex.value,
-                                   child: const Icon(Icons.done, color: Colors.white),
+                                  child: const Icon(Icons.done, color: Colors.white),
                                     ),
                                   ],
                                 ),    
@@ -173,8 +175,10 @@ class ItemDetails extends StatelessWidget {
                       
                           ],
                         ).box.padding(const EdgeInsets.all(8)).make(),
-                       ],  
-                        ),
+                       ], 
+
+                      ),
+                  
                       ).box.white.shadowSm.make(),
 
                       //description section

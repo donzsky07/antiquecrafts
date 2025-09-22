@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/controllers/cart_controller.dart';
 import 'package:projects/services/firestore_services.dart';
+import 'package:projects/views/cart_screen/shipping_screen.dart';
 import 'package:projects/widget/loading_indicator.dart';
 import 'package:projects/widget/our_button.dart';
 
@@ -14,6 +15,17 @@ class CartScreen extends StatelessWidget{
     var controller = Get.put(CartController());
     return  Scaffold(
       backgroundColor: whiteColor,
+      bottomNavigationBar: SizedBox(
+            height: 60,
+            child:   ourButton(
+              color: softBlueGreen,
+              onPress: (){
+                Get.to (() => const ShippingDetails());
+              },
+              textColor: whiteColor,
+              title: "Proceed to Shipping", 
+             ),
+          ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: "Shopping Cart".text.color(darkFontGrey).fontFamily(semibold).make(),
@@ -33,6 +45,7 @@ class CartScreen extends StatelessWidget{
           }else {
             var data = snapshot.data!.docs;
             controller.calculate(data);
+            controller.productSnapshot = data;
 
             return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -74,6 +87,7 @@ class CartScreen extends StatelessWidget{
                 .fontFamily(semibold)
                 .color(darkFontGrey)
                 .make(),
+                
               Obx(
                 () => "${controller.totalP.value}" 
                   .numCurrency
@@ -93,15 +107,7 @@ class CartScreen extends StatelessWidget{
             .make(),
 
           10.heightBox,
-          SizedBox(
-            width: context.screenWidth - 60,
-            child:   ourButton(
-              color: softBlueGreen,
-              onPress: (){},
-              textColor: whiteColor,
-              title: "Proceed to Shipping", 
-             ),
-          ),
+        
 
          ],
         ),

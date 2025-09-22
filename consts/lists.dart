@@ -23,3 +23,6 @@ const itemDetailsButtonList = [video, reviews, sellerpolicy, returnpolicy, suppo
 
 const profileButtonsList =[orders, wishlist, messages];
 const profileButtonsIcon =[icOrder, icOrder, icMessages];
+
+const paymentMethodImg = [imgpaypal,imgCod];
+const paymentMethod = [paypal, cod];

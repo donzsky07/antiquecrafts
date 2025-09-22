@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/product_controller.dart';
+import 'package:projects/views/chat_screen/chat_screen.dart';
 import 'package:projects/widget/our_button.dart';
 
 
@@ -35,7 +36,19 @@ class ItemDetails extends StatelessWidget {
         title: title!.text.color(darkFontGrey).fontFamily(bold).make(),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
+          Obx (
+          () => IconButton(onPressed: () {
+            if(controller.isFav.value){
+              controller.removeFromWishlist(data.id, context);
+            }else{
+              controller.addToWishlist(data.id, context);
+            }
+          }, 
+          icon: Icon(
+            Icons.favorite_outlined,
+            color: controller.isFav.value ? redColor : darkFontGrey,
+            )),
+          ),
         ],
       ),
 
@@ -102,7 +115,13 @@ class ItemDetails extends StatelessWidget {
                         const CircleAvatar(
                           backgroundColor: Colors.white,
                           child: Icon(Icons.message_rounded, color: darkFontGrey),
-                          ),
+                          ).onTap (() {
+                            Get.to(
+                              () => const ChatScreen(),
+                              arguments: [data['p_seller'], data['vendor_id']],
+                            
+                            );
+                          })
 
                       ],
 

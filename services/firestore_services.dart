@@ -32,4 +32,14 @@ static deleteDocument(docId) {
 
 }
 
+//get all chat messages
+static getChatMessages(docId){
+  return firestore
+  .collection(chatsCollection)
+  .doc(docId)
+  .collection(messageCollection)
+  .orderBy('created_on', descending: false)
+  . snapshots();
+}
+
 }

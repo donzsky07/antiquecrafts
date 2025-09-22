@@ -78,6 +78,7 @@ const imgPi2 = "assets/images/pi2.jpg";
 const imgPi3 = "assets/images/pi3.jpg";
 const imgPi4 = "assets/images/pi4.jpg";
 const imgPi5 = "assets/images/pi5.jpg";
+const imgpaypal = "assets/images/paypal.png";
 //for sliderList
 const imgSlider1 = "assets/images/slider_1.png";
 const imgSlider2 = "assets/images/slider_2.png";

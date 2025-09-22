@@ -66,4 +66,7 @@ const wishlist = "My Wishlist",
 
 //edit profile sstrings
 const oldpass = "Old Password ", newpass = "newpassword ";
-      
+
+// payment method strings
+const paypal = "Paypal",
+      cod = "Cash on Delivery";

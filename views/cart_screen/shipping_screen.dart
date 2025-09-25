@@ -24,12 +24,13 @@ class ShippingDetails extends StatelessWidget {
         onPress: () {
           if(controller.addressController.text.length > 10) {
             Get.to(() => const PaymentMethods());
-          }else{
+          } else
+          {
             VxToast.show(context, msg: "Please fill the form ");
           }
         },
 
-        color: redColor,
+        color: softBlueGreen,
         textColor: whiteColor,
         title: "Continue",
       ),

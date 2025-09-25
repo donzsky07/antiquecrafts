@@ -2,6 +2,7 @@
 const appname = "antique_crafts";
 const appversion = "Version 1.0.0";
 const credits = "@santurdio devs";
+
 //login/signup string
 const email = "Email";
 const emailHint = "techcare@yahoo.com";
@@ -50,6 +51,18 @@ const searchanything = "Search anything.....",
     jewelery = "Jewelery",
     cellphone = "Cellphone & Tab",
     furnitures = "Furniture";
+  
+ /* //NEW category_screen string
+  const handwoven = "Handwoven & Textiles",
+        woodcrafts = "Woodcrafts & Furniture",
+        bamboo = "Bamboo & Rattan Products",
+        jewelry= "Jewelry & Accessories",
+        ceramics = "Ceramics & Pottery",
+        metalcraft ="Metal Crafts",
+        natural = "Natural & Eco-Friendly Products",
+        souvenir = "Souvenirs and Gift Items",
+        foods = "Foods & Delicacies";   */ 
+
 
 //item details string
 const video = "Video", 

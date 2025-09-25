@@ -1,6 +1,8 @@
 import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/cart_controller.dart';
+import 'package:projects/views/home_screen/home.dart';
+import 'package:projects/widget/loading_indicator.dart';
 import 'package:projects/widget/our_button.dart';
 import 'package:get/get.dart';
 
@@ -14,15 +16,27 @@ class PaymentMethods extends StatelessWidget {
 
     var controller = Get.find<CartController>();
 
-    return Scaffold (
+    return Obx ( 
+      () => Scaffold (
       backgroundColor: whiteColor,
       bottomNavigationBar: SizedBox(
         height: 60,
-        child: ourButton(
-          onPress: () {
-            controller.placeMyOrder();
+        child: controller.placingOrder.value 
+        ? Center (
+             child: loadingIndicator(),
+          
+        )
+      : ourButton(
+          onPress: () async {
+           await controller.placeMyOrder(
+              orderPaymentMethod: paymentMethod[controller.paymentIndex.value], 
+              totalAmount: controller.totalP.value );
+
+              await controller.clearCart();
+              VxToast.show(context, msg: "Order placed successfully");
+              Get.offAll(Home());
           },
-          color: redColor,
+          color: softBlueGreen,
           textColor: whiteColor,
           title: "Place my Order",
         ),
@@ -47,7 +61,7 @@ class PaymentMethods extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: controller.paymentIndex.value == index ?  redColor : Colors.transparent,
+                  color: controller.paymentIndex.value == index ?  softBlueGreen : Colors.transparent,
                   width: 4,
                 )
               ),
@@ -66,7 +80,7 @@ class PaymentMethods extends StatelessWidget {
                     scale: 1.3,
                     child: Checkbox(
                       activeColor: Colors.green,
-                    shape: RoundedRectangleBorder(
+                      shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
                     value: true, 
@@ -88,6 +102,8 @@ class PaymentMethods extends StatelessWidget {
           }),
         )
         ))
+    )
+
     );
 
   }

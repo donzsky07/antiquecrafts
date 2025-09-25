@@ -42,4 +42,8 @@ static getChatMessages(docId){
   . snapshots();
 }
 
+static getAllOrders() {
+  return firestore.collection(ordersCollection).where("order_by",isEqualTo: currentUser!.uid).snapshots();
+}
+
 }

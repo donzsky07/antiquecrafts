@@ -272,7 +272,8 @@ class ItemDetails extends StatelessWidget {
             child: ourButton(
               color: softBlueGreen, 
               onPress: () {
-                controller.addToCart(
+                if(controller.quantity.value > 0 ){
+                  controller.addToCart(
                   color: data['p_colors'][controller.colorIndex.value],
                   context: context,
                   vendorID: data['vendor_id'],
@@ -282,6 +283,9 @@ class ItemDetails extends StatelessWidget {
                   title: data['p_name'],
                   tprice: controller.totalPrice.value);
                   VxToast.show(context, msg: "Added to Cart");
+                }else{
+                  VxToast.show(context, msg: "Minimim 1 products is required");
+                }
               }, 
               textColor: whiteColor, 
               title: "Add to cart" ),

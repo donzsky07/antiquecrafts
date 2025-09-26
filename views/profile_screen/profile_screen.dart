@@ -6,8 +6,11 @@ import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/controllers/profile_controller.dart';
 import 'package:projects/services/firestore_services.dart';
 import 'package:projects/views/auth_screen/login_screen.dart';
+import 'package:projects/views/chat_screen/messaging_screen.dart';
+import 'package:projects/views/orders_screen/orders_screen.dart';
 import 'package:projects/views/profile_screen/components/details_card.dart';
 import 'package:projects/views/profile_screen/edit_profile_screen.dart';
+import 'package:projects/views/wishlist_screen/wishlist_screen.dart';
 import 'package:projects/widget/bg_widget.dart';
 
 
@@ -113,6 +116,17 @@ class ProfileScreen extends StatelessWidget{
               itemCount: profileButtonsList.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
+                  onTap: () {
+                    switch (index){
+                      case 0:
+                      Get.to(() => OrdersScreen());
+                      break;
+                      case 1: Get.to(()=>WishlistScreen());
+                      break;
+                      case 2: Get.to(()=>MessagesScreen());
+                      break;
+                    }
+                  },
                   leading: Image.asset(
                     profileButtonsIcon[index],
                   width: 22,
@@ -120,7 +134,16 @@ class ProfileScreen extends StatelessWidget{
                   title: profileButtonsList[index].text.fontFamily(semibold).color(darkFontGrey).make(),
                 );
               },
-             ).box.white.rounded.margin(EdgeInsets.all(12)).padding(const EdgeInsets.symmetric(horizontal: 16)).shadowSm.make().box.color(softBlueGreen).make(),
+             ).box
+             .white
+             .rounded
+             .margin(EdgeInsets.all(12))
+             .padding(const EdgeInsets.symmetric(horizontal: 16))
+             .shadowSm
+             .make()
+             .box
+             .color(softBlueGreen)
+             .make(),
             ],
           ));
               

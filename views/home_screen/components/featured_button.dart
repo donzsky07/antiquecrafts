@@ -1,4 +1,7 @@
 import 'package:projects/consts/consts.dart';
+import 'package:get/get.dart';
+import 'package:projects/views/category_screen/category_details.dart';
+
 
 Widget featuredButton({String? title, icon}) {
   return Row (
@@ -9,5 +12,15 @@ Widget featuredButton({String? title, icon}) {
     ],
    
   
-  ).box.width(200).margin(EdgeInsets.symmetric(horizontal: 4)).white.padding(const EdgeInsets.all(4)).roundedSM.outerShadowSm.make();
+  ).box
+  .width(200)
+  .margin(EdgeInsets.symmetric(horizontal: 4))
+  .white
+  .padding(const EdgeInsets.all(4))
+  .roundedSM
+  .outerShadowSm
+  .make().onTap((){
+    Get.to(() => CategoryDetails(title: title) );
+  });
+
 }

@@ -7,41 +7,46 @@ import 'package:get/get.dart';
 import  'package:projects/views/category_screen/item_details.dart';
 import 'package:projects/widget/loading_indicator.dart';
 
-class CategoryDetails extends StatelessWidget{
+
+class CategoryDetails extends StatefulWidget{
   final String? title;
   const CategoryDetails({super.key, required this.title} );
 
-   @override
-  Widget build(BuildContext context){
+  @override
+  State<CategoryDetails> createState() => _CategoryDetailsState();
+}
+
+  class _CategoryDetailsState  extends State<CategoryDetails> {
+
+    @override
+    void initState() {
+      super.initState();
+      switchCategory(widget.title);
+    }
+    switchCategory(title){
+      if(controller.subcat.contains(title)){
+         productMethod = FirestoreServices.getSubCategoryProducts(title);
+      }else {
+          productMethod = FirestoreServices.getProducts(title);
+      }
+    }
 
     var controller = Get.find<ProductController>();
+
+    dynamic productMethod;
+ 
+   @override
+  Widget build(BuildContext context){
 
     return bgWidget(
       child: Scaffold(
         appBar: AppBar(
-          title: title!.text.fontFamily(bold).white.make() 
+          title: widget.title!.text.fontFamily(bold).white.make() 
         ),
-        body: StreamBuilder(
-          stream: FirestoreServices.getProducts(title),
-          
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: loadingIndicator(),
-              );
-
-            }else if(snapshot.data!.docs.isEmpty){
-              return Center(
-                child: "No products found!".text.color(darkFontGrey).make(),
-              );
-            }else {
-              var data = snapshot.data!.docs;
-              return Container(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment:CrossAxisAlignment.start ,
-            children: [
-              SingleChildScrollView(
+        body: Column (
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 scrollDirection: Axis.horizontal, 
               
@@ -59,12 +64,33 @@ class CategoryDetails extends StatelessWidget{
                   .rounded
                   .size(120, 60)
                   .margin(EdgeInsets.symmetric(horizontal: 4))
-                  .make()),
+                  .make().onTap((){
+                    switchCategory("${controller.subcat[index]}");
+                    setState(() {});
+                  })
+                  
+                  )),
               ),
-              ),
-
-              //items container
               20.heightBox,
+              StreamBuilder(
+                stream: productMethod,
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                   if (!snapshot.hasData) {
+                      return Expanded(
+                        child: Center(
+                       child: loadingIndicator(),
+                    )
+                  );
+
+                       }else if(snapshot.data!.docs.isEmpty){
+                         return Expanded(
+                           child: "No products found!".text.color(darkFontGrey).size(18).makeCentered(),
+              );
+                     }else {
+                    
+                  var data = snapshot.data!.docs;
+
+              return  
               Expanded(
                 child: GridView.builder(
                   physics: const BouncingScrollPhysics(),
@@ -99,25 +125,20 @@ class CategoryDetails extends StatelessWidget{
                     Get.to(
                       () => ItemDetails(
                         title: "${data[index]['p_name']}", 
-                        data: data[index]));
+                        data: data[index]
+                        )
+                     );
                   }); 
-              }),
-
-              ),
-
-            ],
-          ),
-        );
-
-
+              }));
             }
 
           },
           
-          )
-
-
-        ));
+       
+         )
+        ],
+      ),
+    ));
 
   }
 

@@ -38,6 +38,7 @@ const searchanything = "Search anything.....",
   tShirts ="TShirts",
   girlsDress ="Girls Dresses",
   featuredProduct = "Featured Products ",
+  allproducts = "All Products",
 
   featuredCategories = "Featured Categories";
 

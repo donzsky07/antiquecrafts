@@ -12,6 +12,7 @@ import 'package:projects/views/profile_screen/components/details_card.dart';
 import 'package:projects/views/profile_screen/edit_profile_screen.dart';
 import 'package:projects/views/wishlist_screen/wishlist_screen.dart';
 import 'package:projects/widget/bg_widget.dart';
+import 'package:projects/widget/loading_indicator.dart';
 
 
 
@@ -23,6 +24,7 @@ class ProfileScreen extends StatelessWidget{
   Widget build(BuildContext context){
 
     var controller = Get.put(ProfileController());
+   
 
     return  bgWidget(
       child: Scaffold(
@@ -94,14 +96,38 @@ class ProfileScreen extends StatelessWidget{
               ),
               
               20.heightBox,
-              Row(
+              FutureBuilder(
+                future: FirestoreServices.getCount(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if(!snapshot.hasData){
+                    return Center(child: loadingIndicator());
+                  }else {
+                    var countData = snapshot.data;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      detailsCard(
+                        count: countData[0].toString(), title: "in your cart", width: context.screenWidth / 3.7),
+                      detailsCard(
+                        count: countData[1].toString(), 
+                        title: "in your wishlist",
+                        width: context.screenWidth / 3.7),
+                      detailsCard(
+                        count: countData[2].toString(), title: "your orders", width: context.screenWidth / 3.7),
+                ],
+              );
+              }
+            },
+           ),
+
+             /* Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   detailsCard(count: data['cart_count'], title: "in your cart", width: context.screenWidth / 3.7),
                   detailsCard(count: data['wishlist_count'], title: "in your wishlist", width: context.screenWidth / 3.7),
                   detailsCard(count: data['order_count'], title: "your orders", width: context.screenWidth / 3.7),
                 ],
-              ),
+              ),*/
 
               //buttons section
               40.heightBox,

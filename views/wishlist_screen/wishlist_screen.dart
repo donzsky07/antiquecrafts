@@ -21,7 +21,7 @@ class WishlistScreen extends StatelessWidget {
             return Center(
               child: loadingIndicator(),);
           }else if(snapshot.data!.docs.isEmpty){
-            return "No orders yet!".text.color(darkFontGrey).make();
+            return "No wishlist yet!".text.color(darkFontGrey).make();
           }else {
             var data = snapshot.data!.docs;
             return Column(

@@ -16,7 +16,7 @@ const featuredImages2 = [imgS4, imgS5, imgS6];
 const featuredTitles1 = [womenDress,girlsDress, girlWatches ];
 const featuredTitles2 = [boysGlasses, mobilePhone, tShirts ];
 
-const categoriesList = [ womenClothing, menClothingFashion, comAccess, automobile, kidtoys, sports, jewelery, cellphone, furnitures];
+const categoriesList = [ handwoven, woodcrafts, bamboo, jewelry, ceramics, metalcraft, natural, souvenir, foods];
 const categoryImages = [imgS1, imgFc1, imgFc2,imgFc3, imgFc4, imgFc5,imgFc7, imgFc6, imgFc9, ];
 
 const itemDetailsButtonList = [video, reviews, sellerpolicy, returnpolicy, supportpolicy ];

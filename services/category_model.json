@@ -1,79 +1,81 @@
+
 {
-    "categories":[
+
+"categories":[
          {
-            "name": "Women Dress",
+            "name": "Handwoven & Textiles",
             "subcategory": [
-                "Wedding & Event",
-                "Tops & Sets",
-                "Watches"
+                "Patadyong",
+                "Clothing",
+                "Bags and Pouches"
             ]
         },
         {
-            "name": "Men Clothing & Fashion",
+            "name": "Woodcrafts & Furniture",
             "subcategory": [
-                "Outwear & Jackets",
-                "Formal Dress",
-                "Accessories"
+                "Furniture",
+                "Kitchen",
+                "Home Decor"
             ]
         },
          {
-            "name": "Computer & Accessories",
+            "name": "Bamboo & Rattan Products",
             "subcategory": [
-                "Laptop",
-                "Gaming PC",
-                "Official Equipment"
+                "Basket & Storage",
+                "Accessories",
+                "Furniture"
             ]
         },
          {
-            "name": "Automobile",
+            "name": "Jewelry & Accessories",
             "subcategory": [
-                "cars",
-                "Bike"
+                "Beaded Jewelry",
+                "Shell & Coral Jewelry"
                
             ]
         },
-         {
-            "name": "Kid & Toys",
+ 	   {
+            "name": "Ceramics & Pottery",
             "subcategory": [
-                "Shoes & Bags",
-                "Baby Clothing",
-                "Girls Toys"
+		 "Pots",
+                "Decorative Vases",
+                "Plates & Bowls"
+              
             ]
         },
-         {
-            "name": "Sports",
+	    {
+            "name": "Metal Crafts",
             "subcategory": [
-                "Cycling",
-                "Sneakers",
-                "Swimming"
+                "Knives & Blades",
+                "Keychains & Trinkets"
+               
             ]
         },
-         {
-            "name": "Jewelery",
+	  {
+            "name": "Natural & Eco-Friendly",
             "subcategory": [
-                "Nicklace",
-                "Gold",
-                "Earings"
+                "Mats/Banig",
+                "Coconut-based Crafts",
+                "Eco Bags"
             ]
         },
-         {
-            "name": "Cellphone & Tab",
+	 {
+            "name": "Souvenirs & Gift Items",
             "subcategory": [
-                "Smartphone",
-                "Tablets",
-                "Accessories"
+                "Keychains",
+                "Miniatures",
+                "Home Decor "
             ]
         },
-         {
-            "name": "Furniture",
+	 {
+            "name": "Food & Delicacies",
             "subcategory": [
-                "Sofa",
-                "Bed",
-                "Home Textile"
+                "Native Sweets",
+                "Processed Goods",
+                "Pasalubong Packs"
             ]
         }
-            
+
     ]
-       
-    
+
 }

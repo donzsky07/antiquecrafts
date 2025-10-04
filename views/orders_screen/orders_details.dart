@@ -37,7 +37,7 @@ class OrdersDetails extends StatelessWidget {
             title2: "Shipping Method",
           ),
           orderPlaceDetails(
-            d1: intl.DateFormat('yMd').add_jm().format(data['order_date'].toDate()),
+            d1: intl.DateFormat().add_yMd().format(data['order_date'].toDate()),
             d2: data['payment_method'],
             title1: "Order Date",
             title2: "Payment Method",

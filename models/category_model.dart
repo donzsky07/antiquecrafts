@@ -6,6 +6,7 @@ import 'dart:convert';
 
 CategoryModel categoryModelFromJson(String str) => CategoryModel.fromJson(json.decode(str));
 
+
 class CategoryModel {
     List<Category> categories;
 
@@ -17,6 +18,7 @@ class CategoryModel {
         categories: List<Category>.from(json["categories"].map((x) => Category.fromJson(x))),
     );
 
+   
 }
 
 class Category {
@@ -33,5 +35,5 @@ class Category {
         subcategory: List<String>.from(json["subcategory"].map((x) => x)),
     );
 
-    
+   
 }

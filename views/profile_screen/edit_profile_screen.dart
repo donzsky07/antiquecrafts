@@ -21,17 +21,18 @@ class EditProfileScreen extends StatelessWidget{
     
     return bgWidget(
       child: Scaffold (
+         resizeToAvoidBottomInset: false,
         appBar: AppBar(),
          
           body: Obx(
             () => Column (
             mainAxisSize: MainAxisSize.min,
             children: [
-
-               /* data['imageUrl'] == '' && */controller.profileImgPath.isEmpty 
+                //data['imageUrl'] == '' &&-------
+                data['imgUrl'] == '' && controller.profileImgPath.isEmpty 
                 ? Image.asset(imgProfile, width: 100, fit: BoxFit.cover ).box.roundedFull.clip(Clip.antiAlias).make()
-               /* : data['imageUrl'] != '' && controller.profileImgPath.isEmpty
-                ? Image.network(data['imageUrl']) // for image network */
+                : data['imgUrl'] != '' && controller.profileImgPath.isEmpty
+                ? Image.network(data['imgUrl']) // for image network */
       
                 :  Image.file(
                     File(controller.profileImgPath.value),
@@ -80,25 +81,25 @@ class EditProfileScreen extends StatelessWidget{
 
                     controller.isloading(true);
 
-                    //if is not selected
-                  /*  if(controller.profileImgPath.value.isNotEmpty){
+                    //if is not selected ----
+                   if(controller.profileImgPath.value.isNotEmpty){
                       await controller.uploadProfileImage();
                       }else {
-                        controller.profileImageLink = data['imageUrl'];
-                      } */
+                        controller.profileImageLink = data['imgUrl'];
+                      } 
 
-                      //if old password matches database
+                      //if old password matches database---
                       if (data['password'] == controller.oldpassController.text) {
                         await controller.changeAuthPassword(
                           email: data['email'],
                           password: controller.oldpassController.text,
                           newpassword: controller.newpassController.text);
-                     
-                      // await controller.uploadProfileImage();
+                     //await controller.uploadProfileImage();---
+                       await controller.uploadProfileImage();
                        await controller.updateProfile(
-                          //controller.profileImageLink,
-                          controller.nameController.text,
-                          controller.newpassController.text);
+                        imgUrl: controller.profileImageLink,
+                        name:controller.nameController.text,
+                        password:controller.newpassController.text);
                     VxToast.show(context, msg: "Updated"); 
                   }else {
                     VxToast.show(context, msg:"Wrong old password ");

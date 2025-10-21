@@ -13,13 +13,13 @@ const secondSlidersList =[imgSs1, imgSs2, imgSs3, imgSs4];
 const featuredImages1 = [imgS1, imgS2, imgS3];
 const featuredImages2 = [imgS4, imgS5, imgS6];
 
-const featuredTitles1 = [womenDress,girlsDress, girlWatches ];
-const featuredTitles2 = [boysGlasses, mobilePhone, tShirts ];
+const featuredTitles1 = [womenDress, girlWatches, mobilePhone];
+const featuredTitles2 = [boysGlasses, tShirts, girlsDress ];
 
 const categoriesList = [ handwoven, woodcrafts, bamboo, jewelry, ceramics, metalcraft, natural, souvenir, foods];
-const categoryImages = [imgS1, imgFc1, imgFc2,imgFc3, imgFc4, imgFc5,imgFc7, imgFc6, imgFc9, ];
+const categoryImages = [imgS1, imgFc1, imgFc2,imgFc3, imgFc4, imgFc5,imgFc7, imgFc6, imgFc9];
 
-const itemDetailsButtonList = [video, reviews, sellerpolicy, returnpolicy, supportpolicy ];
+const itemDetailsButtonList = [video, reviews, sellerpolicy, returnpolicy, supportpolicy];
 
 const profileButtonsList =[orders, wishlist, messages];
 const profileButtonsIcon =[icOrder, icOrder, icMessages];

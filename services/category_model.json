@@ -3,41 +3,41 @@
 
 "categories":[
          {
-            "name": "Handwoven & Textiles",
+            "name": "Handwoven",
             "subcategory": [
                 "Patadyong",
-                "Clothing",
+                "Shawl",
                 "Bags and Pouches"
             ]
         },
         {
-            "name": "Woodcrafts & Furniture",
+            "name": "Woodcrafts",
             "subcategory": [
                 "Furniture",
                 "Kitchen",
                 "Home Decor"
             ]
         },
-         {
-            "name": "Bamboo & Rattan Products",
+        {
+            "name": "Bamboo & Rattan",
             "subcategory": [
                 "Basket & Storage",
                 "Accessories",
                 "Furniture"
             ]
         },
-         {
-            "name": "Jewelry & Accessories",
+        {
+            "name": "Accessories",
             "subcategory": [
                 "Beaded Jewelry",
                 "Shell & Coral Jewelry"
                
             ]
         },
- 	   {
+        {
             "name": "Ceramics & Pottery",
             "subcategory": [
-		 "Pots",
+                "Pots",
                 "Decorative Vases",
                 "Plates & Bowls"
               

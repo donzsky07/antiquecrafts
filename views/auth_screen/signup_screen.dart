@@ -125,7 +125,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 controller.isloading(true);
                                 if (isCheck != true) return;
 
-                                // ✅ Capture messenger before async gaps
+                                // Capture messenger before async gaps
                                 final messenger = ScaffoldMessenger.of(context);
 
                                 try {

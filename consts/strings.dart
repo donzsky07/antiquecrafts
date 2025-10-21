@@ -31,13 +31,21 @@ const searchanything = "Search anything.....",
   topBrand = "Top Brand", 
   topSellers = "Top Sellers",
   topCategories = "Top Categories", 
-  womenDress = "Women Dress",
-  girlWatches = "Girls Watches",
-  mobilePhone = "Mobile Phone",
-  boysGlasses =" Boys Glasses ",
-  tShirts ="TShirts",
-  girlsDress ="Girls Dresses",
-  featuredProduct = "Featured Products ",
+  //featured categories
+  womenDress = "Handwoven",
+  girlWatches = "Woodcrafts",
+  mobilePhone = "Bamboo & Rattan",
+  boysGlasses = "Accessories",
+  tShirts = "Ceramics & Pottery",
+  girlsDress = "Foods & Delicacies",
+  /*patadyong = "Handwoven",
+  furniture = "Woodcrafts",
+  basket = "Bamboo & Rattan",
+  beaded  = "Accessories",
+  pots = "Ceramics & Pottery",
+  native = "Foods & Delicacies",*/
+
+  featuredProduct = "Featured Products",
   allproducts = "All Products",
 
   featuredCategories = "Featured Categories";
@@ -54,10 +62,10 @@ const searchanything = "Search anything.....",
     furnitures = "Furniture";  */
   
   //NEW category_screen string
-  const handwoven = "Handwoven & Textiles",
-        woodcrafts = "Woodcrafts & Furniture",
-        bamboo = "Bamboo & Rattan Products",
-        jewelry= "Jewelry & Accessories",
+  const handwoven = "Handwoven",
+        woodcrafts = "Woodcrafts",
+        bamboo = "Bamboo & Rattan",
+        jewelry= "Accessories",
         ceramics = "Ceramics & Pottery",
         metalcraft ="Metal Crafts",
         natural = "Natural & Eco-Friendly",

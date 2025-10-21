@@ -1,6 +1,6 @@
-//import 'dart:io';
+import 'dart:io';
 
-//import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
@@ -8,12 +8,13 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projects/consts/consts.dart';
 import 'dart:developer';
-//import 'package:path/path.dart';
+import 'package:path/path.dart';
 
 class ProfileController extends GetxController{
+  
   var profileImgPath = ''.obs;
 
-// var profileImageLink = '';  
+ var profileImageLink = '';  
  
   var isloading = false.obs;
 
@@ -33,20 +34,20 @@ class ProfileController extends GetxController{
 }
 
  //need para sa connection sa firebase storage
-/*uploadProfileImage()async {
+uploadProfileImage()async {
   var filename = basename(profileImgPath.value);
   var destination = 'images/${currentUser!.uid}/ $filename';
   Reference ref = FirebaseStorage.instance.ref().child(destination);
   await ref.putFile(File(profileImgPath.value));
   profileImageLink = await ref.getDownloadURL();
-}*/
+}
 
-updateProfile(name, password, /*imgUrl*/) async {
+updateProfile({name, password, imgUrl}) async {
   var store = firestore.collection(usersCollection).doc(currentUser!.uid);
   await store.set({
     'name': name,
-    'password': password
-   // 'imageUrl': imgUrl
+    'password': password,
+    'imgUrl': imgUrl
   }, SetOptions(merge: true));
   isloading(false);
 

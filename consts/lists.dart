@@ -3,8 +3,7 @@ import 'package:projects/consts/strings.dart';
 
 const socialIconList =[
   icFacebookLogo,
-  icGoogleLogo,
-  icTwitterLogo
+  icGoogleLogo 
 ];
 
 const slidersList = [imgSlider1, imgSlider2, imgSlider3, imgSlider4 ];
@@ -17,7 +16,7 @@ const featuredTitles1 = [womenDress, girlWatches, mobilePhone];
 const featuredTitles2 = [boysGlasses, tShirts, girlsDress ];
 
 const categoriesList = [ handwoven, woodcrafts, bamboo, jewelry, ceramics, metalcraft, natural, souvenir, foods];
-const categoryImages = [imgS1, imgFc1, imgFc2,imgFc3, imgFc4, imgFc5,imgFc7, imgFc6, imgFc9];
+const categoryImages = [imgS1, imgC2, imgC3,imgFc3, imgC5, imgFc5,imgFc7, imgC8, imgC9];
 
 const itemDetailsButtonList = [video, reviews, sellerpolicy, returnpolicy, supportpolicy];
 

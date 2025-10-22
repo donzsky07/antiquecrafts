@@ -9,6 +9,6 @@ Widget ourButton ({onPress, color, textColor, String? title}) {
      ),
 
     onPressed: onPress,
-      child: title!.text.size(16).color(textColor).fontFamily(bold).make(),
+      child: title!.text.size(18).color(textColor).fontFamily(bold).make(),
    );
 }

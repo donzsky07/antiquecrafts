@@ -8,6 +8,13 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  
+  // ✅ Add this block to activate App Check debug mode
+ /* await FirebaseAppCheck.instance.activate(
+   androidProvider: AndroidProvider.debug,
+
+  );*/
+
   runApp(const MyApp());
 }
 

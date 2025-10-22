@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/widget/bg_widget.dart';
@@ -50,7 +51,21 @@ class LoginScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () async {
+  if (controller.emailController.text.isEmpty) {
+    VxToast.show(context, msg: "Please enter your email first");
+    return;
+  }
+
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(
+      email: controller.emailController.text.trim(),
+    );
+    VxToast.show(context, msg: "Password reset link sent to your email");
+  } catch (e) {
+    VxToast.show(context, msg: "Error: ${e.toString()}");
+  }
+},
                       child: forgetPass.text.color(primaryColor).make(),
                     ),
                   ),
@@ -107,7 +122,7 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
-                      3,
+                      2,
                       (index) => Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CircleAvatar(

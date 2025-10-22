@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/product_controller.dart';
+import 'package:projects/views/cart_screen/cart_screen.dart';
 import 'package:projects/views/chat_screen/chat_screen.dart';
 import 'package:projects/widget/our_button.dart';
 
@@ -234,7 +235,7 @@ class ItemDetails extends StatelessWidget {
                         ),
                         ),
                        ),
-                       20.heightBox,
+                       10.heightBox,
                       //products may like section
                       productsyoumaylike.text.fontFamily(bold).size(16).color(darkFontGrey).make(),
                       10.heightBox,
@@ -247,12 +248,12 @@ class ItemDetails extends StatelessWidget {
                     (index) => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(imgP1, width: 130, fit: BoxFit.cover, 
+                      Image.asset(imgP5, width: 130, fit: BoxFit.cover, 
                     ),
                     10.heightBox,
-                    "Laptop 4GB/64GB".text.fontFamily(semibold).color(darkFontGrey).make(),
+                    "Bag".text.fontFamily(semibold).color(darkFontGrey).make(),
                     10.heightBox,
-                    "₱30000".text.color(redColor).fontFamily(bold).size(16).make()
+                    "₱300".text.color(redColor).fontFamily(bold).size(16).make()
                     
                     ],
                   ).box.white.margin(EdgeInsets.symmetric(horizontal: 4)).roundedSM.padding(EdgeInsets.all(8)).make()),
@@ -268,7 +269,7 @@ class ItemDetails extends StatelessWidget {
            )),
         SizedBox(
             width: double.infinity,
-            height: 60,
+            height: 70,
             child: ourButton(
               color: softBlueGreen, 
               onPress: () {
@@ -283,6 +284,7 @@ class ItemDetails extends StatelessWidget {
                   title: data['p_name'],
                   tprice: controller.totalPrice.value);
                   VxToast.show(context, msg: "Added to Cart");
+                   Get.to(() => CartScreen()); 
                 }else{
                   VxToast.show(context, msg: "Minimim 1 products is required");
                 }

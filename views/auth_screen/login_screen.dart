@@ -16,6 +16,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(AuthController());
+   
 
     return bgWidget(
       child: Scaffold(
@@ -90,12 +91,14 @@ class LoginScreen extends StatelessWidget {
                             backgroundColor: Colors.green,
                             colorText: Colors.white,
                           );
+                          await Future.delayed(const Duration(seconds: 1));
                           // Then navigate
                           Get.offAll(() => const Home());
                         }else {
                           controller.isloading(false);
                         }
                       } catch (e) {
+                        controller.isloading(false);
                         Get.snackbar(
                           "Login Failed",
                           e.toString(),

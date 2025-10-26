@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:projects/views/auth_screen/login_screen.dart';
+//import 'package:projects/controllers/home_controller.dart';
+//import 'package:projects/views/auth_screen/login_screen.dart';
+//import 'package:projects/views/auth_screen/login_screen.dart';
 
 
 class AuthController extends GetxController {
@@ -52,9 +56,40 @@ class AuthController extends GetxController {
       });
     }
   }
+  /*Future<void> storeUserData({
+  required String name,
+  required String password,
+  required String email,
+}) async {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user != null) {
+    await firestore.collection(usersCollection).doc(user.uid).set({
+      'id': user.uid,
+      'name': name,
+      'password': password,
+      'email': email,
+      'imgUrl': "",
+      'cart_count': "00",
+      'wishlist_count': "00",
+      'order_count': "00",
+    });
+  }
+}
+*/
 
   // Sign out
-  Future<void> signoutMethod() async {
+ /* Future<void> signoutMethod() async {
     await auth.signOut();
-  }
+
+ 
+}*/
+
+Future<void> signoutMethod() async {
+  await auth.signOut();
+  await Future.delayed(const Duration(milliseconds: 300));
+  Get.offAll(() => const LoginScreen());
+}
+
+
+  
 }

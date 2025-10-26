@@ -18,7 +18,7 @@ State<SplashScreen> createState() => _SplashScreenState();
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  changeScreen() {
+ /* changeScreen() {
     Future.delayed(const Duration(seconds: 3), () {
       //Get.to(() => const LoginScreen());
       auth.authStateChanges().listen((User? user) {
@@ -66,6 +66,54 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   
+  }*/
+   void changeScreen() {
+    Future.delayed(const Duration(seconds: 3), () {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (!mounted) return; // Prevent navigation after dispose
+
+      if (user == null) {
+        // No user logged in
+        Get.offAll(() => const LoginScreen());
+      } else {
+        // User is already logged in
+        Get.offAll(() => const Home());
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    changeScreen();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: softBlueGreen,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.topLeft,
+              child: Image.asset(icSplashBg, width: 300),
+            ),
+            20.heightBox,
+            applogoWidget(),
+            10.heightBox,
+            appname.text.fontFamily(bold).size(22).white.make(),
+            5.heightBox,
+            appversion.text.white.make(),
+            const Spacer(),
+            credits.text.white.fontFamily(semibold).make(),
+            30.heightBox,
+          ],
+        ),
+      ),
+    );
   }
 
 }

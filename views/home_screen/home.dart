@@ -30,6 +30,14 @@ class Home extends StatelessWidget{
      const CartScreen(),
      const ProfileScreen(),
     ];
+    //edited/fixed
+     /*return Obx(() {
+      // show a small loading screen while fetching user data
+      if (controller.userData.isEmpty) {
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }*/
 
     return PopScope(
       canPop: false,
@@ -65,5 +73,7 @@ class Home extends StatelessWidget{
         )
       ),
     ));
+   
   }
+
 }

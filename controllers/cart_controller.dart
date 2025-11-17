@@ -19,6 +19,8 @@ class CartController extends GetxController {
 
   var products = [];
 
+  var vendors = [];
+
   var placingOrder = false.obs;
  
   calculate(data){
@@ -39,7 +41,7 @@ class CartController extends GetxController {
       "order_code":"233981237",
       "order_date": FieldValue.serverTimestamp(),
       "order_by": currentUser!.uid,
-      "order_by_name": Get.find<HomeController>().username,
+      "order_by_name": Get.find<HomeController>().username.value,
       "order_by_email": currentUser!.email,
       "order_by_address": addressController.text,
       "order_by_state": stateController.text,
@@ -53,7 +55,8 @@ class CartController extends GetxController {
       "order_delivered": false,
       "order_on_delivery": false,
       "total_amount": totalAmount,
-      "orders": FieldValue.arrayUnion(products)
+      "orders": FieldValue.arrayUnion(products),
+      "vendors" : FieldValue.arrayUnion(vendors),
 
     }); 
     placingOrder(false);
@@ -62,6 +65,7 @@ class CartController extends GetxController {
 
    getProductDetails() {
    products.clear();
+   vendors.clear();
     for (var i = 0; i < productSnapshot.length; i++) {
       products.add({
         'color': productSnapshot[i]['color'],
@@ -72,6 +76,8 @@ class CartController extends GetxController {
         'title': productSnapshot[i]['title']
 
       });
+
+      vendors.add(productSnapshot[i]['vendor_id']);
      }
     }
 

@@ -9,7 +9,8 @@ Widget senderBubble(QueryDocumentSnapshot data) {
   var time = intl.DateFormat("h:mm").format(t);
 
   return  Directionality(
-    textDirection: data['uid'] == currentUser!.uid ? TextDirection.rtl : TextDirection.ltr,
+   // textDirection: data['uid'] == currentUser!.uid ? TextDirection.rtl : TextDirection.ltr,
+     textDirection: TextDirection.ltr ,
   child : Container(
     padding: const EdgeInsets.all(12),
     margin: const EdgeInsets.only(bottom: 8), 

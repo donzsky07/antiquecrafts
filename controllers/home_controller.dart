@@ -66,7 +66,7 @@ class HomeController extends GetxController {
         username.value = 'Unknown User';
       }
     } catch (e) {
-      debugPrint("🔥 Error loading user data: $e");
+      debugPrint(" Error loading user data: $e");
       username.value = 'Error';
     }
   }

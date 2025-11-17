@@ -15,6 +15,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  // 🔥 Initialize local notifications (REQUIRED)
+  //await NotificationService.init();   // <-- ADD THIS
+
   //Register controllers once here
  // Get.put(AuthController(), permanent: true);
   

@@ -1,0 +1,81 @@
+
+{
+
+"categories":[
+         {
+            "name": "Handwoven & Textiles",
+            "subcategory": [
+                "Patadyong",
+                "Clothing",
+                "Bags and Pouches"
+            ]
+        },
+        {
+            "name": "Woodcrafts & Furniture",
+            "subcategory": [
+                "Furniture",
+                "Kitchen",
+                "Home Decor"
+            ]
+        },
+         {
+            "name": "Bamboo & Rattan Products",
+            "subcategory": [
+                "Basket & Storage",
+                "Accessories",
+                "Furniture"
+            ]
+        },
+         {
+            "name": "Jewelry & Accessories",
+            "subcategory": [
+                "Beaded Jewelry",
+                "Shell & Coral Jewelry"
+               
+            ]
+        },
+ 	   {
+            "name": "Ceramics & Pottery",
+            "subcategory": [
+		 "Pots",
+                "Decorative Vases",
+                "Plates & Bowls"
+              
+            ]
+        },
+	    {
+            "name": "Metal Crafts",
+            "subcategory": [
+                "Knives & Blades",
+                "Keychains & Trinkets"
+               
+            ]
+        },
+	  {
+            "name": "Natural & Eco-Friendly",
+            "subcategory": [
+                "Mats/Banig",
+                "Coconut-based Crafts",
+                "Eco Bags"
+            ]
+        },
+	 {
+            "name": "Souvenirs & Gift Items",
+            "subcategory": [
+                "Keychains",
+                "Miniatures",
+                "Home Decor "
+            ]
+        },
+	 {
+            "name": "Food & Delicacies",
+            "subcategory": [
+                "Native Sweets",
+                "Processed Goods",
+                "Pasalubong Packs"
+            ]
+        }
+
+    ]
+
+}

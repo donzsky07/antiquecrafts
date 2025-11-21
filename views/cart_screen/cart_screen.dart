@@ -23,7 +23,7 @@ class CartScreen extends StatelessWidget{
                 Get.to (() => const ShippingDetails());
              },
               textColor: whiteColor,
-              title: "Proceed to Shipping", 
+              title: "Proceed to Order", 
              ),
           ),
       appBar: AppBar(

@@ -42,7 +42,7 @@ class PaymentMethods extends StatelessWidget {
         ),
       ),
       appBar: AppBar(
-        title: "Choose Payment Method".text.fontFamily(semibold).color(darkFontGrey).make(),
+        title: "Payment Method".text.fontFamily(semibold).color(darkFontGrey).make(),
 
       ),
 

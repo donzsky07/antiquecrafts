@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/seller/consts/const.dart';
-import 'package:projects/seller/controllers/seller_auth_controller.dart';
 import 'package:projects/seller/controllers/seller_profile_controller.dart';
 import 'package:projects/seller/services/store_services.dart';
 import 'package:projects/seller/views/seller_auth_screen/seller_login_screen.dart';
@@ -33,7 +33,7 @@ class SProfileScreen extends StatelessWidget {
         }, 
         icon: const Icon(Icons.edit, color: white)),
         TextButton(onPressed: () async{
-          await Get.find<SellerAuthController>().signoutMethod();
+          await Get.find<AuthController>().signoutMethod();
           Get.offAll(() => const SellerLoginScreen());
         }, 
         child: normalText(text: logout, size: 18.0),)

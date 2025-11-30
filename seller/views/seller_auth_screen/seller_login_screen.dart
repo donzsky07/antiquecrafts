@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/seller/consts/const.dart';
-import 'package:projects/seller/controllers/seller_auth_controller.dart';
 import 'package:projects/seller/views/seller_home_screen/seller_home.dart';
 import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_our_button.dart';
@@ -13,7 +13,7 @@ class SellerLoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    var controller = Get.put(SellerAuthController());
+    var controller = Get.put(AuthController());
     //  Create a reactive boolean for password visibility
     var isPasswordVisible = false.obs;
 

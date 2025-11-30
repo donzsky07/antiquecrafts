@@ -26,7 +26,12 @@ class SellerHomeScreen extends StatelessWidget {
           }else {
             var data = snapshot.data!.docs;
 
-            data = data.sortedBy((a,b) => a['p_wishlist'].length.compareTo(b['p_wishlist'].length));
+          data = data.sortedBy((a, b) {
+  var aList = (a['p_wishlist'] ?? []) as List;
+  var bList = (b['p_wishlist'] ?? []) as List;
+  return aList.length.compareTo(bList.length);
+});
+
 
             return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -34,21 +39,23 @@ class SellerHomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Dashboard buttons
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  sDashboardButton(context, title: product, count: "${data.length}", icon: icProduct),
-                  sDashboardButton(context, title: orders, count: "15", icon: icOrders),
-                ],
-              ),
+             Row(
+  children: [
+    Expanded(child: sDashboardButton(context, title: product, count: "${data.length}", icon: icProduct)),
+      const SizedBox(width: 10),
+    Expanded(child: sDashboardButton(context, title: orders, count: "15", icon: icOrders)),
+  ],
+),
+
               10.heightBox,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  sDashboardButton(context, title: rating, count: "60", icon: icStar),
-                  sDashboardButton(context, title: totalSales, count: "15", icon: icOrders),
-                ],
-              ),
+            Row(
+  children: [
+    Expanded(child: sDashboardButton(context, title: rating, count: "60", icon: icStar)),
+      const SizedBox(width: 10),
+    Expanded(child: sDashboardButton(context, title: totalSales, count: "15", icon: icOrders)),
+  ],
+),
+
               10.heightBox,
               const Divider(),
               10.heightBox,
@@ -61,7 +68,8 @@ class SellerHomeScreen extends StatelessWidget {
                   shrinkWrap: true,
                   children :  List.generate(
                   data.length,
-                  (index) => data[index]['p_wishlist'].length == 0 
+                  (index) =>((data[index]['p_wishlist'] ?? []) as List).isEmpty
+
                   ? const SizedBox()
                   : ListTile(
                     onTap: () {

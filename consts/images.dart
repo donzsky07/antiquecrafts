@@ -126,3 +126,14 @@ const imgP4 = "assets/images/p4.jpeg";
 const imgP5 = "assets/images/p5.jpeg";
 const imgP6 = "assets/images/p6.jpeg";
 const imgP7 = "assets/images/p7.jpeg";
+
+///seller side
+const icLogo ="assets/icons/logo.png";
+const icAccount ="assets/icons/account.png";
+const icGeneralSettings ="assets/icons/general_setting.png";
+const icProduct ="assets/icons/products.png";
+const icShopSetting ="assets/icons/shop_setting.png";
+const icStar ="assets/icons/star.png";
+const icVerify ="assets/icons/verify.png";
+
+const imgproduct = "assets/images/product.jpg";

@@ -88,6 +88,26 @@ updateShop({shopname, shopaddress, shopmobile, shopwebsite, shopdesc}) async {
   isloading(false);
 }
 
+//shop_profile settings
+// LOAD SHOP DATA FROM FIRESTORE SAFELY
+loadShopData() async {
+  try {
+    var doc = await firestore.collection(vendorsCollection).doc(currentUser!.uid).get();
+
+    if (doc.exists) {
+      var data = doc.data()!;
+
+      shopNameController.text = data['shop_name'] ?? "";
+      shopAddressController.text = data['shop_address'] ?? "";
+      shopMobileController.text = data['shop_mobile'] ?? "";
+      shopWebsiteController.text = data['shop_website'] ?? "";
+      shopDescController.text = data['shop_desc'] ?? "";
+    }
+  } catch (_) {}
+
+}
+
+
 
 
 

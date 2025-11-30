@@ -1,91 +1,35 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-import 'package:projects/seller/consts/const.dart';
-import 'package:projects/seller/views/seller_auth_screen/seller_login_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SellerAuthController extends GetxController {
-  
-  var isloading = false.obs;
+class SellerAuthController {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
 
-// Text controllers
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
-
-  // Login method
-  Future<UserCredential?> loginMethod() async {
+  Future<String?> loginSeller(String email, String password) async {
     try {
-      return await auth.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+      // Step 1 — Firebase login
+      final userCred = await _auth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password.trim(),
       );
+
+      final uid = userCred.user!.uid;
+
+      // Step 2 — Get vendor Firestore document
+      final vendorDoc = await _firestore
+          .collection('vendors')
+          .where('id', isEqualTo: uid)
+          .get();
+
+      if (vendorDoc.docs.isEmpty) {
+        return "Your account is not registered as vendor.";
+      }
+
+      return null; // SUCCESS
     } on FirebaseAuthException catch (e) {
-      return Future.error(e.message ?? "Login failed");
+      return e.message;
     }
   }
 
- /* // Signup method
-  Future<UserCredential?> signupMethod({required String email, required String password}) async {
-    try {
-      return await auth.createUserWithEmailAndPassword(email: email, password: password);
-    } on FirebaseAuthException catch (e) {
-      return Future.error(e.message ?? "Signup failed");
-    }
-  }*/
-
-  // Store user data in Firestore
-  Future<void> storeUserData({
-    required String name,
-    required String password,
-    required String email,
-  }) async {
-    final userId = auth.currentUser?.uid;
-    if (userId != null) {
-      await firestore.collection(vendorsCollection).doc(userId).set({
-        'name': name,
-        'password': password,
-        'email': email,
-        'imgUrl': "",
-        'id' : currentUser!.uid,
-        'cart_count': "00",
-        'wishlist_count': "00",
-        'order_count': "00",
-      });
-    }
-  }
-  /*Future<void> storeUserData({
-  required String name,
-  required String password,
-  required String email,
-}) async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user != null) {
-    await firestore.collection(usersCollection).doc(user.uid).set({
-      'id': user.uid,
-      'name': name,
-      'password': password,
-      'email': email,
-      'imgUrl': "",
-      'cart_count': "00",
-      'wishlist_count': "00",
-      'order_count': "00",
-    });
-  }
-}
-*/
-
-  // Sign out
- /* Future<void> signoutMethod() async {
-    await auth.signOut();
-
- 
-}*/
-
-Future<void> signoutMethod() async {
-  await auth.signOut();
-  await Future.delayed(const Duration(milliseconds: 300));
-  Get.offAll(() => const SellerLoginScreen());
-}
-
-
-  
+  Future<void> logoutSeller() => _auth.signOut();
 }

@@ -1,7 +1,8 @@
 import 'package:projects/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:projects/views/splash_screen/splash_screen.dart';
+import 'package:projects/views/auth_screen/login_screen.dart';
+
 
 
 
@@ -34,7 +35,8 @@ Widget build(BuildContext context){
         backgroundColor:Colors.transparent),
       fontFamily: regular,
     ),
-   home: const SplashScreen(),
+   //home: const SplashScreen(),
+   home: const LoginScreen(),
  
     );
       

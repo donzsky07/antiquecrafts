@@ -1,13 +1,22 @@
+import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SellerAuthController {
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
+class SellerAuthController extends GetxController {
+  // Reactive loading state
+  var isLoading = false.obs;
 
+  // Firebase instances
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  /// Login seller with email and password
+  /// Returns null if successful, otherwise returns error message
   Future<String?> loginSeller(String email, String password) async {
+    isLoading.value = true;
+
     try {
-      // Step 1 — Firebase login
+      // 1️⃣ Firebase login
       final userCred = await _auth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
@@ -15,21 +24,26 @@ class SellerAuthController {
 
       final uid = userCred.user!.uid;
 
-      // Step 2 — Get vendor Firestore document
-      final vendorDoc = await _firestore
-          .collection('vendors')
-          .where('id', isEqualTo: uid)
-          .get();
+      // 2️⃣ Check vendors collection
+      final vendorDoc =
+          await _firestore.collection('vendors').doc(uid).get();
 
-      if (vendorDoc.docs.isEmpty) {
-        return "Your account is not registered as vendor.";
+      if (!vendorDoc.exists) {
+        // Not a seller
+        await _auth.signOut();
+        return "Your account is not registered as a vendor.";
       }
 
-      return null; // SUCCESS
+      return null; // Login success
     } on FirebaseAuthException catch (e) {
       return e.message;
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  Future<void> logoutSeller() => _auth.signOut();
+  /// Logout seller
+  Future<void> logoutSeller() async {
+    await _auth.signOut();
+  }
 }

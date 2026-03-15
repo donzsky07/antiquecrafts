@@ -33,7 +33,7 @@ class SProfileScreen extends StatelessWidget {
         }, 
         icon: const Icon(Icons.edit, color: white)),
         TextButton(onPressed: () async{
-          await Get.find<AuthController>().signoutMethod();
+          await Get.find<AuthController>().signout();
           Get.offAll(() => const SellerLoginScreen());
         }, 
         child: normalText(text: logout, size: 18.0),)

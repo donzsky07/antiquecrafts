@@ -103,7 +103,7 @@ class _SShopSettingsState extends State<SShopSettings> {
                     style: TextStyle(color: white, fontSize: 16),
                   ),
                   onPressed: () async {
-                    await authController.signoutMethod();
+                    await authController.signout();
                   },
                 ),
               ],

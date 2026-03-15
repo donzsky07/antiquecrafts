@@ -193,15 +193,17 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 }*/
 
+
+
+
 import 'package:get/get.dart';
-import 'package:projects/consts/consts.dart';
 import 'package:projects/controllers/auth_controller.dart';
-import 'package:projects/views/home_screen/home.dart';
+import 'package:projects/consts/consts.dart';
+
 import 'package:projects/widget/bg_widget.dart';
 import 'package:projects/widget/applogo_widget.dart';
 import 'package:projects/widget/custom_textfield.dart';
 import 'package:projects/widget/our_button.dart';
-
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -213,8 +215,10 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   bool isCheck = false;
 
+  // Controller instance
   var controller = Get.put(AuthController());
 
+  // Text controllers
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
@@ -229,11 +233,18 @@ class _SignupScreenState extends State<SignupScreen> {
           child: Center(
             child: Column(
               children: [
-                (context.screenHeight * 0.1).heightBox,
+                SizedBox(height: context.screenHeight * 0.1),
                 applogoWidget(),
-                10.heightBox,
-                "Join the $appname".text.fontFamily(bold).white.size(22).make(),
-                15.heightBox,
+                const SizedBox(height: 10),
+                Text(
+                  "Join the $appname",
+                  style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+                const SizedBox(height: 15),
+
                 Obx(
                   () => Column(
                     children: [
@@ -262,6 +273,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         isPass: true,
                       ),
 
+                      // Terms checkbox
                       Row(
                         children: [
                           Checkbox(
@@ -274,7 +286,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               });
                             },
                           ),
-                          10.widthBox,
+                          const SizedBox(width: 10),
                           Expanded(
                             child: RichText(
                               text: const TextSpan(
@@ -282,30 +294,26 @@ class _SignupScreenState extends State<SignupScreen> {
                                   TextSpan(
                                     text: "I agree to the ",
                                     style: TextStyle(
-                                      fontFamily: regular,
-                                      color: fontGrey,
-                                    ),
+                                        fontFamily: regular,
+                                        color: fontGrey),
                                   ),
                                   TextSpan(
                                     text: termAndCon,
                                     style: TextStyle(
-                                      fontFamily: regular,
-                                      color: redColor,
-                                    ),
+                                        fontFamily: regular,
+                                        color: redColor),
                                   ),
                                   TextSpan(
                                     text: " & ",
                                     style: TextStyle(
-                                      fontFamily: regular,
-                                      color: fontGrey,
-                                    ),
+                                        fontFamily: regular,
+                                        color: fontGrey),
                                   ),
                                   TextSpan(
                                     text: privacyPolicy,
                                     style: TextStyle(
-                                      fontFamily: regular,
-                                      color: redColor,
-                                    ),
+                                        fontFamily: regular,
+                                        color: redColor),
                                   ),
                                 ],
                               ),
@@ -314,9 +322,13 @@ class _SignupScreenState extends State<SignupScreen> {
                         ],
                       ),
 
-                      controller.isloading.value
+                      const SizedBox(height: 10),
+
+                      // Signup button or loading indicator
+                      controller.isLoading.value
                           ? const CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation(softBlueGreen),
+                              valueColor:
+                                  AlwaysStoppedAnimation(softBlueGreen),
                             )
                           : ourButton(
                               color: isCheck ? softBlueGreen : lightGrey,
@@ -326,78 +338,70 @@ class _SignupScreenState extends State<SignupScreen> {
                                 final messenger =
                                     ScaffoldMessenger.of(context);
 
+                                // ✅ Check if terms agreed
                                 if (!isCheck) {
                                   messenger.showSnackBar(
                                     const SnackBar(
-                                      content: Text(
-                                          "You must agree to the terms."),
-                                    ),
+                                        content: Text(
+                                            "You must agree to the terms.")),
                                   );
                                   return;
                                 }
 
+                                // ✅ Check if passwords match
                                 if (passwordController.text.trim() !=
                                     passwordRetypeController.text.trim()) {
                                   messenger.showSnackBar(
                                     const SnackBar(
-                                      content:
-                                          Text("Passwords do not match!"),
-                                    ),
+                                        content:
+                                            Text("Passwords do not match!")),
                                   );
                                   return;
                                 }
 
-                                controller.isloading(true);
+                                // ✅ Start loading
+                                controller.isLoading.value = true;
 
                                 try {
-                                  var userCredential =
-                                      await controller.signupMethod(
-                                    email:
-                                        emailController.text.trim(),
-                                    password:
-                                        passwordController.text.trim(),
+                                  // 1️⃣ Signup with Firebase Auth
+                                  await controller.signup(
+                                    name: nameController.text.trim(),
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim(),
                                   );
 
-                                  if (userCredential != null) {
-                                    await controller.storeUserData(
-                                      name: nameController.text.trim(),
-                                      email: emailController.text.trim(),
-                                      uid: userCredential.user!.uid,
-                                    );
+                                  // 2️⃣ Navigate to User Home
+                                  messenger.showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text("Signup successful!")),
 
-                                    messenger.showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              "Signup successful!")),
-                                    );
-
-                                    Get.offAll(() => const Home());
-                                  }
+                                  );
                                 } catch (e) {
-                                  debugPrint(
-                                      "Error saving user data: $e");
                                   messenger.showSnackBar(
                                     SnackBar(content: Text(e.toString())),
                                   );
                                 } finally {
-                                  controller.isloading(false);
+                                  controller.isLoading.value = false;
                                 }
                               },
                             ).box.width(context.screenWidth - 50).make(),
 
-                      10.heightBox,
+                      const SizedBox(height: 10),
+
+                      // Already have account?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          alreadyHaveAccount.text
-                              .color(fontGrey)
-                              .size(16)
-                              .make(),
-                          login.text
-                              .color(redColor)
-                              .size(18)
-                              .make()
-                              .onTap(() {
+                          Text(
+                            alreadyHaveAccount,
+                            style: const TextStyle(color: fontGrey, fontSize: 16),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            login,
+                            style: const TextStyle(color: redColor, fontSize: 18),
+                          ).onTap(() {
                             Get.back();
                           }),
                         ],
@@ -420,6 +424,3 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 }
-
-
-

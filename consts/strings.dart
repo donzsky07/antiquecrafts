@@ -3,7 +3,7 @@ const appname = "antique_crafts";
 const appversion = "Version 1.0.0";
 const credits = "@santurdio devs";
 
-//login/signup string
+//login/signup userside string
 const email = "Email";
 const emailHint = "techcare@yahoo.com";
 const password = "Password";
@@ -24,14 +24,14 @@ const alreadyHaveAccount = "Already have an account?";
 //home string
 const home = "Home", categories = "Categories", cart = "Cart", account = "Account"; 
 
-//home_screen string
+//home_screen userside string
 const searchanything = "Search anything.....",
  todayDeal = "Today's Deal" ,
   flashsale = "Flash Sale", 
   topBrand = "Top Brand", 
   topSellers = "Top Sellers",
   topCategories = "Top Categories", 
-  //featured categories
+  //featured categories/ userside
   womenDress = "Handwoven",
   girlWatches = "Woodcrafts",
   mobilePhone = "Bamboo & Rattan",
@@ -61,7 +61,7 @@ const searchanything = "Search anything.....",
     cellphone = "Cellphone & Tab",
     furnitures = "Furniture";  */
   
-  //NEW category_screen string
+  //NEW category_screen string/userside
   const handwoven = "Handwoven",
         woodcrafts = "Woodcrafts",
         bamboo = "Bamboo & Rattan",
@@ -73,7 +73,7 @@ const searchanything = "Search anything.....",
         foods = "Food & Delicacies";   
 
 
-//item details string
+//item details string/userside
 const video = "Video", 
       reviews = "Reviews",
       sellerpolicy = "Seller Policy",
@@ -81,14 +81,14 @@ const video = "Video",
       supportpolicy = "Support Policy",
       productsyoumaylike = "Products you may also like";
 
-//profile strings
+//profile strings/userside
 const wishlist = "My Wishlist",
       orders = "My Orders",
       messages ="Messages";
 
-//edit profile sstrings
+//edit profile sstrings/userside
 const oldpass = "Old Password ", newpass = "newpassword ";
 
-// payment method strings
+// payment method strings/userside
 const paypal = "Paypal",
       cod = "Cash on Delivery";

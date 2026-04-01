@@ -10,6 +10,7 @@ const usersCollection = "users"; // shared (role = seller)
 const productsCollection = "products";
 
 const chatsCollection = "chats";
+<<<<<<< HEAD
 const messageCollection = "messages";
 const ordersCollection = "orders";
 
@@ -18,3 +19,7 @@ const ordersCollection = "orders";
 const chatsCollection = "chats";
 const messageCollection = "messages";
 const ordersCollection = "orders";*/
+=======
+const messageCollection = "message";
+const ordersCollection = "orders";
+>>>>>>> f5bf3bc (v3 in 1)

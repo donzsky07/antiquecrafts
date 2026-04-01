@@ -13,13 +13,13 @@ const chatsCollection = "chats";
 const messageCollection = "message";
 
 <<<<<<< HEAD
-const ordersCollection = "orders";*/
+const ordersCollection = "orders";
 =======
 const ordersCollection = "orders";
 
 
 
-const vendorsCollection = "vendors";*///
+const vendorsCollection = "vendors";*/
 
 >>>>>>> f5bf3bc (v3 in 1)
 

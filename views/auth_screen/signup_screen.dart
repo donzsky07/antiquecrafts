@@ -199,7 +199,6 @@ class _SignupScreenState extends State<SignupScreen> {
 import 'package:get/get.dart';
 import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/consts/consts.dart';
-
 import 'package:projects/widget/bg_widget.dart';
 import 'package:projects/widget/applogo_widget.dart';
 import 'package:projects/widget/custom_textfield.dart';

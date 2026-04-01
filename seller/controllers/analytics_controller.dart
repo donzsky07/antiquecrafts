@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:projects/consts/firebase_const.dart';
 //import 'package:seller_side/consts/const.dart';
 
 

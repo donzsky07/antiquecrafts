@@ -1,7 +1,9 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
+/*import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:projects/consts/firebase_const.dart';
-//import 'package:seller_side/consts/const.dart';
+
+
+
 
 
 class AnalyticsController extends GetxController {
@@ -54,5 +56,70 @@ class AnalyticsController extends GetxController {
     totalRatings.value = count == 0 ? 0 : total / count;
 
     isLoading(false);
+  }
+}*/
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:projects/consts/firebase_const.dart';
+
+class AnalyticsController extends GetxController {
+  var totalOrders = 0.obs;
+  var totalSales = 0.0.obs;
+  var totalRatings = 0.0.obs;
+
+  var isLoading = false.obs;
+
+  @override
+  void onInit() {
+    fetchAnalytics();
+    super.onInit();
+  }
+
+  void fetchAnalytics() {
+    isLoading.value = true;
+
+    // 🔹 ORDERS: total orders + total sales
+    FirebaseFirestore.instance
+        .collection(ordersCollection)
+        .snapshots()
+        .listen((orderSnapshot) {
+
+      totalOrders.value = orderSnapshot.docs.length;
+
+      double sales = 0;
+
+      for (var doc in orderSnapshot.docs) {
+        var data = doc.data();
+
+        if (data['total_amount'] != null) {
+          sales += (data['total_amount'] as num).toDouble();
+        }
+      }
+
+      totalSales.value = sales;
+    });
+
+    // 🔹 PRODUCTS: ratings
+    FirebaseFirestore.instance
+        .collection(productsCollection)
+        .snapshots()
+        .listen((productSnapshot) {
+
+      double ratings = 0;
+      int count = 0;
+
+      for (var doc in productSnapshot.docs) {
+        var data = doc.data();
+
+        if (data['p_ratings'] != null) {
+          ratings += double.tryParse(data['p_ratings'].toString()) ?? 0;
+          count++;
+        }
+      }
+
+      totalRatings.value = count > 0 ? ratings / count : 0;
+
+      isLoading.value = false;
+    });
   }
 }

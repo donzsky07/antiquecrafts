@@ -1,3 +1,4 @@
+import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/images.dart';
 import 'package:projects/consts/strings.dart';
 
@@ -25,3 +26,13 @@ const profileButtonsIcon =[icOrder, icOrder, icMessages];
 
 const paymentMethodImg = [imgCod];
 const paymentMethod = [cod];
+
+//SELLER SIDE//
+const profileIconList = [icShopSetting, icChat, icAccount];
+const profileIconsTitle = [shopSettings, messages, logout];
+
+const popupMenuTitles = [featured, edit, remove];
+const popupMenuIcons = [Icons.featured_play_list, Icons.edit, Icons.delete];
+
+const profileButtonsTitles = [shopSettings, messages];
+const profileButtonsIcons = [Icons.settings, Icons.chat];

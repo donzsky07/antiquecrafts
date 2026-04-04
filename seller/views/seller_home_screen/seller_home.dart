@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:projects/consts/colors.dart';
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/controllers/home_controller.dart';
 import 'package:projects/seller/views/seller_home_screen/seller_home_screen.dart';

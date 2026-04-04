@@ -1,4 +1,5 @@
 import 'package:projects/seller/consts/const.dart';
+import 'package:projects/consts/colors.dart';
 
 class SSettingsScreen extends StatelessWidget {
   const SSettingsScreen({super.key});

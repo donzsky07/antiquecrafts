@@ -8,6 +8,7 @@ import 'package:projects/seller/views/seller_widgets/s_appbar_widget.dart';
 import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
 import 'package:get/get.dart';
+import 'package:projects/consts/colors.dart';
 
 
 class SProductsScreen extends StatelessWidget {
@@ -19,6 +20,7 @@ class SProductsScreen extends StatelessWidget {
     var controller = Get.put(SellerProductsController());
 
     return Scaffold(
+      backgroundColor: white,
       floatingActionButton: FloatingActionButton(
       backgroundColor: purpleColor,
       shape: const CircleBorder(),

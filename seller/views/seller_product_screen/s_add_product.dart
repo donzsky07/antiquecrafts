@@ -6,6 +6,7 @@ import 'package:projects/seller/views/seller_product_screen/s_product_images.dar
 import 'package:projects/seller/views/seller_widgets/s_custom_textfield.dart';
 import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
+import 'package:projects/consts/colors.dart';
 
 
 class SAddProduct extends StatelessWidget {

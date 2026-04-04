@@ -6,6 +6,7 @@ import 'package:projects/seller/services/store_services.dart';
 import 'package:projects/seller/views/seller_message_screen/seller_chat_screen.dart';
 import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
+import 'package:projects/consts/colors.dart';
 
 class SMessagesScreen extends StatelessWidget {
   const SMessagesScreen({super.key});
@@ -13,6 +14,7 @@ class SMessagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       backgroundColor: white,
       appBar: AppBar(
         title: boldText(text: messages, size: 18.0, color: fontGrey),
       ),

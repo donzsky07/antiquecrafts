@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:projects/consts/colors.dart';
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/controllers/seller_orders_controller.dart';
 import 'package:projects/seller/views/seller_order_screen/components/seller_order_place.dart';
@@ -33,6 +34,7 @@ class _OrderDetailsState extends State<SellerOrderDetails> {
   Widget build(BuildContext context) {
     return Obx (
       () => Scaffold( 
+      backgroundColor: white,
       appBar: AppBar(
         leading: IconButton(onPressed: (){
           Get.back();

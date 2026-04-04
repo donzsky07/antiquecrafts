@@ -92,3 +92,50 @@ const oldpass = "Old Password ", newpass = "newpassword ";
 // payment method strings/userside
 const paypal = "Paypal",
       cod = "Cash on Delivery";
+
+
+//SELLER SIDE //
+const sappname = 'ACraft Seller App', 
+  slogin = 'Login', 
+  welcome = 'Hi!, Welcome to', 
+  semail = 'Email', 
+  spassword = 'Password', 
+  forgotPassword = 'Forgot Password!', 
+  anyProblem ='In case of difficulty, contact adminisration',
+  semailHint = 'eg. vendor@emart.com',
+  spasswordHint = '* * * * * * * ',
+  dashboard = 'Dashboard',
+  rating = 'Rating',
+  unpaid = 'Unpaid',
+  totalSales = 'Total Sales',
+  popular = 'Popular Products',
+  sorders = 'Orders',
+  loginTo = 'Login to your account',
+  product = 'Products',
+  settings = 'Shop Settings',
+  featured = 'Featured',
+  edit = 'Edit',
+  save = 'Save',
+  remove = 'Remove',
+  logout = 'Logout',
+  smessages = 'Messages',
+  shopSettings = 'Shop Settings',
+  editProfile = 'Edit Profile',
+  changeImage = 'Change Image',
+  sname = 'Username',
+  confirmPass = 'Confirm Password',
+  chats = 'Chats',
+  credit = '@santurdioDevs';
+
+
+  //shop setting String
+  const snameHint = 'eg. Vendor Name',
+  shopDescHint = 'Enter your shop description',
+  shopWebsiteHint = 'eg. vendor.emart.com',
+  shopMobileHint = 'eg. +92123456789',
+  shopAddressHint = 'eg. Near Railway Bazaar',
+  description = 'Description',
+  mobile = 'Shop Mobile',
+  website = 'Shop Website',
+  shopName = 'Shop Name',
+  address = 'Shop Address';

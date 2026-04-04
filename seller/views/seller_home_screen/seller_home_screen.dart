@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:projects/consts/colors.dart';
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/services/store_services.dart';
 import 'package:projects/seller/views/seller_product_screen/s_product_details.dart';
@@ -15,6 +16,7 @@ class SellerHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white, 
       appBar: sAppbarWidget(dashboard),
       body: StreamBuilder(
         stream: StoreServices.getProducts(currentUser!.uid),

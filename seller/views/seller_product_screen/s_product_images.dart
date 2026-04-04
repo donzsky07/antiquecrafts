@@ -1,4 +1,5 @@
 import 'package:projects/seller/consts/const.dart';
+import 'package:projects/consts/colors.dart';
 
 
 Widget sProductImages({required label, onPress}){

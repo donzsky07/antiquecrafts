@@ -7,6 +7,7 @@ import 'package:projects/seller/views/seller_order_screen/seller_order_details.d
 import 'package:projects/seller/views/seller_widgets/s_appbar_widget.dart';
 import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
+import 'package:projects/consts/colors.dart';
 import 'package:intl/intl.dart' as intl;
 
 
@@ -18,6 +19,7 @@ class SellerOrdersScreen extends StatelessWidget {
     var controller = Get.put(SellerOrdersController());
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: sAppbarWidget(orders),
       body: StreamBuilder(
         stream: StoreServices.getOrders(currentUser!.uid),

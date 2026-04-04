@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:projects/consts/colors.dart';
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/controllers/chat_controller.dart';
 import 'package:projects/seller/views/seller_message_screen/components/seller_chat_bubble.dart';
@@ -15,6 +16,7 @@ class SellerChatScreen extends StatelessWidget {
     final SellerChatController ctrl = Get.put(SellerChatController());
 
     return Scaffold(
+      backgroundColor: white,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: fontGrey),

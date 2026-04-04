@@ -10,6 +10,7 @@ import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
 import 'package:projects/seller/views/seller_message_screen/seller_messages_screen.dart';
 import 'package:projects/seller/views/seller_profile_screen/s_edit_profilescreen.dart';
+import 'package:projects/consts/colors.dart';
 
 
 

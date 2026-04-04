@@ -2,6 +2,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/controllers/products_controller.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
+import 'package:projects/consts/colors.dart';
 
 
 Widget sProductDropdown(hint, List<String> list, dropvalue, SellerProductsController controller){

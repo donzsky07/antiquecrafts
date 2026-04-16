@@ -11,6 +11,7 @@ import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
 import 'package:projects/seller/views/seller_message_screen/seller_messages_screen.dart';
 import 'package:projects/seller/views/seller_profile_screen/s_edit_profilescreen.dart';
 import 'package:projects/consts/colors.dart';
+import 'package:projects/views/auth_screen/login_screen.dart';
 
 
 
@@ -35,7 +36,7 @@ class SProfileScreen extends StatelessWidget {
         icon: const Icon(Icons.edit, color: white)),
         TextButton(onPressed: () async{
           await Get.find<AuthController>().signout();
-          Get.offAll(() => const SellerLoginScreen());
+          Get.offAll(() => const LoginScreen());
         }, 
         child: normalText(text: logout, size: 18.0),)
       ],

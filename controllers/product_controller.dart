@@ -11,14 +11,17 @@ class ProductController extends GetxController {
   var totalPrice = 0.obs;
 
   var subcat = [];
-
   var isFav = false.obs;
 
-  getSubCategories(title) async {
+  // Stock tracking
+  var remainingStock = 0.obs;
+
+  // -------------------- Categories --------------------
+  getSubCategories(String title) async {
     subcat.clear();
-    var data =  await rootBundle.loadString('lib/services/category_model.json');
+    var data = await rootBundle.loadString('lib/services/category_model.json');
     var decoded = categoryModelFromJson(data);
-    var s= decoded.categories.where ((element) => element.name == title).toList();
+    var s = decoded.categories.where((element) => element.name == title).toList();
 
     for (var e in s[0].subcategory) {
       subcat.add(e);
@@ -27,57 +30,122 @@ class ProductController extends GetxController {
 
   changeColorIndex(int index) {
     colorIndex.value = index;
-
   }
 
-  increaseQuantity(totalQuantity) {
-    if (quantity.value < totalQuantity) {
-       quantity.value++;
-    }
+  // -------------------- Quantity & Stock --------------------
+  void setInitialStock(int stock) {
+    remainingStock.value = stock;
   }
-  decreaseQuantity() {
-    if(quantity.value > 0){
-       quantity.value--;
-    }
+int productPrice = 0;
+
+void setProductPrice(int price) {
+  productPrice = price;
+  calculateTotalPrice(); // initial compute
+}
+
+void increaseQuantity() {
+  if (remainingStock.value > 0) {
+    quantity.value++;
+    remainingStock.value--;
+    calculateTotalPrice(); // ✅ update
+  } else {
+    VxToast.show(Get.context!, msg: "No more items available");
+  }
+}
+
+void decreaseQuantity() {
+  if (quantity.value > 0) {
+    quantity.value--;
+    remainingStock.value++;
+    calculateTotalPrice(); // ✅ update
+  }
+}
+
+void calculateTotalPrice() {
+  totalPrice.value = productPrice * quantity.value;
+}
+
+  void updateRemainingStock(int stock) {
+    remainingStock.value = stock;
   }
 
-  calculateTotalPrice(price) {
-    totalPrice.value = price * quantity.value;
-  }
-
-  addToCart({
-    title, img, sellername, color, qty, tprice,context, vendorID}) async {
-    await firestore.collection(cartCollection).doc().set({
-      "title": title,
-      "img": img,
-      "sellername": sellername,
-      "color": color,
-      "qty": qty,
-      "vendor_id": vendorID,
-      "tprice": tprice,
-      "added_by": currentUser!.uid
-
-    }).catchError((error) {
-      VxToast.show(context, msg: error.toString());
-    });
-  }
-
-  resetValues(){
+  void resetValues() {
     totalPrice.value = 0;
     quantity.value = 0;
     colorIndex.value = 0;
-
   }
 
-  addToWishlist(docId, context) async {
+  // -------------------- Cart --------------------
+  addToCart({
+    required String title,
+    required String img,
+    required String sellername,
+    required String color,
+    required int qty,
+    required int tprice,
+    required BuildContext context,
+    required String vendorID,
+    required String productId,
+  }) async {
+    try {
+      // 1️⃣ Fetch product document
+      DocumentSnapshot productSnap = await firestore.collection('products').doc(productId).get();
+      if (!productSnap.exists) {
+        VxToast.show(context, msg: "Product not found");
+        return;
+      }
+
+      int currentStock = productSnap['p_quantity'] ?? 0;
+
+      // 2️⃣ Check minimum quantity
+      if (qty <= 0) {
+        VxToast.show(context, msg: "Minimum 1 product is required");
+        return;
+      }
+
+      // 3️⃣ Check stock availability
+      if (qty > currentStock) {
+        VxToast.show(context, msg: "Not enough stock available");
+        return;
+      }
+
+      // 4️⃣ Add item to cart
+      await firestore.collection(cartCollection).add({
+        "title": title,
+        "img": img,
+        "sellername": sellername,
+        "color": color,
+        "qty": qty,
+        "vendor_id": vendorID,
+        "tprice": tprice,
+        "added_by": currentUser!.uid,
+        "productId": productId,
+      });
+
+      // 5️⃣ Update product stock
+      await firestore.collection('products').doc(productId).update({
+        'p_quantity': currentStock - qty
+      });
+
+      // 6️⃣ Reset controller values
+      resetValues();
+
+      VxToast.show(context, msg: "Added to Cart");
+    } catch (e) {
+      VxToast.show(context, msg: e.toString());
+    }
+  }
+
+  // -------------------- Wishlist --------------------
+  addToWishlist(String docId, BuildContext context) async {
     await firestore.collection(productsCollection).doc(docId).set({
       'p_wishlist': FieldValue.arrayUnion([currentUser!.uid])
     }, SetOptions(merge: true));
     isFav(true);
-      VxToast.show(context, msg: "Added to wishlist ");
+    VxToast.show(context, msg: "Added to wishlist");
   }
 
-    removeFromWishlist(docId, context) async {
+  removeFromWishlist(String docId, BuildContext context) async {
     await firestore.collection(productsCollection).doc(docId).set({
       'p_wishlist': FieldValue.arrayRemove([currentUser!.uid])
     }, SetOptions(merge: true));
@@ -85,14 +153,46 @@ class ProductController extends GetxController {
     VxToast.show(context, msg: "Removed from wishlist");
   }
 
-  checkIfFav(data) async {
-    if(data['p_wishlist'].contains(currentUser!.uid)) {
+  checkIfFav(data) {
+    if (data['p_wishlist'] != null && data['p_wishlist'].contains(currentUser!.uid)) {
       isFav(true);
-    }else {
+    } else {
       isFav(false);
     }
-
   }
+
+/*//random order code
+String generateOrderCode({int length = 8}) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  Random rnd = Random();
+  return String.fromCharCodes(
+    Iterable.generate(
+      length,
+      (_) => chars.codeUnitAt(rnd.nextInt(chars.length)),
+    ),
+  );
+}
+
+
+Future<void> addOrder(Map<String, dynamic> orderData) async {
+  final orderCode = generateOrderCode(); // ✅ generate random code
+
+  final newOrder = {
+    'order_code': orderCode,
+    'order_date': Timestamp.now(),
+    'total_amount': orderData['total_amount'],
+    'order_by_name': orderData['order_by_name'],
+    'order_by_email': orderData['order_by_email'],
+    'order_by_address': orderData['order_by_address'],
+    'orders': orderData['orders'],
+    'order_status': 'Placed', // optional status field
+    // ...add other fields
+  };
+
+  await FirebaseFirestore.instance
+      .collection('orders')
+    .add(newOrder); // Firestore auto doc ID
+}*/
 
 
 

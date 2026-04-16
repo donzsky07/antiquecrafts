@@ -92,7 +92,7 @@ class _SShopSettingsState extends State<SShopSettings> {
                 ElevatedButton.icon(
                   icon: const Icon(Icons.logout, color: white),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: redColor,
+                    backgroundColor:  softBlueGreen,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                     shape: RoundedRectangleBorder(

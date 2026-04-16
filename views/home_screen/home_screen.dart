@@ -9,14 +9,13 @@ import 'package:projects/views/home_screen/search_screen.dart';
 import 'package:projects/widget/home_button.dart';
 import 'package:projects/views/home_screen/components/featured_button.dart';
 import 'package:projects/widget/loading_indicator.dart';
-  
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<HomeController>();
+    var controller = Get.put(HomeController());
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -26,30 +25,69 @@ class HomeScreen extends StatelessWidget {
       child: SafeArea(
         child: Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              height: 60,
-              color: lightGrey,
-              child: TextFormField(
-                controller: controller.searchController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  suffixIcon: Icon(Icons.search).onTap(() {
-                    if (controller.searchController.text.isNotEmptyAndNotNull) {
-                      Get.to(() => SearchScreen(
-                            title: controller.searchController.text,
-                          ));
-                    }
-                  }),
-                  filled: true,
-                  fillColor: whiteColor,
-                  hintText: searchanything,
-                  hintStyle: TextStyle(color: textfieldGrey),
+            // SEARCH FIELD + LIVE RESULTS
+            Column(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  color: lightGrey,
+                  child: TextFormField(
+                    controller: controller.searchController,
+                    onChanged: (value) {
+                      controller.searchProducts(value); // Live search
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      suffixIcon: Icon(Icons.search),
+                      filled: true,
+                      fillColor: whiteColor,
+                      hintText: searchanything,
+                      hintStyle: TextStyle(color: textfieldGrey),
+                    ),
+                  ),
                 ),
-              ),
+                5.heightBox,
+                Obx(() {
+                  if (controller.searchResults.isEmpty ||
+                      controller.searchController.text.isEmpty) {
+                    return Container();
+                  } else {
+                    return Container(
+                      color: whiteColor,
+                      constraints: BoxConstraints(maxHeight: 300),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: controller.searchResults.length,
+                        itemBuilder: (context, index) {
+                          var product = controller.searchResults[index];
+                          return ListTile(
+                            leading: Image.network(
+                              product['p_imgs'][0],
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                            ),
+                            title: Text(product['p_name']),
+                            subtitle: Text(
+                                "${product['p_category']} - ₱${product['p_price']}"),
+                            onTap: () {
+                              Get.to(() => ItemDetails(
+                                    title: product['p_name'],
+                                    data: product,
+                                  ));
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }),
+              ],
             ),
 
             10.heightBox,
+
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -73,8 +111,8 @@ class HomeScreen extends StatelessWidget {
                               .margin(const EdgeInsets.symmetric(horizontal: 8))
                               .make();
                         }),
-
                     10.heightBox,
+
                     // DEALS BUTTONS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -341,7 +379,6 @@ class HomeScreen extends StatelessWidget {
                         }
                       },
                     ),
-
                   ],
                 ),
               ),

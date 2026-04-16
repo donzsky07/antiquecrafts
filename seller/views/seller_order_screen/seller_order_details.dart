@@ -183,7 +183,7 @@ class _OrderDetailsState extends State<SellerOrderDetails> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   sellerOrderPlaceDetails(
-                    title1: "₱ ${controller.orders[index]['title']}",
+                    title1: " ${controller.orders[index]['title']}",
                     title2: "₱ ${controller.orders[index]['tprice']}",
                     d1: "${controller.orders[index]['qty']}x",
                     d2: "Refundable"),
@@ -193,7 +193,9 @@ class _OrderDetailsState extends State<SellerOrderDetails> {
                    child: Container(
                       width: 30,
                       height: 20,
-                      color: Color(controller.orders[index]['color']),
+                    color: Color(
+  int.tryParse(controller.orders[index]['color'].toString()) ?? 0
+),
                     ),
                     ),
                     const Divider(),

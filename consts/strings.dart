@@ -1,4 +1,6 @@
 //flashscreen string
+import 'package:projects/consts/consts.dart';
+
 const appname = "antique_crafts";
 const appversion = "Version 1.0.0";
 const credits = "@santurdio devs";
@@ -74,7 +76,7 @@ const searchanything = "Search anything.....",
 
 
 //item details string/userside
-const video = "Video", 
+const feedback = "Feedbacks", 
       reviews = "Reviews",
       sellerpolicy = "Seller Policy",
       returnpolicy = "Return Policy",

@@ -39,7 +39,7 @@ class StoreServices {
 
 //NEW line of CODES
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:projects/seller/consts/const.dart';
 
 class StoreServices {
@@ -68,8 +68,8 @@ class StoreServices {
         .snapshots();
   }
 
-  // ✅ ADD THIS FUNCTION HERE
-  static Future<void> updateProductRating(String productId) async {
+  // PRODUCTS RATINGS
+  /*static Future<void> updateProductRating(String productId) async {
     var snapshot = await FirebaseFirestore.instance
         .collection('ratings')
         .where('product_id', isEqualTo: productId)
@@ -92,7 +92,8 @@ class StoreServices {
       'p_ratings': avg,
       'total_reviews': snapshot.docs.length,
     });
-  }
+  }*/
+  
 
   
 }

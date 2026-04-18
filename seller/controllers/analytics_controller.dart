@@ -63,11 +63,12 @@ import 'package:get/get.dart';
 import 'package:projects/consts/firebase_const.dart';
 
 class AnalyticsController extends GetxController {
+
   var totalOrders = 0.obs;
   var totalSales = 0.0.obs;
   var totalRatings = 0.0.obs;
 
-  var isLoading = false.obs;
+  var isLoading = true.obs;
 
   @override
   void onInit() {
@@ -76,11 +77,11 @@ class AnalyticsController extends GetxController {
   }
 
   void fetchAnalytics() {
-    isLoading.value = true;
 
-    // 🔹 ORDERS: total orders + total sales
+    /// 🔹 ORDERS + SALES
     FirebaseFirestore.instance
         .collection(ordersCollection)
+        .where("vendors", arrayContains: currentUser!.uid)
         .snapshots()
         .listen((orderSnapshot) {
 
@@ -89,35 +90,27 @@ class AnalyticsController extends GetxController {
       double sales = 0;
 
       for (var doc in orderSnapshot.docs) {
-        var data = doc.data();
-
-        if (data['total_amount'] != null) {
-          sales += (data['total_amount'] as num).toDouble();
-        }
+        sales += (double.tryParse(doc['total_amount'].toString()) ?? 0);
       }
 
       totalSales.value = sales;
     });
 
-    // 🔹 PRODUCTS: ratings
+    /// 🔹 RATINGS (PER VENDOR)
     FirebaseFirestore.instance
-        .collection(productsCollection)
+        .collection("ratings")
+        .where("vendor_id", isEqualTo: currentUser!.uid)
         .snapshots()
-        .listen((productSnapshot) {
+        .listen((snapshot) {
 
-      double ratings = 0;
-      int count = 0;
+      double sum = 0;
 
-      for (var doc in productSnapshot.docs) {
-        var data = doc.data();
-
-        if (data['p_ratings'] != null) {
-          ratings += double.tryParse(data['p_ratings'].toString()) ?? 0;
-          count++;
-        }
+      for (var doc in snapshot.docs) {
+        sum += (doc['rating'] as num).toDouble();
       }
 
-      totalRatings.value = count > 0 ? ratings / count : 0;
+      totalRatings.value =
+          snapshot.docs.isEmpty ? 0 : sum / snapshot.docs.length;
 
       isLoading.value = false;
     });

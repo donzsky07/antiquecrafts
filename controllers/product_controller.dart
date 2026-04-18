@@ -13,6 +13,8 @@ class ProductController extends GetxController {
   var subcat = [];
   var isFav = false.obs;
 
+  var rating = 0.obs;
+
   // Stock tracking
   var remainingStock = 0.obs;
 
@@ -161,38 +163,7 @@ void calculateTotalPrice() {
     }
   }
 
-/*//random order code
-String generateOrderCode({int length = 8}) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  Random rnd = Random();
-  return String.fromCharCodes(
-    Iterable.generate(
-      length,
-      (_) => chars.codeUnitAt(rnd.nextInt(chars.length)),
-    ),
-  );
-}
 
-
-Future<void> addOrder(Map<String, dynamic> orderData) async {
-  final orderCode = generateOrderCode(); // ✅ generate random code
-
-  final newOrder = {
-    'order_code': orderCode,
-    'order_date': Timestamp.now(),
-    'total_amount': orderData['total_amount'],
-    'order_by_name': orderData['order_by_name'],
-    'order_by_email': orderData['order_by_email'],
-    'order_by_address': orderData['order_by_address'],
-    'orders': orderData['orders'],
-    'order_status': 'Placed', // optional status field
-    // ...add other fields
-  };
-
-  await FirebaseFirestore.instance
-      .collection('orders')
-    .add(newOrder); // Firestore auto doc ID
-}*/
 
 
 

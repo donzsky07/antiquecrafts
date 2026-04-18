@@ -6,6 +6,7 @@ import 'package:projects/views/auth_screen/login_screen.dart';
 
 
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

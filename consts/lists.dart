@@ -19,7 +19,7 @@ const featuredTitles2 = [boysGlasses, tShirts, girlsDress ];
 const categoriesList = [ handwoven, woodcrafts, bamboo, jewelry, ceramics, metalcraft, natural, souvenir, foods];
 const categoryImages = [imgS1, imgC2, imgC3,imgC4, imgC5, imgC6,imgC7, imgC8, imgC9];
 
-const itemDetailsButtonList = [video, reviews, sellerpolicy, returnpolicy, supportpolicy];
+const itemDetailsButtonList = [feedback, reviews, sellerpolicy, returnpolicy, supportpolicy];
 
 const profileButtonsList =[orders, wishlist, messages];
 const profileButtonsIcon =[icOrder, icOrder, icMessages];

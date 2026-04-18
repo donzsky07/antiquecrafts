@@ -144,10 +144,15 @@ class SProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    // ✅ SAFE CONVERSIONS
-    double rating = double.tryParse(data['p_ratings'].toString()) ?? 0.0;
-    double price = double.tryParse(data['p_price'].toString()) ?? 0.0;
-    int quantity = int.tryParse(data['p_quantity'].toString()) ?? 0;
+    // 🔥 SAFE PARSING (FIXED)
+    double rating =
+        double.tryParse(data['p_ratings']?.toString() ?? '0') ?? 0.0;
+
+    double price =
+        double.tryParse(data['p_price']?.toString() ?? '0') ?? 0.0;
+
+    int quantity =
+        int.tryParse(data['p_quantity']?.toString() ?? '0') ?? 0;
 
     List images = data['p_imgs'] ?? [];
     List colors = data['p_colors'] ?? [];
@@ -156,13 +161,11 @@ class SProductDetails extends StatelessWidget {
       backgroundColor: white,
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
+          onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_back, color: darkGrey),
         ),
         title: boldText(
-          text: "${data['p_name']}",
+          text: "${data['p_name'] ?? ''}",
           color: fontGrey,
           size: 18.0,
         ),
@@ -198,7 +201,7 @@ class SProductDetails extends StatelessWidget {
 
                   /// 🔹 NAME
                   boldText(
-                    text: "${data['p_name']}",
+                    text: "${data['p_name'] ?? ''}",
                     color: fontGrey,
                     size: 18.0,
                   ),
@@ -209,13 +212,13 @@ class SProductDetails extends StatelessWidget {
                   Row(
                     children: [
                       boldText(
-                        text: "${data['p_category']}",
+                        text: "${data['p_category'] ?? ''}",
                         color: fontGrey,
                         size: 16.0,
                       ),
                       10.widthBox,
                       normalText(
-                        text: "${data['p_subcategory']}",
+                        text: "${data['p_subcategory'] ?? ''}",
                         color: fontGrey,
                         size: 16.0,
                       ),
@@ -224,15 +227,26 @@ class SProductDetails extends StatelessWidget {
 
                   /// 🔹 RATING
                   10.heightBox,
-                  VxRating(
-                    isSelectable: false,
-                    value: rating,
-                    onRatingUpdate: (value) {},
-                    normalColor: textFieldGrey,
-                    selectionColor: golden,
-                    count: 5,
-                    maxRating: 5,
-                    size: 25,
+                  Row(
+                    children: [
+                      VxRating(
+                        isSelectable: false,
+                        value: rating,
+                        onRatingUpdate: (value) {},
+                        normalColor: textFieldGrey,
+                        selectionColor: golden,
+                        count: 5,
+                        maxRating: 5,
+                        size: 25,
+                      ),
+
+                      10.widthBox,
+
+                      normalText(
+                        text: rating.toStringAsFixed(1),
+                        color: fontGrey,
+                      ),
+                    ],
                   ),
 
                   /// 🔹 PRICE
@@ -262,14 +276,22 @@ class SProductDetails extends StatelessWidget {
                           Row(
                             children: List.generate(
                               colors.length,
-                              (index) => VxBox()
-                                  .size(40, 40)
-                                  .roundedFull
-                                  .color(Color(colors[index]))
-                                  .margin(
-                                      const EdgeInsets.symmetric(horizontal: 4))
-                                  .make()
-                                  .onTap(() {}),
+                              (index) {
+                                Color colorValue;
+
+                                try {
+                                  colorValue = Color(colors[index]);
+                                } catch (e) {
+                                  colorValue = Colors.grey;
+                                }
+
+                                return VxBox()
+                                    .size(40, 40)
+                                    .roundedFull
+                                    .color(colorValue)
+                                    .margin(const EdgeInsets.symmetric(horizontal: 4))
+                                    .make();
+                              },
                             ),
                           ),
                         ],
@@ -309,7 +331,7 @@ class SProductDetails extends StatelessWidget {
                   10.heightBox,
 
                   normalText(
-                    text: "${data['p_desc']}",
+                    text: "${data['p_desc'] ?? ''}",
                     color: fontGrey,
                   ),
                 ],

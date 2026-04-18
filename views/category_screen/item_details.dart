@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
-import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/product_controller.dart';
 import 'package:projects/views/cart_screen/cart_screen.dart';
 import 'package:projects/views/chat_screen/chat_screen.dart';
@@ -15,6 +14,7 @@ class ItemDetails extends StatelessWidget {
   final String? title;
   final dynamic data;
   const ItemDetails({super.key, required this.title, this.data});
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,18 +87,77 @@ class ItemDetails extends StatelessWidget {
                       10.heightBox,
                       title!.text.size(16).color(darkFontGrey).fontFamily(semibold).make(),
                       
-                     //ratings
+                    10.heightBox,
+
+"Rate this product".text
+    .color(darkFontGrey)
+    .fontFamily(semibold)
+    .make(),
+
 10.heightBox,
-VxRating(
-  isSelectable: false,
-  value:  (data['p_ratings'] ?? 0).toDouble(),
-  onRatingUpdate: (value){}, 
-  normalColor: textfieldGrey, 
-  selectionColor: golden, 
-  count: 5,
-  maxRating: 5,
-  size: 25, 
-),
+
+/// ⭐ CLICKABLE STARS
+Obx(() => Row(
+  mainAxisAlignment: MainAxisAlignment.start,
+  children: List.generate(5, (index) {
+
+    return IconButton(
+      icon: Icon(
+        Icons.star,
+        size: 25,
+        color: index < controller.rating.value
+            ? golden
+            : textfieldGrey,
+      ),
+
+      onPressed: () async {
+        int ratingValue = index + 1;
+
+        controller.rating.value = ratingValue;
+
+        /// 1. SAVE RATING
+        await FirebaseFirestore.instance
+            .collection("ratings")
+            .add({
+          "product_id": data.id,
+          "user_id": currentUser?.uid ?? "guest",
+          "vendor_id": data['vendor_id'],
+          "rating": ratingValue.toDouble(),
+          "review": "",
+          "isApproved": false,
+          "isReported": false,
+          "created_at": Timestamp.now(),
+        });
+
+        /// 2. UPDATE PRODUCT AVERAGE ⭐ (IMPORTANT FIX)
+       DocumentReference productRef = FirebaseFirestore.instance
+    .collection("products")
+    .doc(data.id);
+
+QuerySnapshot ratingSnap = await FirebaseFirestore.instance
+    .collection("ratings")
+    .where("product_id", isEqualTo: data.id)
+    .get();
+
+double sum = 0;
+
+for (var doc in ratingSnap.docs) {
+  sum += (doc['rating'] as num).toDouble();
+}
+
+int count = ratingSnap.docs.length;
+
+double avg = count == 0 ? 0 : sum / count;
+
+await productRef.update({
+  "p_ratings": avg.toStringAsFixed(1),
+  "totalRatings": count,
+});
+        VxToast.show(context, msg: "Rating submitted");
+      },
+    );
+  }),
+)),
 
                      
                      10.heightBox,
@@ -178,7 +237,7 @@ Obx(
     children: [
       SizedBox(
         width: 100,
-        child: "Quantity: ".text.color(textfieldGrey).make(),
+        child: "Quantity: ".text.color(darkFontGrey).make(),
       ),
       // Decrease quantity
       Icon(Icons.remove).onTap(() async {
@@ -236,10 +295,11 @@ Obx(
                       10.heightBox,
                       "${data['p_desc']}".text.color(darkFontGrey).make(),
 
-                      //button section
+
+                      //button section itemdetails buttonlist
                       10.heightBox,
 
-                      ListView(
+                     /* ListView(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
                         children: List.generate(
@@ -249,7 +309,10 @@ Obx(
                           trailing: const Icon(Icons.arrow_forward),
                         ),
                         ),
-                       ),
+                       ),*/
+                       
+
+
                        10.heightBox,
                       //products you may like section
                       productsyoumaylike.text.fontFamily(bold).size(16).color(darkFontGrey).make(),
@@ -368,362 +431,3 @@ SizedBox(
   }
 }
 
-/*//new lines of codes start here//
-import 'package:get/get.dart';
-import 'package:projects/consts/consts.dart';
-import 'package:projects/consts/lists.dart';
-import 'package:projects/controllers/product_controller.dart';
-import 'package:projects/views/cart_screen/cart_screen.dart';
-import 'package:projects/views/chat_screen/chat_screen.dart';
-import 'package:projects/widget/our_button.dart';
-import 'package:projects/widget/loading_indicator.dart';
-import 'package:projects/services/firestore_services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class ItemDetails extends StatelessWidget {
-  final String? title;
-  final dynamic data;
-
-  const ItemDetails({super.key, required this.title, this.data});
-
-  @override
-  Widget build(BuildContext context) {
-
-    var controller = Get.put(ProductController());
-
-    // SAFE CONVERSIONS
-    double price = (data['p_price'] ?? 0).toDouble();
-    int stock = (data['p_quantity'] ?? 0).toInt();
-    double rating = (data['p_ratings'] ?? 0).toDouble();
-
-    controller.setProductPrice(price.toInt());
-    controller.setInitialStock(stock);
-
-    return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        controller.resetValues();
-      },
-      child: Scaffold(
-        backgroundColor: lightGrey,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              controller.resetValues();
-              Get.back();
-            },
-            icon: const Icon(Icons.arrow_back),
-          ),
-          title: (title ?? '')
-              .text
-              .color(darkFontGrey)
-              .fontFamily(bold)
-              .make(),
-          actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
-            Obx(
-              () => IconButton(
-                onPressed: () {
-                  if (controller.isFav.value) {
-                    controller.removeFromWishlist(data.id, context);
-                  } else {
-                    controller.addToWishlist(data.id, context);
-                  }
-                },
-                icon: Icon(
-                  Icons.favorite_outlined,
-                  color: controller.isFav.value ? redColor : darkFontGrey,
-                ),
-              ),
-            ),
-          ],
-        ),
-
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      // IMAGES
-                      VxSwiper.builder(
-                        autoPlay: true,
-                        height: 350,
-                        itemCount: (data['p_imgs'] ?? []).length,
-                        aspectRatio: 16 / 9,
-                        viewportFraction: 1.0,
-                        itemBuilder: (context, index) {
-                          return Image.network(
-                            data['p_imgs'][index],
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
-
-                      10.heightBox,
-
-                      (title ?? '')
-                          .text
-                          .size(16)
-                          .color(darkFontGrey)
-                          .fontFamily(semibold)
-                          .make(),
-
-                      // RATING SAFE
-                      10.heightBox,
-                      VxRating(
-                        isSelectable: false,
-                        value: rating,
-                        onRatingUpdate: (value) {},
-                        normalColor: textfieldGrey,
-                        selectionColor: golden,
-                        count: 5,
-                        maxRating: 5,
-                        size: 25,
-                      ),
-
-                      10.heightBox,
-
-                     price
-    .toStringAsFixed(2)
-    .numCurrency
-    .text
-    .color(redColor)
-    .fontFamily(bold)
-    .size(18)
-    .make(),
-
-                      10.heightBox,
-
-                      // SELLER
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                "Seller"
-                                    .text
-                                    .white
-                                    .fontFamily(semibold)
-                                    .make(),
-                                5.heightBox,
-                                "${data['p_seller'] ?? ''}"
-                                    .text
-                                    .fontFamily(semibold)
-                                    .color(darkFontGrey)
-                                    .size(16)
-                                    .make(),
-                              ],
-                            ),
-                          ),
-                          const CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.message_rounded,
-                                color: darkFontGrey),
-                          ).onTap(() {
-                            Get.to(
-                              () => const ChatScreen(),
-                              arguments: [
-                                data['p_seller'],
-                                data['vendor_id']
-                              ],
-                            );
-                          })
-                        ],
-                      )
-                          .box
-                          .height(60)
-                          .padding(const EdgeInsets.symmetric(horizontal: 16))
-                          .color(textfieldGrey)
-                          .make(),
-
-                      20.heightBox,
-
-                      // COLOR SAFE
-                      Obx(
-                        () => Column(
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  child: "Color:"
-                                      .text
-                                      .color(textfieldGrey)
-                                      .make(),
-                                ),
-                                Row(
-                                  children: List.generate(
-                                    (data['p_colors'] ?? []).length,
-                                    (index) => Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        VxBox()
-                                            .size(40, 40)
-                                            .roundedFull
-                                            .color(
-                                              Color(int.parse(data['p_colors']
-                                                      [index]
-                                                  .toString())),
-                                            )
-                                            .margin(
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 4))
-                                            .make()
-                                            .onTap(() {
-                                          controller.changeColorIndex(index);
-                                        }),
-                                        Visibility(
-                                          visible: index ==
-                                              controller.colorIndex.value,
-                                          child: const Icon(Icons.done,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ).box.padding(const EdgeInsets.all(8)).make(),
-
-                            // QUANTITY SAFE
-                            Obx(
-                              () => Row(
-                                children: [
-                                  SizedBox(
-                                    width: 100,
-                                    child: "Quantity:"
-                                        .text
-                                        .color(textfieldGrey)
-                                        .make(),
-                                  ),
-                                  Icon(Icons.remove).onTap(() async {
-                                    if (controller.quantity.value > 0) {
-                                      controller.quantity.value--;
-
-                                      await FirebaseFirestore.instance
-                                          .collection('products')
-                                          .doc(data.id)
-                                          .update({
-                                        'p_quantity':
-                                            FieldValue.increment(1)
-                                      });
-                                    }
-                                  }),
-                                  5.widthBox,
-                                  controller.quantity.value.text
-                                      .size(16)
-                                      .color(darkFontGrey)
-                                      .fontFamily(bold)
-                                      .make(),
-                                  5.widthBox,
-                                  Icon(Icons.add).onTap(() async {
-                                    DocumentSnapshot productSnap =
-                                        await FirebaseFirestore.instance
-                                            .collection('products')
-                                            .doc(data.id)
-                                            .get();
-
-                                    int currentStock =
-                                        (productSnap['p_quantity'] ?? 0)
-                                            .toInt();
-
-                                    if (currentStock > 0) {
-                                      controller.quantity.value++;
-
-                                      await FirebaseFirestore.instance
-                                          .collection('products')
-                                          .doc(data.id)
-                                          .update({
-                                        'p_quantity':
-                                            FieldValue.increment(-1)
-                                      });
-                                    } else {
-                                      VxToast.show(context,
-                                          msg: "No more stock available");
-                                    }
-                                  }),
-                                  10.widthBox,
-                                  "Available: $stock"
-                                      .text
-                                      .color(textfieldGrey)
-                                      .make(),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ).box.white.shadowSm.make(),
-                      ),
-
-                      10.heightBox,
-
-                      "Description"
-                          .text
-                          .color(darkFontGrey)
-                          .fontFamily(semibold)
-                          .make(),
-
-                      10.heightBox,
-
-                      "${data['p_desc'] ?? ''}"
-                          .text
-                          .color(darkFontGrey)
-                          .make(),
-
-                      20.heightBox,
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // ADD TO CART
-            SizedBox(
-              width: double.infinity,
-              height: 70,
-              child: ourButton(
-                color: softBlueGreen,
-                onPress: () async {
-                  int qty = controller.quantity.value;
-
-                  if (qty <= 0) {
-                    VxToast.show(context,
-                        msg: "Minimum 1 product is required");
-                    return;
-                  }
-
-                  double total = price * qty;
-
-                  await controller.addToCart(
-                    color: data['p_colors']
-                        [controller.colorIndex.value]
-                        .toString(),
-                    context: context,
-                    vendorID: data['vendor_id'],
-                    img: data['p_imgs'][0],
-                    qty: qty,
-                    sellername: data['p_seller'],
-                    title: data['p_name'],
-                    tprice: total.toInt(),
-                    productId: data.id,
-                  );
-
-                  Get.to(() => const CartScreen());
-                },
-                textColor: whiteColor,
-                title: "Add to cart",
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}*/

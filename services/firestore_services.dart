@@ -79,8 +79,14 @@ static getCount() async {
   return res;
 }
 
-static allproducts() {
+/*static allproducts() {
   return firestore.collection(productsCollection).snapshots();
+}*/
+static allproducts() {
+  return firestore
+      .collection(productsCollection)
+      .orderBy('p_date', descending: true)
+      .snapshots();
 }
 
 //get featured products method

@@ -71,6 +71,7 @@ class HomeController extends GetxController {
   var email = "".obs;
   var featuredList = [];
   var searchResults = <dynamic>[].obs;
+ var sortBy = 'all'.obs;
 
   // Firestore & Auth
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -118,56 +119,58 @@ class HomeController extends GetxController {
   }
 
   // Live search products by name, category, description, or price
-  Future<void> searchProducts(String query) async {
-    if (query.isEmpty) {
-      searchResults.clear();
-      return;
-    }
-
-    try {
-      List<dynamic> results = [];
-
-      // Search by product name
-      var nameSnapshot = await firestore
-          .collection(productsCollection)
-          .where('p_name', isGreaterThanOrEqualTo: query)
-          .where('p_name', isLessThanOrEqualTo: query + '\uf8ff')
-          .get();
-      results.addAll(nameSnapshot.docs.map((e) => e.data()));
-
-      // Search by category
-      var categorySnapshot = await firestore
-          .collection(productsCollection)
-          .where('p_category', isGreaterThanOrEqualTo: query)
-          .where('p_category', isLessThanOrEqualTo: query + '\uf8ff')
-          .get();
-      results.addAll(categorySnapshot.docs.map((e) => e.data()));
-
-      // Search by description
-      var descSnapshot = await firestore
-          .collection(productsCollection)
-          .where('p_desc', isGreaterThanOrEqualTo: query)
-          .where('p_desc', isLessThanOrEqualTo: query + '\uf8ff')
-          .get();
-      results.addAll(descSnapshot.docs.map((e) => e.data()));
-
-      // Search by price if number
-      double? priceQuery = double.tryParse(query);
-      if (priceQuery != null) {
-        var priceSnapshot = await firestore
-            .collection(productsCollection)
-            .where('p_price', isEqualTo: priceQuery)
-            .get();
-        results.addAll(priceSnapshot.docs.map((e) => e.data()));
-      }
-
-      // Remove duplicates
-      searchResults.value = results.toSet().toList();
-    } catch (e) {
-      print("Search error: $e");
-      searchResults.clear();
-    }
+ Future<void> searchProducts(String query) async {
+  if (query.isEmpty) {
+    searchResults.clear();
+    return;
   }
+
+  try {
+    String searchKey = query.toLowerCase();
+
+    List<dynamic> results = [];
+
+    var snapshot = await firestore
+        .collection(productsCollection)
+        .get();
+
+    for (var doc in snapshot.docs) {
+      var data = doc.data();
+
+      String name = (data['p_name'] ?? '').toString().toLowerCase();
+      String category = (data['p_category'] ?? '').toString().toLowerCase();
+      String desc = (data['p_desc'] ?? '').toString().toLowerCase();
+
+      // 🔎 MATCH ANY FIELD
+      if (name.contains(searchKey) ||
+          category.contains(searchKey) ||
+          desc.contains(searchKey)) {
+        results.add(data);
+      }
+    }
+
+    // 💰 PRICE SEARCH (optional number)
+    double? priceQuery = double.tryParse(query);
+    if (priceQuery != null) {
+      var priceSnapshot = await firestore
+          .collection(productsCollection)
+          .where('p_price', isEqualTo: priceQuery)
+          .get();
+
+      results.addAll(priceSnapshot.docs.map((e) => e.data()));
+    }
+
+    // ❌ REMOVE DUPLICATES
+    searchResults.value = results.toSet().toList();
+  } catch (e) {
+    print("Search error: $e");
+    searchResults.clear();
+  }
+}
+
+
+
+
 }
  
  

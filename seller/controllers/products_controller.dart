@@ -1,4 +1,4 @@
-import 'dart:io';
+/*import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -100,6 +100,7 @@ uploadProduct(context) async {
     'p_quantity' : pquantityController.text,
     'p_seller' : Get.find<SellerHomeController>().username,
     'p_ratings' : "5.0",
+    'p_date': FieldValue.serverTimestamp(), 
     'vendor_id' : currentUser!.uid,
     'featured_id' : ""
 
@@ -129,4 +130,187 @@ removeProduct(docId)async{
 
 
 
+}*/
+
+//NEW CODES
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:projects/seller/consts/const.dart';
+import 'package:projects/seller/controllers/home_controller.dart';
+import 'package:projects/seller/models/seller_category_model.dart';
+
+class SellerProductsController extends GetxController {
+  var isloading = false.obs;
+
+  // text controllers
+  var pnameController = TextEditingController();
+  var pdescController = TextEditingController();
+  var ppriceController = TextEditingController();
+  var pquantityController = TextEditingController();
+
+  var categoryList = <String>[].obs;
+  var subcategoryList = <String>[].obs;
+  List<Category> category = [];
+
+  var pImagesLinks = <String>[];
+  var pImagesList = RxList<dynamic>.generate(3, (index) => null);
+
+  var categoryvalue = ''.obs;
+  var subcategoryvalue = ''.obs;
+
+  var selectedColorIndex = 0.obs;
+
+  // ================= GET CATEGORIES =================
+  getCategories() async {
+    categoryList.clear();
+    var data = await rootBundle.loadString("lib/services/category_model.json");
+    var cat = categoryModelFromJson(data);
+    category = cat.categories;
+  }
+
+  populateCategoryList() {
+    categoryList.clear();
+    for (var item in category) {
+      categoryList.add(item.name);
+    }
+  }
+
+  populateSubcategory(cat) {
+    subcategoryList.clear();
+    var data = category.where((element) => element.name == cat).toList();
+
+    for (var i = 0; i < data.first.subcategory.length; i++) {
+      subcategoryList.add(data.first.subcategory[i]);
+    }
+  }
+
+  // ================= PICK IMAGE =================
+  pickImage(index, context) async {
+    try {
+      final img = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 80);
+
+      if (img != null) {
+        pImagesList[index] = File(img.path);
+      }
+    } catch (e) {
+      VxToast.show(context, msg: e.toString());
+    }
+  }
+
+  // ================= UPLOAD IMAGES =================
+  Future<void> uploadImages() async {
+    pImagesLinks.clear();
+
+    for (var item in pImagesList) {
+      if (item != null) {
+        var filename = basename(item.path);
+
+        var destination =
+            'images/vendors/${currentUser!.uid}/$filename';
+
+        Reference ref = FirebaseStorage.instance.ref().child(destination);
+
+        await ref.putFile(item);
+
+        var url = await ref.getDownloadURL();
+        pImagesLinks.add(url);
+      }
+    }
+  }
+
+  // ================= UPLOAD PRODUCT =================
+  Future<void> uploadProduct(context) async {
+    var store = firestore.collection(productsCollection).doc();
+
+    await store.set({
+      'is_featured': false,
+      'p_category': categoryvalue.value,
+      'p_subcategory': subcategoryvalue.value,
+      'p_colors': FieldValue.arrayUnion([4278190080, 4286578816]),
+
+      // FIXED: direct list instead of arrayUnion
+      'p_imgs': pImagesLinks,
+
+      'p_wishlist': [],
+
+      'p_desc': pdescController.text,
+      'p_name': pnameController.text,
+
+      // FIXED TYPES
+      'p_price': double.tryParse(ppriceController.text) ?? 0.0,
+      'p_quantity': int.tryParse(pquantityController.text) ?? 0,
+
+      'p_seller': Get.find<SellerHomeController>().username,
+      'p_ratings': 5.0,
+
+      // IMPORTANT FOR NEWEST TAB
+      'p_date': FieldValue.serverTimestamp(),
+
+      'vendor_id': currentUser!.uid,
+      'featured_id': ""
+    });
+  }
+
+  // ================= MAIN UPLOAD FLOW (FIXED) =================
+  Future<void> submitProduct(context) async {
+    try {
+      isloading(true);
+
+      // 1. upload images first
+      await uploadImages();
+
+      // 2. upload product AFTER images
+      await uploadProduct(context);
+
+      VxToast.show(context, msg: "Product Uploaded Successfully");
+
+      // optional reset
+      pImagesLinks.clear();
+      pImagesList.assignAll([null, null, null]);
+      pnameController.clear();
+      pdescController.clear();
+      ppriceController.clear();
+      pquantityController.clear();
+      categoryvalue.value = '';
+      subcategoryvalue.value = '';
+
+    } catch (e) {
+      VxToast.show(context, msg: e.toString());
+    } finally {
+      isloading(false);
+    }
+  }
+
+  // ================= FEATURED =================
+  addFeatured(docId) async {
+    await firestore
+        .collection(productsCollection)
+        .doc(docId)
+        .set({
+      'featured_id': currentUser!.uid,
+      'is_featured': true,
+    }, SetOptions(merge: true));
+  }
+
+  removeFeatured(docId) async {
+    await firestore
+        .collection(productsCollection)
+        .doc(docId)
+        .set({
+      'featured_id': '',
+      'is_featured': false,
+    }, SetOptions(merge: true));
+  }
+
+  // ================= DELETE PRODUCT =================
+  removeProduct(docId) async {
+    await firestore.collection(productsCollection).doc(docId).delete();
+  }
 }

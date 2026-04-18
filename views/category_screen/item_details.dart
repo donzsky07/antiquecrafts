@@ -1,4 +1,4 @@
-/*import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/product_controller.dart';
@@ -366,9 +366,9 @@ SizedBox(
       ),
     ));
   }
-}*/
+}
 
-//new lines of codes start here//
+/*//new lines of codes start here//
 import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/lists.dart';
@@ -490,13 +490,14 @@ class ItemDetails extends StatelessWidget {
 
                       10.heightBox,
 
-                      "${price.toStringAsFixed(2)}"
-                          .numCurrency
-                          .text
-                          .color(redColor)
-                          .fontFamily(bold)
-                          .size(18)
-                          .make(),
+                     price
+    .toStringAsFixed(2)
+    .numCurrency
+    .text
+    .color(redColor)
+    .fontFamily(bold)
+    .size(18)
+    .make(),
 
                       10.heightBox,
 
@@ -725,4 +726,4 @@ class ItemDetails extends StatelessWidget {
       ),
     );
   }
-}
+}*/

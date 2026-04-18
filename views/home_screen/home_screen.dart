@@ -5,7 +5,6 @@ import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/home_controller.dart';
 import 'package:projects/services/firestore_services.dart';
 import 'package:projects/views/category_screen/item_details.dart';
-import 'package:projects/views/home_screen/search_screen.dart';
 import 'package:projects/widget/home_button.dart';
 import 'package:projects/views/home_screen/components/featured_button.dart';
 import 'package:projects/widget/loading_indicator.dart';

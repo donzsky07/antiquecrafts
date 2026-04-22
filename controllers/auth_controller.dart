@@ -199,6 +199,27 @@ class AuthController extends GetxController {
     Get.offAll(() =>  LoginScreen());
   }
 
+  //codes for admin
+  
+  /*Future<void> loginAdmin() async {
+  try {
+    isLoading(true);
+
+    await auth.signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+
+    Get.snackbar("Success", "Welcome Admin");
+
+    Get.offAllNamed('/adminHome');
+  } catch (e) {
+    Get.snackbar("Error", e.toString());
+  } finally {
+    isLoading(false);
+  }
+}*/
+
 
 
 

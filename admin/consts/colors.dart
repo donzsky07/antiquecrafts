@@ -9,3 +9,5 @@ const Color ratingsColor = Color.fromRGBO(181, 140, 255, 1);
 const Color sidebarBg = Color.fromRGBO(20, 20, 20, 1);
 const Color selectedItemColor = Color.fromRGBO(108, 140, 255, 1);
 const Color softBlue = Color.fromRGBO(48, 176, 199, 1); 
+const Color successGreen = Color.fromRGBO(76, 217, 100, 1);   
+const green = Color.fromRGBO(52, 168, 83, 1.0);

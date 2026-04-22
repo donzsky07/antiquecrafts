@@ -110,8 +110,12 @@ class CategoryDetails extends StatefulWidget{
                     10.heightBox,
                     "${data[index]['p_name']}".text.fontFamily(semibold).color(darkFontGrey).make(),
                     10.heightBox,
-                    "${data[index]['p_price']}".numCurrency.text.color(redColor).fontFamily(bold).size(16).make()
-                    
+                   "₱${double.parse(data[index]['p_price'].toString()).toStringAsFixed(2)}"
+    .text
+    .color(redColor)
+    .fontFamily(bold)
+    .size(16)
+    .make(),
                     ],
                   ).box
                   .white

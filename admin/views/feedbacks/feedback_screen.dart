@@ -7,6 +7,19 @@ import 'package:projects/widget/loading_indicator.dart';
 class AdminFeedbackScreen extends StatelessWidget {
   const AdminFeedbackScreen({super.key});
 
+  // ⭐ STAR WIDGET
+  Widget buildStars(int rating) {
+    return Row(
+      children: List.generate(5, (index) {
+        return Icon(
+          index < rating ? Icons.star : Icons.star_border,
+          color: Colors.amber,
+          size: 18,
+        );
+      }),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +29,7 @@ class AdminFeedbackScreen extends StatelessWidget {
 
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection("feedbacks") // ✅ FIXED
+            .collection("feedbacks")
             .orderBy("created_at", descending: true)
             .snapshots(),
 
@@ -41,6 +54,8 @@ class AdminFeedbackScreen extends StatelessWidget {
 
               bool isApproved = item['isApproved'] ?? false;
 
+              int rating = (item['rating'] ?? 0).toInt();
+
               return FutureBuilder(
                 future: FirebaseFirestore.instance
                     .collection("users")
@@ -62,7 +77,7 @@ class AdminFeedbackScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
 
-                          /// USER INFO
+                          /// USER INFO + STATUS
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -81,9 +96,10 @@ class AdminFeedbackScreen extends StatelessWidget {
 
                           10.heightBox,
 
-                          /// REVIEW (FIXED)
+                          /// REVIEW
                           "Review:"
                               .text
+                              .color(selectedItemColor)
                               .fontFamily(semibold)
                               .make(),
 
@@ -96,11 +112,17 @@ class AdminFeedbackScreen extends StatelessWidget {
 
                           10.heightBox,
 
-                          /// RATING
-                          "Rating: ${item['rating'] ?? 0}"
-                              .text
-                              .color(selectedItemColor)
-                              .make(),
+                          /// ⭐ STAR RATING (UPDATED)
+                          Row(
+                            children: [
+                              "Rating: "
+                                  .text
+                                  .color(selectedItemColor)
+                                  .make(),
+                              5.widthBox,
+                              buildStars(rating),
+                            ],
+                          ),
 
                           10.heightBox,
 
@@ -134,7 +156,7 @@ class AdminFeedbackScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
 
-                              /// APPROVE / RESOLVE
+                              /// APPROVE
                               TextButton.icon(
                                 onPressed: () async {
                                   await FirebaseFirestore.instance

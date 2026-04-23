@@ -20,7 +20,17 @@ class ProductsPage extends StatelessWidget {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
+            // ✅ UPDATED BUTTON (WITH COLOR)
             ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF4CAF50),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 5,
+              ),
               onPressed: () => showAddProductDialog(context),
               icon: const Icon(Icons.add),
               label: const Text("Add Product"),
@@ -49,14 +59,38 @@ class ProductsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final product = products[index];
 
+                  // ✅ SAFE IMAGE LIST
+                final images = (product['p_imgs'] as List?)?.cast<String>() ?? [];
+                
+
                   return Card(
                     child: ListTile(
-                      leading: const Icon(Icons.shopping_bag),
-
-                      // ✅ FIXED FIELD NAME
+                      
+                      // 🔥 UPDATED IMAGE
+                     leading: SizedBox(
+  width: 50,
+  height: 50,
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(8),
+    child: images.isNotEmpty
+        ? Image.network(
+            images[0],
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[300],
+                child: const Icon(Icons.broken_image),
+              );
+            },
+          )
+        : Container(
+            color: Colors.grey[300],
+            child: const Icon(Icons.image),
+          ),
+  ),
+),
                       title: Text(product['p_name'] ?? "No Name"),
-
-                      subtitle: Text("₱${product['price'] ?? 0}"),
+                      subtitle: Text("₱${product['p_price'] ?? 0}"),
 
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -120,8 +154,9 @@ class ProductsPage extends StatelessWidget {
       textConfirm: "Save",
       onConfirm: () {
         FirebaseFirestore.instance.collection('products').add({
-          'p_name': name.text, // ✅ FIXED
+          'p_name': name.text,
           'p_price': double.tryParse(price.text) ?? 0,
+          'p_imgs': [], // 🔥 ready for images
           'created_at': DateTime.now(),
         });
 
@@ -135,7 +170,7 @@ class ProductsPage extends StatelessWidget {
       BuildContext context, String id, dynamic data) {
 
     TextEditingController name =
-        TextEditingController(text: data['p_name']); // ✅ FIXED
+        TextEditingController(text: data['p_name']);
 
     TextEditingController price =
         TextEditingController(text: data['p_price'].toString());
@@ -154,7 +189,7 @@ class ProductsPage extends StatelessWidget {
             .collection('products')
             .doc(id)
             .update({
-          'p_name': name.text, // ✅ FIXED
+          'p_name': name.text,
           'p_price': double.tryParse(price.text) ?? 0,
         });
 

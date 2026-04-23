@@ -237,9 +237,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:projects/admin/consts/colors.dart';
+import 'package:projects/admin/views/blocked/blocked_page.dart';
 import 'package:projects/admin/views/feedbacks/feedback_screen.dart';
 import 'package:projects/admin/views/auth/admin_login.dart';
+import 'package:projects/admin/views/orders/orders_page.dart';
 import 'package:projects/admin/views/products/products_page.dart';
+import 'package:projects/admin/views/ratings/ratings_page.dart';
 import 'package:projects/admin/views/users/users_page.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -332,13 +335,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       case 2:
         return ProductsPage();
       case 3:
-        return simplePage("Orders Page");
+        return OrdersPage();
       case 4:
-        return simplePage("Ratings Page");
+        return RatingsPage();
       case 5:
         return const AdminFeedbackScreen();
       case 6:
-        return simplePage("Blocked Users Page");
+        return BlockedPage();
       default:
         return const SizedBox();
     }

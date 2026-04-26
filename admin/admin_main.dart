@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:projects/admin/views/auth/admin_login.dart';
+import 'package:projects/admin/views/home_screen/admin_homescreen.dart';
 import 'package:projects/firebase_options.dart';
 
 

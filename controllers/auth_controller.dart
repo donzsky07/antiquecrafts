@@ -114,44 +114,61 @@ class AuthController extends GetxController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // ✅ ROLE-BASED LOGIN
-  Future<void> login() async {
-    isLoading.value = true;
+Future<void> login() async {
+  isLoading.value = true;
 
-    try {
-      final userCred = await _auth.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+  try {
+    final userCred = await _auth.signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+
+    final uid = userCred.user!.uid;
+
+    // 🔥 GET USER DATA
+    final userDoc =
+        await _firestore.collection(usersCollection).doc(uid).get();
+      
+
+    if (!userDoc.exists) {
+      await _auth.signOut();
+      Get.snackbar("Error", "Account not found");
+      return;
+    }
+
+    final data = userDoc.data() as Map<String, dynamic>;
+
+    // 🚨 BLOCK CHECK (IMPORTANT ADDITION)
+    final isBlocked = data['isBlocked'] ?? false;
+
+    if (isBlocked == true) {
+      await _auth.signOut();
+
+      Get.snackbar(
+        "Blocked Account",
+        "Your account has been blocked. Contact admin.",
       );
 
-      final uid = userCred.user!.uid;
-
-      // 🔥 SINGLE COLLECTION WITH ROLE
-      final userDoc =
-          await _firestore.collection(usersCollection).doc(uid).get();
-
-      if (!userDoc.exists) {
-        await _auth.signOut();
-        Get.snackbar("Error", "Account not found");
-        return;
-      }
-
-      final role = userDoc['role'];
-
-      if (role == 'seller') {
-        Get.offAll(() => SellerHome());
-      } else if (role == 'user') {
-        Get.offAll(() =>  Home());
-      } else {
-        Get.snackbar("Error", "Invalid role");
-      }
-
-    } on FirebaseAuthException catch (e) {
-      Get.snackbar("Login Failed", e.message ?? "Something went wrong");
-    } finally {
-      isLoading.value = false;
+      return; // ⛔ STOP LOGIN FLOW HERE
     }
-  }
 
+    // ✅ ROLE CHECK
+    final role = data['role'];
+
+    if (role == 'seller') {
+      Get.offAll(() => SellerHome());
+    } else if (role == 'user') {
+      Get.offAll(() => Home());
+    } else {
+      Get.snackbar("Error", "Invalid role");
+    }
+
+  } on FirebaseAuthException catch (e) {
+    Get.snackbar("Login Failed", e.message ?? "Something went wrong");
+  } finally {
+    isLoading.value = false;
+  }
+}
    // SIGNUP
   Future<void> signup({
     required String name,
@@ -169,18 +186,20 @@ class AuthController extends GetxController {
 
       final uid = userCred.user!.uid;
 
-      // Save user data to Firestore
-      await _firestore.collection(usersCollection).doc(uid).set({
-        'id': uid,
-        'name': name,
-        'email': email,
-        'role': 'user', // default role for users
-        'imgUrl': "",
-        'cart_count': "0",
-        'wishlist_count': "0",
-        'order_count': "0",
-      });
-
+  // Save user data to Firestore
+await _firestore.collection(usersCollection).doc(uid).set({
+  'id': uid,
+  'name': name,
+  'email': email,
+  'role': 'user', // default role for users
+  'imgUrl': "",
+  'cart_count': "0",
+  'wishlist_count': "0",
+  'order_count': "0",
+  'isBlocked': false,
+  'blockedReason': 'SPAM',
+  'blockedAt': null,
+});
       // Navigate to User Home
       Get.offAll(() => Home());
     } on FirebaseAuthException catch (e) {

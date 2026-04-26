@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
-class UsersPage extends StatelessWidget {
+class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
+
+  @override
+  State<UsersPage> createState() => _UsersPageState();
+}
+
+class _UsersPageState extends State<UsersPage> {
+  String selectedFilter = "All"; // All | Active | Blocked
 
   @override
   Widget build(BuildContext context) {
@@ -19,20 +26,32 @@ class UsersPage extends StatelessWidget {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
-           ElevatedButton(
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.green, 
-    foregroundColor: Colors.white, 
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-  ),
-  onPressed: () {
-    showAddUserDialog(context);
-  },
-  child: const Text("Add User"),
-),
+            // 🟢 ADD USER BUTTON (GREEN)
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () => showAddUserDialog(context),
+              child: const Text("Add User"),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 10),
+
+        // 🔥 FILTER TABS
+        Row(
+          children: [
+            filterButton("All"),
+            const SizedBox(width: 10),
+            filterButton("Active"),
+            const SizedBox(width: 10),
+            filterButton("Blocked"),
           ],
         ),
 
@@ -50,16 +69,76 @@ class UsersPage extends StatelessWidget {
 
               final users = snapshot.data!.docs;
 
+              // 🔥 FILTER LOGIC
+              final filteredUsers = users.where((user) {
+                final data = user.data();
+                final isBlocked = data['isBlocked'] ?? false;
+
+                if (selectedFilter == "All") return true;
+                if (selectedFilter == "Active") return isBlocked == false;
+                if (selectedFilter == "Blocked") return isBlocked == true;
+
+                return true;
+              }).toList();
+
               return ListView.builder(
-                itemCount: users.length,
+                itemCount: filteredUsers.length,
                 itemBuilder: (context, index) {
-                  final user = users[index];
+                  final user = filteredUsers[index];
+                  final data = user.data();
+                  final isBlocked = data['isBlocked'] ?? false;
 
                   return Card(
+                    color: isBlocked ? Colors.red.shade50 : null,
                     child: ListTile(
-                      title: Text(user['name'] ?? "No Name"),
-                      subtitle: Text(user['email'] ?? ""),
 
+                      // 👤 ICON
+                      leading: Icon(
+                        isBlocked ? Icons.block : Icons.person,
+                        color: isBlocked ? Colors.red : Colors.green,
+                      ),
+
+                      // 👤 NAME
+                      title: Text(
+                        data['name'] ?? "No Name",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isBlocked ? Colors.red : Colors.black,
+                        ),
+                      ),
+
+                      // 📧 DETAILS
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(data['email'] ?? ""),
+
+                          // 🚨 BLOCK INFO
+                          if (isBlocked) ...[
+                            const SizedBox(height: 4),
+
+                            const Text(
+                              "BLOCKED USER",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+
+                            Text(
+                              "Reason: ${data['blockedReason'] ?? 'No reason'}",
+                              style: const TextStyle(fontSize: 12),
+                            ),
+
+                            Text(
+                              "Blocked At: ${data['blockedAt'] != null ? data['blockedAt'].toDate().toString() : 'N/A'}",
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ],
+                      ),
+
+                      // 🔥 ACTION BUTTONS
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -68,7 +147,7 @@ class UsersPage extends StatelessWidget {
                           IconButton(
                             icon: const Icon(Icons.edit),
                             onPressed: () {
-                              showEditUserDialog(context, user.id, user);
+                              showEditUserDialog(context, user.id, data);
                             },
                           ),
 
@@ -80,6 +159,27 @@ class UsersPage extends StatelessWidget {
                                   .collection('users')
                                   .doc(user.id)
                                   .delete();
+                            },
+                          ),
+
+                          // 🚨 BLOCK / UNBLOCK
+                          IconButton(
+                            icon: Icon(
+                              isBlocked ? Icons.lock_open : Icons.lock,
+                              color: isBlocked ? Colors.orange : Colors.black,
+                            ),
+                            onPressed: () async {
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(user.id)
+                                  .update({
+                                'isBlocked': !isBlocked,
+                                'blockedReason':
+                                    isBlocked ? '' : 'Blocked by admin',
+                                'blockedAt': isBlocked
+                                    ? null
+                                    : FieldValue.serverTimestamp(),
+                              });
                             },
                           ),
                         ],
@@ -95,6 +195,24 @@ class UsersPage extends StatelessWidget {
     );
   }
 
+  // 🔥 FILTER BUTTON
+  Widget filterButton(String title) {
+    final isSelected = selectedFilter == title;
+
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: isSelected ? Colors.black : Colors.grey.shade300,
+        foregroundColor: isSelected ? Colors.white : Colors.black,
+      ),
+      onPressed: () {
+        setState(() {
+          selectedFilter = title;
+        });
+      },
+      child: Text(title),
+    );
+  }
+
   // ➕ ADD USER
   void showAddUserDialog(BuildContext context) {
     TextEditingController name = TextEditingController();
@@ -104,8 +222,8 @@ class UsersPage extends StatelessWidget {
       title: "Add User",
       content: Column(
         children: [
-          TextField(controller: name, decoration: const InputDecoration(hintText: "Name")),
-          TextField(controller: email, decoration: const InputDecoration(hintText: "Email")),
+          TextField(controller: name),
+          TextField(controller: email),
         ],
       ),
       textConfirm: "Save",
@@ -113,7 +231,17 @@ class UsersPage extends StatelessWidget {
         FirebaseFirestore.instance.collection('users').add({
           'name': name.text,
           'email': email.text,
+          'role': 'user',
+
+          'cart_count': 0,
+          'wishlist_count': 0,
+          'order_count': 0,
+
+          'isBlocked': false,
+          'blockedReason': '',
+          'blockedAt': null,
         });
+
         Get.back();
       },
     );
@@ -121,8 +249,10 @@ class UsersPage extends StatelessWidget {
 
   // ✏ EDIT USER
   void showEditUserDialog(BuildContext context, String id, dynamic data) {
-    TextEditingController name = TextEditingController(text: data['name']);
-    TextEditingController email = TextEditingController(text: data['email']);
+    TextEditingController name =
+        TextEditingController(text: data['name']);
+    TextEditingController email =
+        TextEditingController(text: data['email']);
 
     Get.defaultDialog(
       title: "Edit User",
@@ -138,6 +268,7 @@ class UsersPage extends StatelessWidget {
           'name': name.text,
           'email': email.text,
         });
+
         Get.back();
       },
     );

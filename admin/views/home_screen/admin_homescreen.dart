@@ -237,7 +237,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:projects/admin/consts/colors.dart';
-import 'package:projects/admin/views/blocked/blocked_page.dart';
 import 'package:projects/admin/views/feedbacks/feedback_screen.dart';
 import 'package:projects/admin/views/auth/admin_login.dart';
 import 'package:projects/admin/views/orders/orders_page.dart';
@@ -301,7 +300,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 sideItem(Icons.shopping_cart, "Orders", 3),
                 sideItem(Icons.star, "Ratings", 4),
                 sideItem(Icons.feedback, "Feedback", 5),
-                sideItem(Icons.block, "Blocked", 6),
+          
 
                 const Spacer(),
                 sideItem(Icons.logout, "Logout", 7),
@@ -340,8 +339,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         return RatingsPage();
       case 5:
         return const AdminFeedbackScreen();
-      case 6:
-        return BlockedPage();
       default:
         return const SizedBox();
     }

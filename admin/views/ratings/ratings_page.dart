@@ -58,7 +58,7 @@ class RatingsPage extends StatelessWidget {
                 itemCount: ratings.length,
                 itemBuilder: (context, index) {
                   final doc = ratings[index];
-                  final data = doc.data() as Map<String, dynamic>;
+                final data = doc.data();
 
                   final rating = data['rating'] ?? 0;
                   final review = data['review'] ?? '';

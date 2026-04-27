@@ -1,30 +1,31 @@
 
 import 'package:get/get.dart';
-import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/consts/consts.dart';
+import 'package:projects/seller/controllers/seller_auth_controller.dart';
 import 'package:projects/widget/bg_widget.dart';
 import 'package:projects/widget/applogo_widget.dart';
 import 'package:projects/widget/custom_textfield.dart';
 import 'package:projects/widget/our_button.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class SellerSignupScreen extends StatefulWidget {
+  const SellerSignupScreen({super.key});
 
   @override
-  State<SignupScreen> createState() => _SignupScreenState();
+  State<SellerSignupScreen> createState() => _SellerSignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> {
+class _SellerSignupScreenState extends State<SellerSignupScreen> {
   bool isCheck = false;
 
-  // Controller instance
-  var controller = Get.put(AuthController());
+  var controller = Get.put(SellerAuthController());
 
-  // Text controllers
+  // Controllers
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-  var passwordRetypeController = TextEditingController();
+  var retypePasswordController = TextEditingController();
+  var storeNameController = TextEditingController();
+  var phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +39,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 SizedBox(height: context.screenHeight * 0.1),
                 applogoWidget(),
                 const SizedBox(height: 10),
-                Text(
-                  "Join the $appname",
-                  style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
+
+                "Become a Seller"
+                    .text
+                    .fontFamily(bold)
+                    .white
+                    .size(22)
+                    .make(),
+
                 const SizedBox(height: 15),
 
                 Obx(
@@ -71,54 +73,44 @@ class _SignupScreenState extends State<SignupScreen> {
                       customTextField(
                         hint: passwordHint,
                         title: retypePassword,
-                        controller: passwordRetypeController,
+                        controller: retypePasswordController,
                         isPass: true,
                       ),
 
-                      // Terms checkbox
+                      // 🔥 Seller fields
+                      customTextField(
+                        hint: "Store Name",
+                        title: "Store Name",
+                        controller: storeNameController,
+                        isPass: false,
+                      ),
+                      customTextField(
+                        hint: "Phone",
+                        title: "Phone",
+                        controller: phoneController,
+                        isPass: false,
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      // Terms
                       Row(
                         children: [
                           Checkbox(
-                            activeColor: redColor,
+                            activeColor: softBlueGreen,
                             checkColor: whiteColor,
                             value: isCheck,
-                            onChanged: (newValue) {
+                            onChanged: (val) {
                               setState(() {
-                                isCheck = newValue ?? false;
+                                isCheck = val ?? false;
                               });
                             },
                           ),
                           const SizedBox(width: 10),
-                          Expanded(
-                            child: RichText(
-                              text: const TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "I agree to the ",
-                                    style: TextStyle(
-                                        fontFamily: regular,
-                                        color: fontGrey),
-                                  ),
-                                  TextSpan(
-                                    text: termAndCon,
-                                    style: TextStyle(
-                                        fontFamily: regular,
-                                        color: redColor),
-                                  ),
-                                  TextSpan(
-                                    text: " & ",
-                                    style: TextStyle(
-                                        fontFamily: regular,
-                                        color: fontGrey),
-                                  ),
-                                  TextSpan(
-                                    text: privacyPolicy,
-                                    style: TextStyle(
-                                        fontFamily: regular,
-                                        color: redColor),
-                                  ),
-                                ],
-                              ),
+                          const Expanded(
+                            child: Text(
+                              "I agree to Terms & Privacy Policy",
+                              style: TextStyle(color: fontGrey),
                             ),
                           ),
                         ],
@@ -126,7 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       const SizedBox(height: 10),
 
-                      // Signup button or loading indicator
+                      // Button
                       controller.isLoading.value
                           ? const CircularProgressIndicator(
                               valueColor:
@@ -134,54 +126,57 @@ class _SignupScreenState extends State<SignupScreen> {
                             )
                           : ourButton(
                               color: isCheck ? softBlueGreen : lightGrey,
-                              title: signup,
+                              title: "Sign Up as Seller",
                               textColor: whiteColor,
                               onPress: () async {
                                 final messenger =
                                     ScaffoldMessenger.of(context);
 
-                                // ✅ Check if terms agreed
                                 if (!isCheck) {
                                   messenger.showSnackBar(
                                     const SnackBar(
-                                        content: Text(
-                                            "You must agree to the terms.")),
+                                        content: Text("Agree to terms")),
                                   );
                                   return;
                                 }
 
-                                // ✅ Check if passwords match
                                 if (passwordController.text.trim() !=
-                                    passwordRetypeController.text.trim()) {
+                                    retypePasswordController.text.trim()) {
                                   messenger.showSnackBar(
                                     const SnackBar(
                                         content:
-                                            Text("Passwords do not match!")),
+                                            Text("Passwords do not match")),
                                   );
                                   return;
                                 }
 
-                                // ✅ Start loading
                                 controller.isLoading.value = true;
 
                                 try {
-                                  // 1️⃣ Signup with Firebase Auth
-                                  await controller.signup(
+                                  await controller.signupSeller(
                                     name: nameController.text.trim(),
                                     email: emailController.text.trim(),
-                                    password: passwordController.text.trim(),
+                                    password:
+                                        passwordController.text.trim(),
+                                    storeName:
+                                        storeNameController.text.trim(),
+                                    phone: phoneController.text.trim(),
                                   );
 
-                                  // 2️⃣ Navigate to User Home
-                                  messenger.showSnackBar(
-                                    const SnackBar(
-                                        content:
-                                            Text("Signup successful!")),
-
+                                  Get.snackbar(
+                                    "Success",
+                                    "Seller account created!",
+                                    backgroundColor: Colors.green,
+                                    colorText: Colors.white,
                                   );
+
+                                  Get.back(); // balik login
                                 } catch (e) {
-                                  messenger.showSnackBar(
-                                    SnackBar(content: Text(e.toString())),
+                                  Get.snackbar(
+                                    "Error",
+                                    e.toString(),
+                                    backgroundColor: Colors.red,
+                                    colorText: Colors.white,
                                   );
                                 } finally {
                                   controller.isLoading.value = false;
@@ -191,19 +186,19 @@ class _SignupScreenState extends State<SignupScreen> {
 
                       const SizedBox(height: 10),
 
-                      // Already have account?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            alreadyHaveAccount,
-                            style: const TextStyle(color: fontGrey, fontSize: 16),
-                          ),
+                          "Already have account?"
+                              .text
+                              .color(fontGrey)
+                              .make(),
                           const SizedBox(width: 5),
-                          Text(
-                            login,
-                            style: const TextStyle(color: redColor, fontSize: 18),
-                          ).onTap(() {
+                          "Login"
+                              .text
+                              .color(softBlueGreen)
+                              .make()
+                              .onTap(() {
                             Get.back();
                           }),
                         ],

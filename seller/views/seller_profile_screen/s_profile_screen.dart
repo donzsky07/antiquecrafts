@@ -4,7 +4,6 @@ import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/controllers/seller_profile_controller.dart';
 import 'package:projects/seller/services/store_services.dart';
-import 'package:projects/seller/views/seller_auth_screen/seller_login_screen.dart';
 import 'package:projects/seller/views/seller_shop_screen/s_shop_settings.dart';
 import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';

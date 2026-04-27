@@ -1,8 +1,8 @@
-
 import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/seller/controllers/seller_auth_controller.dart';
-import 'package:projects/seller/views/seller_home_screen/seller_home.dart';
+import 'package:projects/seller/views/seller_auth_screen/seller_signup_screen.dart';
+import 'package:projects/seller/views/seller_home_screen/seller_home.dart';// ✅ ADD THIS
 import 'package:projects/widget/bg_widget.dart';
 import 'package:projects/widget/applogo_widget.dart';
 import 'package:projects/widget/custom_textfield.dart';
@@ -13,10 +13,8 @@ class SellerLoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Controller for seller login
     var controller = Get.put(SellerAuthController());
 
-    // Text controllers
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
 
@@ -55,7 +53,7 @@ class SellerLoginScreen extends StatelessWidget {
 
                     const SizedBox(height: 10),
 
-                    // Login button or loading
+                    // 🔥 LOGIN BUTTON
                     controller.isLoading.value
                         ? const CircularProgressIndicator(
                             valueColor:
@@ -75,7 +73,6 @@ class SellerLoginScreen extends StatelessWidget {
                                 );
 
                                 if (result == null) {
-                                  // Login success
                                   Get.snackbar(
                                     "Success",
                                     "Welcome Seller!",
@@ -88,7 +85,6 @@ class SellerLoginScreen extends StatelessWidget {
 
                                   Get.offAll(() => const SellerHome());
                                 } else {
-                                  // Error message from controller
                                   Get.snackbar(
                                     "Login Failed",
                                     result,
@@ -108,6 +104,28 @@ class SellerLoginScreen extends StatelessWidget {
                               }
                             },
                           ).box.width(context.screenWidth - 50).make(),
+
+                    const SizedBox(height: 15),
+
+                    // 🔥 SIGNUP LINK (NEW)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        "Don't have an account?"
+                            .text
+                            .color(fontGrey)
+                            .make(),
+                        const SizedBox(width: 5),
+                        "Sign Up"
+                            .text
+                            .color(softBlueGreen)
+                            .fontFamily(bold)
+                            .make()
+                            .onTap(() {
+                          Get.to(() => const SellerSignupScreen());
+                        }),
+                      ],
+                    ),
                   ],
                 )
                     .box

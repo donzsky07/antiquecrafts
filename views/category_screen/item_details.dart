@@ -541,7 +541,7 @@ class ItemDetails extends StatelessWidget {
                               Icons.star,
                               size: 25,
                               color: index < controller.rating.value
-                                  ? golden
+                                 / ? golden
                                   : textfieldGrey,
                             ),
                             onPressed: () async {

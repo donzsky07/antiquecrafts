@@ -46,10 +46,9 @@ void setProductPrice(int price) {
 }
 
 void increaseQuantity() {
-  if (remainingStock.value > 0) {
+  if (quantity.value < remainingStock.value) {
     quantity.value++;
-    remainingStock.value--;
-    calculateTotalPrice(); // ✅ update
+    calculateTotalPrice();
   } else {
     VxToast.show(Get.context!, msg: "No more items available");
   }
@@ -58,11 +57,9 @@ void increaseQuantity() {
 void decreaseQuantity() {
   if (quantity.value > 0) {
     quantity.value--;
-    remainingStock.value++;
-    calculateTotalPrice(); // ✅ update
+    calculateTotalPrice();
   }
 }
-
 void calculateTotalPrice() {
   totalPrice.value = productPrice * quantity.value;
 }

@@ -62,7 +62,6 @@ import 'package:get/get.dart';
 
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/views/seller_auth_screen/seller_login_screen.dart';
-import 'package:projects/seller/views/seller_auth_screen/seller_signup_screen.dart';
 import 'package:projects/seller/views/seller_home_screen/seller_home.dart';
 
 void main() async {

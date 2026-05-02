@@ -1,6 +1,7 @@
 import 'package:projects/consts/consts.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:projects/controllers/product_controller.dart';
 import 'package:projects/views/auth_screen/login_screen.dart';
 
 
@@ -10,7 +11,8 @@ import 'package:projects/views/auth_screen/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  
+   Get.put(ProductController());
 
   runApp(const MyApp());
 }

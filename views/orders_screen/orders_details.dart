@@ -348,12 +348,11 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                               .text
                               .fontFamily(semibold)
                               .make(),
-                          toInt(data['total_amount'])
-                              .numCurrency
-                              .text
-                              .color(redColor)
-                              .fontFamily(bold)
-                              .make(),
+                        "₱${toInt(data['total_amount']).toDouble().toStringAsFixed(2)}"
+    .text
+    .color(redColor)
+    .fontFamily(bold)
+    .make(),
                         ],
                       ),
                     ),
@@ -391,7 +390,7 @@ class _OrdersDetailsState extends State<OrdersDetails> {
                       orderPlaceDetails(
                         title1: item['title'],
                         title2:
-                            "$qty x ${price.numCurrency} = ${subtotal.numCurrency}",
+                           "$qty x ₱${price.toStringAsFixed(2)} = ₱${subtotal.toStringAsFixed(2)}",
                         d1: "",
                         d2: "",
                       ),

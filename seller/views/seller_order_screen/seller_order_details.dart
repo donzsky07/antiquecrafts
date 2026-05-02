@@ -234,7 +234,7 @@ class _OrderDetailsState extends State<SellerOrderDetails> {
                                       color: purpleColor),
                                   boldText(
                                     text:
-                                        "₱ ${widget.data['total_amount']}",
+                                 "₱ ${(double.tryParse(widget.data['total_amount'].toString()) ?? 0).toStringAsFixed(2)}",
                                     color: red,
                                     size: 16.0,
                                   ),
@@ -278,7 +278,7 @@ class _OrderDetailsState extends State<SellerOrderDetails> {
                             title1:
                                 " ${controller.orders[index]['title']}",
                             title2:
-                                "₱ ${controller.orders[index]['tprice']}",
+                                "₱ ${(double.tryParse(controller.orders[index]['tprice'].toString()) ?? 0).toStringAsFixed(2)}",
                             d1:
                                 "${controller.orders[index]['qty']}x",
                             d2: "",

@@ -53,7 +53,7 @@ class OrdersPage extends StatelessWidget {
                       title: Text("Order Code: ${data['order_code'] ?? ''}"),
                       subtitle: Text(
                         "Name: ${data['order_by_name'] ?? ''}\n"
-                        "Total: ₱${data['total_amount'] ?? 0}",
+                        "Total: ₱${(data['total_amount'] as num? ?? 0).toDouble().toStringAsFixed(2)}",
                       ),
 
                       children: [
@@ -89,7 +89,7 @@ class OrdersPage extends StatelessWidget {
                             ),
                             title: Text(item['title'] ?? ''),
                             subtitle: Text(
-                                "Qty: ${item['qty']} | ₱${item['tprice']}"),
+                               "Qty: ${item['qty']} | ₱${(item['tprice'] as num? ?? 0).toDouble().toStringAsFixed(2)}"),
                           );
                         }),
 

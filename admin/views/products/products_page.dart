@@ -90,8 +90,9 @@ class ProductsPage extends StatelessWidget {
   ),
 ),
                       title: Text(product['p_name'] ?? "No Name"),
-                      subtitle: Text("₱${product['p_price'] ?? 0}"),
-
+                     subtitle: Text(
+  "₱${(product['p_price'] as num).toDouble().toStringAsFixed(2)}",
+),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

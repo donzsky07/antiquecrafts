@@ -5,6 +5,7 @@ import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/home_controller.dart';
 import 'package:projects/services/firestore_services.dart';
 import 'package:projects/views/category_screen/item_details.dart';
+import 'package:projects/views/home_screen/components/featured_category_page.dart';
 import 'package:projects/widget/home_button.dart';
 import 'package:projects/views/home_screen/components/featured_button.dart';
 import 'package:projects/widget/loading_indicator.dart';
@@ -69,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             title: Text(product['p_name']),
                             subtitle: Text(
-                                "${product['p_category']} - ₱${product['p_price']}"),
+                               "${product['p_category']} - ₱${(product['p_price'] as num? ?? 0).toDouble().toStringAsFixed(2)}"),
                             onTap: () {
                               Get.to(() => ItemDetails(
                                     title: product['p_name'],
@@ -170,6 +171,7 @@ class HomeScreen extends StatelessWidget {
                     ),
 
                     // FEATURED CATEGORIES
+
                     20.heightBox,
                     Align(
                         alignment: Alignment.centerLeft,
@@ -187,12 +189,22 @@ class HomeScreen extends StatelessWidget {
                           (index) => Column(
                             children: [
                               featuredButton(
-                                  icon: featuredImages1[index],
-                                  title: featuredTitles1[index]),
+  icon: featuredImages1[index],
+  title: featuredTitles1[index],
+).onTap(() {
+  Get.to(() => FeaturedCategoryPage(
+        category: featuredTitles1[index],
+      ));
+}),
                               10.heightBox,
-                              featuredButton(
-                                  icon: featuredImages2[index],
-                                  title: featuredTitles2[index]),
+                            featuredButton(
+  icon: featuredImages2[index],
+  title: featuredTitles2[index],
+).onTap(() {
+  Get.to(() => FeaturedCategoryPage(
+        category: featuredTitles2[index],
+      ));
+}),
                             ],
                           ),
                         ).toList(),
@@ -232,51 +244,91 @@ class HomeScreen extends StatelessWidget {
                                   } else {
                                     var featuredData = snapshot.data!.docs;
 
-                                    return Row(
-                                      children: List.generate(
-                                        featuredData.length,
-                                        (index) => Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Image.network(
-                                              featuredData[index]['p_imgs'][0],
-                                              width: 130,
-                                              height: 130,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            10.heightBox,
-                                            "${featuredData[index]['p_name']}"
-                                                .text
-                                                .fontFamily(semibold)
-                                                .color(darkFontGrey)
-                                                .make(),
-                                            10.heightBox,
-                                            "${featuredData[index]['p_price']}"
-                                                .numCurrency
-                                                .text
-                                                .color(redColor)
-                                                .fontFamily(bold)
-                                                .size(16)
-                                                .make()
-                                          ],
-                                        )
-                                            .box
-                                            .white
-                                            .margin(const EdgeInsets.symmetric(
-                                                horizontal: 4))
-                                            .roundedSM
-                                            .padding(const EdgeInsets.all(8))
-                                            .make()
-                                            .onTap(() {
-                                          Get.to(() => ItemDetails(
-                                                title:
-                                                    "${featuredData[index]['p_name']}",
-                                                data: featuredData[index],
-                                              ));
-                                        }),
-                                      ),
-                                    );
+                                   return Row(
+  children: List.generate(
+    featuredData.length,
+    (index) => Container(
+      width: 160,
+      margin: const EdgeInsets.symmetric(horizontal: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          // IMAGE + FEATURED BADGE
+          Stack(
+            children: [
+              Image.network(
+                featuredData[index]['p_imgs'][0],
+                width: 160,
+                height: 130,
+                fit: BoxFit.cover,
+              ),
+
+              // ⭐ FEATURED BADGE
+              Positioned(
+                top: 5,
+                left: 5,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 6, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: Colors.green,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: const Text(
+                    "FEATURED",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          8.heightBox,
+
+          // NAME
+          Text(
+            featuredData[index]['p_name'],
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontFamily: semibold,
+              color: darkFontGrey,
+            ),
+          ),
+
+          6.heightBox,
+
+          // PRICE (FIXED FORMAT)
+          Text(
+            "₱${(featuredData[index]['p_price'] as num? ?? 0).toDouble().toStringAsFixed(2)}",
+            style: const TextStyle(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    )
+        .box
+        .white
+        .margin(const EdgeInsets.symmetric(horizontal: 4))
+        .roundedSM
+        .padding(const EdgeInsets.all(8))
+        .make()
+        .onTap(() {
+      Get.to(() => ItemDetails(
+            title: "${featuredData[index]['p_name']}",
+            data: featuredData[index],
+          ));
+    }),
+  ),
+);
                                   }
                                 }),
                           ),
@@ -351,7 +403,7 @@ class HomeScreen extends StatelessWidget {
                                         .color(darkFontGrey)
                                         .make(),
                                     10.heightBox,
-                                    "₱${allproductsdata[index]['p_price']}"
+                                   "₱${(allproductsdata[index]['p_price'] as num? ?? 0).toDouble().toStringAsFixed(2)}"
                                         .text
                                         .color(redColor)
                                         .fontFamily(bold)

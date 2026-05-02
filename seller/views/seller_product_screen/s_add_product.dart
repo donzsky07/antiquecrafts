@@ -50,7 +50,11 @@ class SAddProduct extends StatelessWidget {
             10.heightBox,
             sCustomTextField(hint: "eg. Nice product", label: "Description", isDesc: true, controller: controller.pdescController),
             10.heightBox,
-            sCustomTextField(hint: "eg. \$100", label: "Price", controller: controller.ppriceController),
+          sCustomTextField(
+  hint: "eg. ₱100",
+  label: "Price",
+  controller: controller.ppriceController
+),
             10.heightBox,
             sCustomTextField(hint: "eg. 20", label: "Quantity", controller: controller.pquantityController),
             

@@ -526,9 +526,7 @@ class ItemDetails extends StatelessWidget {
                       ),
 
                       10.heightBox,
-                      title!.text.size(16).color(darkFontGrey).fontFamily(semibold).make(),
-
-                      10.heightBox,
+                      title!.text.size(18).color(darkFontGrey).fontFamily(semibold).make(),
 
                      /* /// RATING
                       "Rate this product".text.color(darkFontGrey).fontFamily(semibold).make(),
@@ -707,18 +705,14 @@ class ItemDetails extends StatelessWidget {
                       10.heightBox,
 
                       /// DESCRIPTION
-                      "Description".text.color(darkFontGrey).fontFamily(semibold).make(),
+                      "Description".text.size(18).color(darkFontGrey).fontFamily(semibold).make(),
                       10.heightBox,
                       "${data['p_desc']}".text.color(darkFontGrey).make(),
 
-                  /// 🔥 FEEDBACK SECTION
-10.heightBox,
-
-"Send Feedback".text.color(darkFontGrey).fontFamily(semibold).make(),
-10.heightBox,
 
 // ⭐ RATING
-"Rate Product".text.make(),
+10.heightBox,
+"Rate Product".text.size(18).make(),
 5.heightBox,
 
 Obx(() => Row(

@@ -204,7 +204,7 @@ class SProductsScreen extends StatelessWidget {
                           children: [
                             normalText(
                                 text:
-                                    "₱ ${data[index]['p_price']}",
+                                  "₱ ${(double.tryParse(data[index]['p_price'].toString()) ?? 0).toStringAsFixed(2)}",
                                 color: darkGrey),
                             normalText(
                                 text:

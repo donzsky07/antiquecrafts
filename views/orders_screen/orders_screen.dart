@@ -34,7 +34,10 @@ class OrdersScreen extends StatelessWidget {
                 return ListTile(
                   leading: "${index + 1}".text.fontFamily(bold).color(darkFontGrey).xl.make(),
                   title: data[index]['order_code'].toString().text.color(redColor).fontFamily(semibold).make(),
-                  subtitle: data[index]['total_amount'].toString().numCurrency.text.fontFamily(bold).make(),
+               subtitle: "₱${(data[index]['total_amount'] as num? ?? 0).toDouble().toStringAsFixed(2)}"
+    .text
+    .fontFamily(bold)
+    .make(),
                   trailing: IconButton(
                     onPressed: (){
                       Get.to(() => OrdersDetails(data: data[index]));

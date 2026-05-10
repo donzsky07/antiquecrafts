@@ -41,4 +41,9 @@ const appname = 'ACraft Seller App',
   mobile = 'Shop Mobile',
   website = 'Shop Website',
   shopName = 'Shop Name',
-  address = 'Shop Address';
+  address = 'Shop Address',
+  
+  userRating = 'Users Rating',
+  sales = 'Total Sales'
+  ;
+

@@ -1,6 +1,5 @@
 import 'package:projects/consts/consts.dart';
-import 'package:projects/consts/images.dart';
-import 'package:projects/consts/strings.dart';
+
 
 const socialIconList =[
   icFacebookLogo,

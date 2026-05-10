@@ -6,54 +6,85 @@ import 'package:projects/views/orders_screen/orders_details.dart';
 import 'package:projects/widget/loading_indicator.dart';
 
 class OrdersScreen extends StatelessWidget {
-  const OrdersScreen ({super.key});
+  const OrdersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold (
+    return Scaffold(
       backgroundColor: whiteColor,
-      appBar: AppBar (
-        title: "My Orders".text.color(darkFontGrey).fontFamily(semibold).make(),
+      appBar: AppBar(
+        title: "My Orders"
+            .text
+            .color(darkFontGrey)
+            .fontFamily(semibold)
+            .make(),
       ),
-      body: StreamBuilder (
-        stream: FirestoreServices.getAllOrders(),
-        
-        builder:(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if(!snapshot.hasData){
-            return Center(
-              child: loadingIndicator(),
-            );
-          }else if(snapshot.data!.docs.isEmpty){
-            return "No orders yet!".text.color(darkFontGrey).make();
-          }else {
 
-            var data = snapshot.data!.docs;
+      body: StreamBuilder(
+        stream: FirestoreServices.getAllOrders(),
+
+        builder: (BuildContext context,
+            AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: loadingIndicator());
+          } else if (snapshot.data!.docs.isEmpty) {
+            return "No orders yet!"
+                .text
+                .color(darkFontGrey)
+                .make();
+          } else {
+
+            /// 🔥 SORT LATEST → OLDEST
+            var data = snapshot.data!.docs.toList();
+
+            data.sort((a, b) {
+              return b['order_date']
+                  .toDate()
+                  .compareTo(a['order_date'].toDate());
+            });
+
             return ListView.builder(
               itemCount: data.length,
-              itemBuilder: (BuildContext context, int index){
+
+              itemBuilder:
+                  (BuildContext context, int index) {
                 return ListTile(
-                  leading: "${index + 1}".text.fontFamily(bold).color(darkFontGrey).xl.make(),
-                  title: data[index]['order_code'].toString().text.color(redColor).fontFamily(semibold).make(),
-               subtitle: "₱${(data[index]['total_amount'] as num? ?? 0).toDouble().toStringAsFixed(2)}"
-    .text
-    .fontFamily(bold)
-    .make(),
+                  leading: "${index + 1}"
+                      .text
+                      .fontFamily(bold)
+                      .color(darkFontGrey)
+                      .xl
+                      .make(),
+
+                  title: data[index]['order_code']
+                      .toString()
+                      .text
+                      .color(redColor)
+                      .fontFamily(semibold)
+                      .make(),
+
+                  subtitle:
+                      "₱${(data[index]['total_amount'] as num? ?? 0).toDouble().toStringAsFixed(2)}"
+                          .text
+                          .fontFamily(bold)
+                          .make(),
+
                   trailing: IconButton(
-                    onPressed: (){
-                      Get.to(() => OrdersDetails(data: data[index]));
-                    }, 
+                    onPressed: () {
+                      Get.to(() => OrdersDetails(
+                          data: data[index]));
+                    },
                     icon: const Icon(
-                      Icons.arrow_forward_ios_rounded, 
+                      Icons.arrow_forward_ios_rounded,
                       color: darkFontGrey,
-                  ))
+                    ),
+                  ),
                 );
               },
             );
           }
-         
         },
       ),
-     );
+    );
   }
-
 }

@@ -52,7 +52,7 @@ class SellerAuthController extends GetxController {
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:projects/seller/views/seller_auth_screen/seller_login_screen.dart';
+import 'package:projects/views/auth_screen/login_screen.dart';
 
 class SellerAuthController extends GetxController {
   var isLoading = false.obs;
@@ -160,6 +160,6 @@ class SellerAuthController extends GetxController {
 
   Future<void> logoutSeller() async {
   await _auth.signOut();
-  Get.offAll(() => const SellerLoginScreen());
+  Get.offAll(() => const LoginScreen());
 }
 }

@@ -120,7 +120,7 @@ class ProductDetailPage extends StatelessWidget {
                       horizontal: 40, vertical: 14),
                 ),
                 onPressed: () {
-                  // TODO: connect cart logic mo later
+        
                   Get.snackbar(
                     "Added",
                     "Product added to cart",

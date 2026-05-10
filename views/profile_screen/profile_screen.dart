@@ -6,6 +6,7 @@ import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/controllers/profile_controller.dart';
 import 'package:projects/services/firestore_services.dart';
+import 'package:projects/views/cart_screen/cart_screen.dart';
 //import 'package:projects/views/auth_screen/login_screen.dart';
 import 'package:projects/views/chat_screen/messaging_screen.dart';
 import 'package:projects/views/orders_screen/orders_screen.dart';
@@ -136,18 +137,36 @@ class ProfileScreen extends StatelessWidget{
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        detailsCard(
-                            count: countData[0].toString(),
-                            title: "in your cart",
-                            width: context.screenWidth / 3.7),
-                        detailsCard(
-                            count: countData[1].toString(),
-                            title: "in your wishlist",
-                            width: context.screenWidth / 3.7),
-                        detailsCard(
-                            count: countData[2].toString(),
-                            title: "your orders",
-                            width: context.screenWidth / 3.7),
+                      InkWell(
+  onTap: () {
+    Get.to(() => const CartScreen());
+  },
+  child: detailsCard(
+    count: countData[0].toString(),
+    title: "in your cart",
+    width: context.screenWidth / 3.7,
+  ),
+),
+                      InkWell(
+  onTap: () {
+    Get.to(() => WishlistScreen());
+  },
+  child: detailsCard(
+    count: countData[1].toString(),
+    title: "in your wishlist",
+    width: context.screenWidth / 3.7,
+  ),
+),
+                       InkWell(
+  onTap: () {
+    Get.to(() => OrdersScreen());
+  },
+  child: detailsCard(
+    count: countData[2].toString(),
+    title: "your orders",
+    width: context.screenWidth / 3.7,
+  ),
+),
                       ],
                     );
                   }

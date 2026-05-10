@@ -181,14 +181,18 @@ class _OrderDetailsState extends State<SellerOrderDetails> {
                         title1: "Order Date",
                         title2: "Payment Method",
                       ),
-                      sellerOrderPlaceDetails(
-                        d1: "Unpaid",
-                        d2: widget.data['order_delivered'] == true
-                            ? "Completed"
-                            : "In Progress",
-                        title1: "Payment Status",
-                        title2: "Delivery Status",
-                      ),
+                    sellerOrderPlaceDetails(
+  d1: widget.data['order_delivered'] == true
+      ? "Paid"
+      : "Unpaid",
+
+  d2: widget.data['order_delivered'] == true
+      ? "Completed"
+      : "In Progress",
+
+  title1: "Payment Status",
+  title2: "Delivery Status",
+),
 
                       /// ADDRESS + TOTAL
                       Padding(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:projects/consts/consts.dart';
 import 'package:projects/controllers/home_controller.dart';
+import 'package:projects/utils/order_code.dart';
 
 
 
@@ -48,34 +49,37 @@ class CartController extends GetxController {
     paymentIndex.value = index;
    }
 
-    placeMyOrder({orderPaymentMethod, required totalAmount}) async {
-    placingOrder(true);
-    await getProductDetails();
-    await firestore.collection(ordersCollection).doc().set({
-      "order_code":"233981237",
-      "order_date": FieldValue.serverTimestamp(),
-      "order_by": currentUser!.uid,
-      "order_by_name": Get.find<HomeController>().username.value,
-      "order_by_email": currentUser!.email,
-      "order_by_address": addressController.text,
-      "order_by_state": stateController.text,
-      "order_by_city": cityController.text,
-      "order_by_phone": phoneController.text,
-      "order_by_postalcode": postalcodeController.text,
-      "shipping_method": "Home Delivery",
-      "payment_method": orderPaymentMethod,
-      "order_placed": true,
-      "order_confirmed": false,
-      "order_delivered": false,
-      "order_on_delivery": false,
-      "total_amount": totalAmount,
-      "orders": FieldValue.arrayUnion(products),
-      "vendors" : FieldValue.arrayUnion(vendors),
+    placeMyOrder({
+  orderPaymentMethod,
+  required totalAmount,
+}) async {
+  placingOrder(true);
+  await getProductDetails();
 
-    }); 
-    placingOrder(false);
+  await firestore.collection(ordersCollection).doc().set({
+    "order_code": generateOrderCode(), // ✅ FIXED
+    "order_date": FieldValue.serverTimestamp(),
+    "order_by": currentUser!.uid,
+    "order_by_name": Get.find<HomeController>().username.value,
+    "order_by_email": currentUser!.email,
+    "order_by_address": addressController.text,
+    "order_by_state": stateController.text,
+    "order_by_city": cityController.text,
+    "order_by_phone": phoneController.text,
+    "order_by_postalcode": postalcodeController.text,
+    "shipping_method": "Home Delivery",
+    "payment_method": orderPaymentMethod,
+    "order_placed": true,
+    "order_confirmed": false,
+    "order_delivered": false,
+    "order_on_delivery": false,
+    "total_amount": totalAmount,
+    "orders": FieldValue.arrayUnion(products),
+    "vendors": FieldValue.arrayUnion(vendors),
+  });
 
-   }
+  placingOrder(false);
+}
 
    getProductDetails() {
    products.clear();

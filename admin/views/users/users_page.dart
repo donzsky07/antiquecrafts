@@ -17,21 +17,36 @@ class _UsersPageState extends State<UsersPage> {
     return Column(
       children: [
 
-        // 🔥 HEADER
+        // 🔥 HEADER WITH BACK BUTTON
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+
+            // ← BACK BUTTON
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                // OPTION 1: balik sa previous page
+                Get.back();
+
+                // OPTION 2: diretso dashboard/home
+                // Get.offAll(() => const DashboardScreen());
+              },
+            ),
+
             const Text(
               "Users",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
-            // 🟢 ADD USER BUTTON (GREEN)
+            const Spacer(),
+
+            // 🟢 ADD USER BUTTON
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -60,16 +75,16 @@ class _UsersPageState extends State<UsersPage> {
         // 🔥 USER LIST
         Expanded(
           child: StreamBuilder(
-            stream: FirebaseFirestore.instance.collection('users').snapshots(),
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .snapshots(),
             builder: (context, snapshot) {
-
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
 
               final users = snapshot.data!.docs;
 
-              // 🔥 FILTER LOGIC
               final filteredUsers = users.where((user) {
                 final data = user.data();
                 final isBlocked = data['isBlocked'] ?? false;
@@ -91,32 +106,26 @@ class _UsersPageState extends State<UsersPage> {
                   return Card(
                     color: isBlocked ? Colors.red.shade50 : null,
                     child: ListTile(
-
-                      // 👤 ICON
                       leading: Icon(
                         isBlocked ? Icons.block : Icons.person,
-                        color: isBlocked ? Colors.red : Colors.green,
+                        color:
+                            isBlocked ? Colors.red : Colors.green,
                       ),
-
-                      // 👤 NAME
                       title: Text(
                         data['name'] ?? "No Name",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: isBlocked ? Colors.red : Colors.black,
+                          color:
+                              isBlocked ? Colors.red : Colors.black,
                         ),
                       ),
-
-                      // 📧 DETAILS
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(data['email'] ?? ""),
 
-                          // 🚨 BLOCK INFO
                           if (isBlocked) ...[
                             const SizedBox(height: 4),
-
                             const Text(
                               "BLOCKED USER",
                               style: TextStyle(
@@ -124,12 +133,10 @@ class _UsersPageState extends State<UsersPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-
                             Text(
                               "Reason: ${data['blockedReason'] ?? 'No reason'}",
                               style: const TextStyle(fontSize: 12),
                             ),
-
                             Text(
                               "Blocked At: ${data['blockedAt'] != null ? data['blockedAt'].toDate().toString() : 'N/A'}",
                               style: const TextStyle(fontSize: 12),
@@ -138,22 +145,19 @@ class _UsersPageState extends State<UsersPage> {
                         ],
                       ),
 
-                      // 🔥 ACTION BUTTONS
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
-                          // ✏ EDIT
                           IconButton(
                             icon: const Icon(Icons.edit),
                             onPressed: () {
-                              showEditUserDialog(context, user.id, data);
+                              showEditUserDialog(
+                                  context, user.id, data);
                             },
                           ),
-
-                          // 🗑 DELETE
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete,
+                                color: Colors.red),
                             onPressed: () {
                               FirebaseFirestore.instance
                                   .collection('users')
@@ -161,12 +165,14 @@ class _UsersPageState extends State<UsersPage> {
                                   .delete();
                             },
                           ),
-
-                          // 🚨 BLOCK / UNBLOCK
                           IconButton(
                             icon: Icon(
-                              isBlocked ? Icons.lock_open : Icons.lock,
-                              color: isBlocked ? Colors.orange : Colors.black,
+                              isBlocked
+                                  ? Icons.lock_open
+                                  : Icons.lock,
+                              color: isBlocked
+                                  ? Colors.orange
+                                  : Colors.black,
                             ),
                             onPressed: () async {
                               await FirebaseFirestore.instance
@@ -174,8 +180,9 @@ class _UsersPageState extends State<UsersPage> {
                                   .doc(user.id)
                                   .update({
                                 'isBlocked': !isBlocked,
-                                'blockedReason':
-                                    isBlocked ? '' : 'Blocked by admin',
+                                'blockedReason': isBlocked
+                                    ? ''
+                                    : 'Blocked by admin',
                                 'blockedAt': isBlocked
                                     ? null
                                     : FieldValue.serverTimestamp(),
@@ -201,8 +208,10 @@ class _UsersPageState extends State<UsersPage> {
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.black : Colors.grey.shade300,
-        foregroundColor: isSelected ? Colors.white : Colors.black,
+        backgroundColor:
+            isSelected ? Colors.black : Colors.grey.shade300,
+        foregroundColor:
+            isSelected ? Colors.white : Colors.black,
       ),
       onPressed: () {
         setState(() {
@@ -232,11 +241,9 @@ class _UsersPageState extends State<UsersPage> {
           'name': name.text,
           'email': email.text,
           'role': 'user',
-
           'cart_count': 0,
           'wishlist_count': 0,
           'order_count': 0,
-
           'isBlocked': false,
           'blockedReason': '',
           'blockedAt': null,
@@ -248,7 +255,8 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   // ✏ EDIT USER
-  void showEditUserDialog(BuildContext context, String id, dynamic data) {
+  void showEditUserDialog(
+      BuildContext context, String id, dynamic data) {
     TextEditingController name =
         TextEditingController(text: data['name']);
     TextEditingController email =
@@ -264,7 +272,10 @@ class _UsersPageState extends State<UsersPage> {
       ),
       textConfirm: "Update",
       onConfirm: () {
-        FirebaseFirestore.instance.collection('users').doc(id).update({
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(id)
+            .update({
           'name': name.text,
           'email': email.text,
         });

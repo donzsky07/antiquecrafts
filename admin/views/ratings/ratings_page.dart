@@ -29,9 +29,28 @@ class RatingsPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
-        const Text(
-          "Ratings & Reviews",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        // 🔥 HEADER WITH BACK BUTTON
+        Row(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                // OPTION 1: balik sa previous screen
+                Get.back();
+
+                // OPTION 2: diretso dashboard/home
+                // Get.offAll(() => const DashboardScreen());
+              },
+            ),
+
+            const Text(
+              "Ratings & Reviews",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
 
         const SizedBox(height: 20),
@@ -43,7 +62,6 @@ class RatingsPage extends StatelessWidget {
                 .orderBy('created_at', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
-
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -51,14 +69,16 @@ class RatingsPage extends StatelessWidget {
               final ratings = snapshot.data!.docs;
 
               if (ratings.isEmpty) {
-                return const Center(child: Text("No ratings found"));
+                return const Center(
+                  child: Text("No ratings found"),
+                );
               }
 
               return ListView.builder(
                 itemCount: ratings.length,
                 itemBuilder: (context, index) {
                   final doc = ratings[index];
-                final data = doc.data();
+                  final data = doc.data();
 
                   final rating = data['rating'] ?? 0;
                   final review = data['review'] ?? '';
@@ -71,33 +91,36 @@ class RatingsPage extends StatelessWidget {
                   return FutureBuilder<String>(
                     future: getProductName(productId),
                     builder: (context, productSnap) {
-
                       final productName =
                           productSnap.data ?? "Loading...";
 
                       return Card(
                         margin: const EdgeInsets.all(10),
                         child: ListTile(
-
-                          // ⭐ RATING HEADER
                           title: Row(
                             children: [
                               Text("⭐ $rating"),
                               const SizedBox(width: 10),
 
                               if (isApproved)
-                                const Icon(Icons.check_circle,
-                                    color: Colors.green, size: 18),
+                                const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 18,
+                                ),
 
                               if (isReported)
-                                const Icon(Icons.flag,
-                                    color: Colors.red, size: 18),
+                                const Icon(
+                                  Icons.flag,
+                                  color: Colors.red,
+                                  size: 18,
+                                ),
                             ],
                           ),
 
-                          // DETAILS
                           subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start,
                             children: [
                               Text("Product: $productName"),
                               Text("User ID: $userId"),
@@ -106,31 +129,31 @@ class RatingsPage extends StatelessWidget {
                             ],
                           ),
 
-                          // ACTIONS
                           trailing: PopupMenuButton(
                             onSelected: (value) {
-
-                              // APPROVE
                               if (value == 'approve') {
                                 FirebaseFirestore.instance
                                     .collection('ratings')
                                     .doc(doc.id)
-                                    .update({'isApproved': true});
+                                    .update({
+                                  'isApproved': true
+                                });
                               }
 
-                              // REPORT
                               if (value == 'report') {
                                 FirebaseFirestore.instance
                                     .collection('ratings')
                                     .doc(doc.id)
-                                    .update({'isReported': true});
+                                    .update({
+                                  'isReported': true
+                                });
                               }
 
-                              // DELETE
                               if (value == 'delete') {
                                 Get.defaultDialog(
                                   title: "Delete Review?",
-                                  middleText: "This cannot be undone.",
+                                  middleText:
+                                      "This cannot be undone.",
                                   textConfirm: "Delete",
                                   textCancel: "Cancel",
                                   confirmTextColor: Colors.white,
@@ -145,7 +168,6 @@ class RatingsPage extends StatelessWidget {
                                 );
                               }
                             },
-
                             itemBuilder: (context) => const [
                               PopupMenuItem(
                                 value: 'approve',

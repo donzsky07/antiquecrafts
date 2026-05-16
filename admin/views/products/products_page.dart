@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:projects/admin/views/home_screen/admin_homescreen.dart';
 
 class ProductsPage extends StatelessWidget {
   const ProductsPage({super.key});
@@ -11,21 +12,36 @@ class ProductsPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
 
-        // 🔥 HEADER
+        // 🔥 HEADER WITH BACK BUTTON
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                // OPTION 1: balik lang sa previous page
+                //Get.back();
+
+                // OPTION 2: diretso dashboard/home (uncomment if needed)
+            Get.offAll(() => const AdminHomeScreen());
+              },
+            ),
+
+            const SizedBox(width: 5),
+
             const Text(
               "Products",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
 
-            // ✅ UPDATED BUTTON (WITH COLOR)
+            const Spacer(),
+
+            // ➕ ADD PRODUCT BUTTON
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF4CAF50),
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -47,7 +63,6 @@ class ProductsPage extends StatelessWidget {
                 .collection('products')
                 .snapshots(),
             builder: (context, snapshot) {
-
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -59,47 +74,47 @@ class ProductsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final product = products[index];
 
-                  // ✅ SAFE IMAGE LIST
-                final images = (product['p_imgs'] as List?)?.cast<String>() ?? [];
-                
+                  final images =
+                      (product['p_imgs'] as List?)?.cast<String>() ?? [];
 
                   return Card(
                     child: ListTile(
-                      
-                      // 🔥 UPDATED IMAGE
-                     leading: SizedBox(
-  width: 50,
-  height: 50,
-  child: ClipRRect(
-    borderRadius: BorderRadius.circular(8),
-    child: images.isNotEmpty
-        ? Image.network(
-            images[0],
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: Colors.grey[300],
-                child: const Icon(Icons.broken_image),
-              );
-            },
-          )
-        : Container(
-            color: Colors.grey[300],
-            child: const Icon(Icons.image),
-          ),
-  ),
-),
+                      leading: SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: images.isNotEmpty
+                              ? Image.network(
+                                  images[0],
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      color: Colors.grey[300],
+                                      child:
+                                          const Icon(Icons.broken_image),
+                                    );
+                                  },
+                                )
+                              : Container(
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.image),
+                                ),
+                        ),
+                      ),
+
                       title: Text(product['p_name'] ?? "No Name"),
-                     subtitle: Text(
-  "₱${(product['p_price'] as num).toDouble().toStringAsFixed(2)}",
-),
+
+                      subtitle: Text(
+                        "₱${(product['p_price'] as num).toDouble().toStringAsFixed(2)}",
+                      ),
+
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
-                          // ✏ EDIT
                           IconButton(
-                            icon: const Icon(Icons.edit, color: Colors.blue),
+                            icon: const Icon(Icons.edit,
+                                color: Colors.blue),
                             onPressed: () {
                               showEditProductDialog(
                                 context,
@@ -108,10 +123,9 @@ class ProductsPage extends StatelessWidget {
                               );
                             },
                           ),
-
-                          // 🗑 DELETE
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete,
+                                color: Colors.red),
                             onPressed: () {
                               FirebaseFirestore.instance
                                   .collection('products')
@@ -143,11 +157,13 @@ class ProductsPage extends StatelessWidget {
         children: [
           TextField(
             controller: name,
-            decoration: const InputDecoration(hintText: "Product Name"),
+            decoration:
+                const InputDecoration(hintText: "Product Name"),
           ),
           TextField(
             controller: price,
-            decoration: const InputDecoration(hintText: "Price"),
+            decoration:
+                const InputDecoration(hintText: "Price"),
             keyboardType: TextInputType.number,
           ),
         ],
@@ -157,7 +173,7 @@ class ProductsPage extends StatelessWidget {
         FirebaseFirestore.instance.collection('products').add({
           'p_name': name.text,
           'p_price': double.tryParse(price.text) ?? 0,
-          'p_imgs': [], // 🔥 ready for images
+          'p_imgs': [],
           'created_at': DateTime.now(),
         });
 
@@ -169,7 +185,6 @@ class ProductsPage extends StatelessWidget {
   // ✏ EDIT PRODUCT
   void showEditProductDialog(
       BuildContext context, String id, dynamic data) {
-
     TextEditingController name =
         TextEditingController(text: data['p_name']);
 

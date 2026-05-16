@@ -4,6 +4,10 @@ import 'package:projects/controllers/auth_controller.dart';
 import 'package:projects/seller/consts/const.dart';
 import 'package:projects/seller/controllers/seller_profile_controller.dart';
 import 'package:projects/seller/services/store_services.dart';
+import 'package:projects/seller/views/dashboard/seller_rating_screen.dart';
+import 'package:projects/seller/views/seller_profile_screen/seller_blocked_screen.dart';
+import 'package:projects/seller/views/seller_profile_screen/seller_feedback_screen.dart';
+import 'package:projects/seller/views/seller_profile_screen/seller_report_screen.dart';
 import 'package:projects/seller/views/seller_shop_screen/s_shop_settings.dart';
 import 'package:projects/seller/views/seller_widgets/s_loading_indicator.dart';
 import 'package:projects/seller/views/seller_widgets/s_text_style.dart';
@@ -71,14 +75,30 @@ class SProfileScreen extends StatelessWidget {
                 onTap: (){
                   switch (index) {
                     case 0:
-                    Get.to(() => const SShopSettings());
+    Get.to(() => const SShopSettings());
+    break;
 
-                    break;
-                    case 1:
-                    Get.to(() => const SMessagesScreen());
+  case 1:
+    Get.to(() => const SMessagesScreen());
+    break;
 
-                    break;
-                    default:
+  case 2:
+    Get.to(() => const SellerRatingsScreen());
+    break;
+
+    case 3:
+    Get.to(() => const SellerFeedbackScreen());
+    break;
+
+  case 4:
+    Get.to(() => const ReportedUsersScreen());
+    break;
+
+  case 5:
+    Get.to(() => const UsersManagementScreen ());
+    break;
+
+  default:
 
                   }
                 },

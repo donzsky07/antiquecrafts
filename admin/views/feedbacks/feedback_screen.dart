@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:projects/admin/consts/const.dart';
 import 'package:projects/consts/colors.dart';
 import 'package:projects/widget/loading_indicator.dart';
-
 
 class AdminFeedbackScreen extends StatelessWidget {
   const AdminFeedbackScreen({super.key});
@@ -23,8 +23,23 @@ class AdminFeedbackScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      // 🔥 APPBAR WITH BACK BUTTON
       appBar: AppBar(
-        title: "User Feedbacks".text.fontFamily(bold).make(),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // OPTION 1: balik sa previous screen
+            Get.back();
+
+            // OPTION 2: diretso dashboard/home
+            // Get.offAll(() => const DashboardScreen());
+          },
+        ),
+        title: "User Feedbacks"
+            .text
+            .fontFamily(bold)
+            .make(),
       ),
 
       body: StreamBuilder<QuerySnapshot>(
@@ -53,7 +68,6 @@ class AdminFeedbackScreen extends StatelessWidget {
               var item = data[index];
 
               bool isApproved = item['isApproved'] ?? false;
-
               int rating = (item['rating'] ?? 0).toInt();
 
               return FutureBuilder(
@@ -66,7 +80,8 @@ class AdminFeedbackScreen extends StatelessWidget {
                   String userName = "Unknown User";
 
                   if (userSnap.hasData && userSnap.data!.exists) {
-                    userName = userSnap.data!['name'] ?? "User";
+                    userName =
+                        userSnap.data!['name'] ?? "User";
                   }
 
                   return Card(
@@ -74,12 +89,14 @@ class AdminFeedbackScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
                         children: [
 
                           /// USER INFO + STATUS
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
                             children: [
                               "User: $userName"
                                   .text
@@ -112,7 +129,7 @@ class AdminFeedbackScreen extends StatelessWidget {
 
                           10.heightBox,
 
-                          /// ⭐ STAR RATING (UPDATED)
+                          /// ⭐ STAR RATING
                           Row(
                             children: [
                               "Rating: "
@@ -134,12 +151,14 @@ class AdminFeedbackScreen extends StatelessWidget {
                                 .get(),
 
                             builder: (context, productSnap) {
-                              String productName = "Unknown Product";
+                              String productName =
+                                  "Unknown Product";
 
                               if (productSnap.hasData &&
                                   productSnap.data!.exists) {
-                                productName =
-                                    productSnap.data!['p_name'] ?? "Product";
+                                productName = productSnap
+                                        .data!['p_name'] ??
+                                    "Product";
                               }
 
                               return "Product: $productName"
@@ -153,7 +172,8 @@ class AdminFeedbackScreen extends StatelessWidget {
 
                           /// ACTION BUTTONS
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment:
+                                MainAxisAlignment.end,
                             children: [
 
                               /// APPROVE
@@ -186,7 +206,8 @@ class AdminFeedbackScreen extends StatelessWidget {
                                       .doc(item.id)
                                       .delete();
 
-                                  VxToast.show(context, msg: "Deleted");
+                                  VxToast.show(context,
+                                      msg: "Deleted");
                                 },
                                 icon: const Icon(Icons.delete,
                                     color: Colors.red),

@@ -1,170 +1,177 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:projects/admin/views/home_screen/admin_homescreen.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-
-        // HEADER
-        const Text(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
           "Orders",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
 
-        const SizedBox(height: 20),
+        // BACK BUTTON
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            // OPTION 1: balik lang sa previous screen
+            //Get.back();
 
-        // LIST
-        Expanded(
-          child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('orders')
-                .snapshots(),
-            builder: (context, snapshot) {
+            // OPTION 2: diretso dashboard/home (uncomment kung gusto mo)
+             Get.offAll(() => const AdminHomeScreen());
+          },
+        ),
+      ),
 
-              if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
-              }
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
 
-              final orders = snapshot.data!.docs;
+          // LIST
+          Expanded(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('orders')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              if (orders.isEmpty) {
-                return const Center(child: Text("No orders found"));
-              }
+                final orders = snapshot.data!.docs;
 
-              return ListView.builder(
-                itemCount: orders.length,
-                itemBuilder: (context, index) {
-                  final order = orders[index];
-                  final data = order.data() as Map<String, dynamic>;
+                if (orders.isEmpty) {
+                  return const Center(child: Text("No orders found"));
+                }
 
-                  final items = data['orders'] ?? [];
+                return ListView.builder(
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) {
+                    final order = orders[index];
+                    final data = order.data() as Map<String, dynamic>;
 
-                  return Card(
-                    margin: const EdgeInsets.all(10),
-                    child: ExpansionTile(
+                    final items = data['orders'] ?? [];
 
-                      // ORDER HEADER
-                      title: Text("Order Code: ${data['order_code'] ?? ''}"),
-                      subtitle: Text(
-                        "Name: ${data['order_by_name'] ?? ''}\n"
-                        "Total: ₱${(data['total_amount'] as num? ?? 0).toDouble().toStringAsFixed(2)}",
-                      ),
-
-                      children: [
-
-                        // CUSTOMER INFO
-                        ListTile(
-                          title: const Text("Customer Info"),
-                          subtitle: Text(
-                            "Email: ${data['order_by_email'] ?? ''}\n"
-                            "Phone: ${data['order_by_phone'] ?? ''}\n"
-                            "Address: ${data['order_by_address'] ?? ''}",
-                          ),
+                    return Card(
+                      margin: const EdgeInsets.all(10),
+                      child: ExpansionTile(
+                        title: Text(
+                          "Order Code: ${data['order_code'] ?? ''}",
+                        ),
+                        subtitle: Text(
+                          "Name: ${data['order_by_name'] ?? ''}\n"
+                          "Total: ₱${(data['total_amount'] as num? ?? 0).toDouble().toStringAsFixed(2)}",
                         ),
 
-                        const Divider(),
-
-                        // ITEMS LIST
-                        const Text(
-                          "Ordered Items",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-
-                        ...List.generate(items.length, (i) {
-                          final item = items[i];
-
-                          return ListTile(
-                            leading: Image.network(
-                              item['img'] ?? '',
-                              width: 40,
-                              height: 40,
-                              errorBuilder: (c, e, s) =>
-                                  const Icon(Icons.image),
-                            ),
-                            title: Text(item['title'] ?? ''),
+                        children: [
+                          // CUSTOMER INFO
+                          ListTile(
+                            title: const Text("Customer Info"),
                             subtitle: Text(
-                               "Qty: ${item['qty']} | ₱${(item['tprice'] as num? ?? 0).toDouble().toStringAsFixed(2)}"),
-                          );
-                        }),
-
-                        const Divider(),
-
-                        // STATUS + DELETE ROW
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-
-                            // CONFIRMED
-                            _statusButton(
-                              "Confirmed",
-                              data['order_confirmed'] ?? false,
-                              () => _update(order.id, {
-                                'order_confirmed': true
-                              }),
+                              "Email: ${data['order_by_email'] ?? ''}\n"
+                              "Phone: ${data['order_by_phone'] ?? ''}\n"
+                              "Address: ${data['order_by_address'] ?? ''}",
                             ),
+                          ),
 
-                            // SHIPPING
-                            _statusButton(
-                              "Shipping",
-                              data['order_on_delivery'] ?? false,
-                              () => _update(order.id, {
-                                'order_on_delivery': true
-                              }),
-                            ),
+                          const Divider(),
 
-                            // DELIVERED
-                            _statusButton(
-                              "Delivered",
-                              data['order_delivered'] ?? false,
-                              () => _update(order.id, {
-                                'order_delivered': true
-                              }),
-                            ),
+                          const Text(
+                            "Ordered Items",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
 
-                            // 🗑 DELETE BUTTON
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
+                          ...List.generate(items.length, (i) {
+                            final item = items[i];
+
+                            return ListTile(
+                              leading: Image.network(
+                                item['img'] ?? '',
+                                width: 40,
+                                height: 40,
+                                errorBuilder: (c, e, s) =>
+                                    const Icon(Icons.image),
                               ),
-                              onPressed: () {
-                                Get.defaultDialog(
-                                  title: "Delete Order?",
-                                  middleText:
-                                      "This action cannot be undone.",
-                                  textConfirm: "Delete",
-                                  textCancel: "Cancel",
-                                  confirmTextColor: Colors.white,
-                                  onConfirm: () {
-                                    FirebaseFirestore.instance
-                                        .collection('orders')
-                                        .doc(order.id)
-                                        .delete();
+                              title: Text(item['title'] ?? ''),
+                              subtitle: Text(
+                                "Qty: ${item['qty']} | ₱${(item['tprice'] as num? ?? 0).toDouble().toStringAsFixed(2)}",
+                              ),
+                            );
+                          }),
 
-                                    Get.back();
-                                  },
-                                );
-                              },
-                              child: const Text("Delete"),
-                            ),
-                          ],
-                        ),
+                          const Divider(),
 
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
+                          // STATUS BUTTONS
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _statusButton(
+                                "Confirmed",
+                                data['order_confirmed'] ?? false,
+                                () => _update(order.id, {
+                                  'order_confirmed': true,
+                                }),
+                              ),
+                              _statusButton(
+                                "Shipping",
+                                data['order_on_delivery'] ?? false,
+                                () => _update(order.id, {
+                                  'order_on_delivery': true,
+                                }),
+                              ),
+                              _statusButton(
+                                "Delivered",
+                                data['order_delivered'] ?? false,
+                                () => _update(order.id, {
+                                  'order_delivered': true,
+                                }),
+                              ),
+
+                              // DELETE
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                onPressed: () {
+                                  Get.defaultDialog(
+                                    title: "Delete Order?",
+                                    middleText:
+                                        "This action cannot be undone.",
+                                    textConfirm: "Delete",
+                                    textCancel: "Cancel",
+                                    confirmTextColor: Colors.white,
+                                    onConfirm: () {
+                                      FirebaseFirestore.instance
+                                          .collection('orders')
+                                          .doc(order.id)
+                                          .delete();
+
+                                      Get.back();
+                                    },
+                                  );
+                                },
+                                child: const Text("Delete"),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 10),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -176,7 +183,7 @@ class OrdersPage extends StatelessWidget {
         .update(data);
   }
 
-  // STATUS BUTTON UI
+  // STATUS BUTTON
   Widget _statusButton(String text, bool value, VoidCallback onTap) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(

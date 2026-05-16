@@ -88,15 +88,15 @@ const imgPi4 = "assets/images/pi4.jpg";
 const imgPi5 = "assets/images/pi5.jpg";
 const imgpaypal = "assets/images/paypal.png";
 //for sliderList
-const imgSlider1 = "assets/images/slider_1.png";
-const imgSlider2 = "assets/images/slider_2.png";
-const imgSlider3 = "assets/images/slider_3.png";
-const imgSlider4 = "assets/images/slider_4.png";
+const imgSlider1 = "assets/images/wood1.jpg";
+const imgSlider2 = "assets/images/wood2.jpg";
+const imgSlider3 = "assets/images/patadyong.jpg";
+const imgSlider4 = "assets/images/wood.jpg";
 //for secondsliderlist
-const imgSs1 = "assets/images/ss1.jpg";
-const imgSs2 = "assets/images/ss2.jpg";
-const imgSs3 = "assets/images/ss3.jpg";
-const imgSs4 = "assets/images/ss4.jpg";
+const imgSs1 = "assets/images/bamboo.jpg";
+const imgSs2 = "assets/images/knives.jpg";
+const imgSs3 = "assets/images/pot.jpg";
+const imgSs4 = "assets/images/bamboo2.jpg";
 //
 const imgSslcommerz = "assets/images/sslcommerz.png";
 const imgStripe = "assets/images/stripe.png";

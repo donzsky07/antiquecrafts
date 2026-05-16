@@ -110,9 +110,9 @@ class AuthWrapper extends StatelessWidget {
         }
 
         // logged in → Seller Home
-        if (snapshot.hasData) {
+      /*  if (snapshot.hasData) {
           return const SellerHome();
-        }
+        }*/
 
         // not logged in → Signup/Login screen
         return const SellerLoginScreen();

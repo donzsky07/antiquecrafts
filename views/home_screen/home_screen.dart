@@ -6,6 +6,7 @@ import 'package:projects/controllers/home_controller.dart';
 import 'package:projects/services/firestore_services.dart';
 import 'package:projects/views/category_screen/item_details.dart';
 import 'package:projects/views/home_screen/components/featured_category_page.dart';
+import 'package:projects/views/home_screen/components/historical_screen.dart';
 import 'package:projects/widget/home_button.dart';
 import 'package:projects/views/home_screen/components/featured_button.dart';
 import 'package:projects/widget/loading_indicator.dart';
@@ -93,6 +94,7 @@ class HomeScreen extends StatelessWidget {
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
+                    
                     // FIRST SWIPER
                     VxSwiper.builder(
                         aspectRatio: 16 / 9,
@@ -210,6 +212,64 @@ class HomeScreen extends StatelessWidget {
                         ).toList(),
                       ),
                     ),
+
+                  //HISTORICAL BACKGROUND
+                  // HISTORICAL BACKGROUND BUTTON
+20.heightBox,
+
+GestureDetector(
+  onTap: () {
+    Get.to(() => const HistoricalBackgroundScreen());
+  },
+  child: Container(
+    padding: const EdgeInsets.all(15),
+    width: double.infinity,
+    decoration: BoxDecoration(
+      color: Colors.brown.shade400,
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: Row(
+      children: [
+
+        const Icon(
+          Icons.history_edu,
+          color: Colors.white,
+          size: 35,
+        ),
+
+        15.widthBox,
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+
+              Text(
+                "Historical Background",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(height: 5),
+
+              Text(
+                "Learn the story behind Antique Crafts products.",
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 13,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+
 
                     // FEATURED PRODUCTS
                     20.heightBox,
@@ -336,7 +396,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // 3RD SWIPER
+                  /*  // 3RD SWIPER
                     20.heightBox,
                     VxSwiper.builder(
                         aspectRatio: 16 / 9,
@@ -354,7 +414,7 @@ class HomeScreen extends StatelessWidget {
                               .clip(Clip.antiAlias)
                               .margin(const EdgeInsets.symmetric(horizontal: 8))
                               .make();
-                        }),
+                        }),*/
 
                     // ALL PRODUCTS
                     20.heightBox,

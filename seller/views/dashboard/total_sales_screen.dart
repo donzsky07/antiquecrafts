@@ -1,71 +1,7 @@
-/*import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/seller/controllers/total_sales_controller.dart';
-
-class TotalSalesScreen extends StatelessWidget {
-  TotalSalesScreen({super.key});
-
-  final controller = Get.put(TotalSalesController());
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        return Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: controller.orders.length,
-                itemBuilder: (context, index) {
-                  final data = controller.orders[index];
-
-                  return ListTile(
-                    leading: const Icon(Icons.person),
-                    title: Text(data['name']),
-                    subtitle: Text("Status: Paid / Delivered"),
-                    trailing: Text(
-                      "₱ ${data['amount'].toStringAsFixed(2)}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            // 🔥 TOTAL SALES BOTTOM
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                border: Border(top: BorderSide(color: Colors.grey)),
-              ),
-              child: Obx(() => Text(
-                    "TOTAL SALES: ₱ ${controller.totalSales.value.toStringAsFixed(2)}",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-            ),
-          ],
-        );
-      }),
-    );
-  }
-}*/
-
-
-//NEW LINE OF CODES FIXED
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TotalSalesScreen extends StatelessWidget {
   const TotalSalesScreen({super.key});
@@ -73,19 +9,24 @@ class TotalSalesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-  backgroundColor: Colors.grey.shade100,
-appBar: AppBar(
-  title: const Text(
-    "Total Sales",
-    style: TextStyle(color: Colors.white),
-  ),
-  backgroundColor: Colors.grey.shade900,
+    // PESO FORMAT
+    final pesoFormat = NumberFormat("#,##0.00", "en_US");
 
-  iconTheme: const IconThemeData(
-    color: Colors.white, // back arrow color
-  ),
-),
+    return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+
+      appBar: AppBar(
+        title: const Text(
+          "Total Sales",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.grey.shade900,
+
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+      ),
+
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('orders')
@@ -104,7 +45,13 @@ appBar: AppBar(
 
           if (orders.isEmpty) {
             return const Center(
-              child: Text("No sales yet"),
+              child: Text(
+                "No sales yet",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             );
           }
 
@@ -116,14 +63,15 @@ appBar: AppBar(
 
             totalSales +=
                 double.tryParse(
-                  data['total_amount'].toString(),
-                ) ??
-                0;
+                      data['total_amount'].toString(),
+                    ) ??
+                    0;
           }
 
           return Column(
             children: [
 
+              // SALES LIST
               Expanded(
                 child: ListView.builder(
                   itemCount: orders.length,
@@ -135,9 +83,9 @@ appBar: AppBar(
 
                     double orderTotal =
                         double.tryParse(
-                          data['total_amount'].toString(),
-                        ) ??
-                        0;
+                              data['total_amount'].toString(),
+                            ) ??
+                            0;
 
                     // PRODUCT DATA
                     String productName = "Product";
@@ -154,10 +102,14 @@ appBar: AppBar(
                     }
 
                     return Card(
-                      elevation: 2,
+                      elevation: 3,
                       margin: const EdgeInsets.symmetric(
                         horizontal: 10,
                         vertical: 6,
+                      ),
+
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
 
                       child: Padding(
@@ -177,16 +129,17 @@ appBar: AppBar(
                               child: productImage.isNotEmpty
                                   ? Image.network(
                                       productImage,
-                                      width: 65,
-                                      height: 65,
+                                      width: 70,
+                                      height: 70,
                                       fit: BoxFit.cover,
                                     )
                                   : Container(
-                                      width: 65,
-                                      height: 65,
+                                      width: 70,
+                                      height: 70,
                                       color: Colors.grey.shade300,
                                       child: const Icon(
                                         Icons.image,
+                                        size: 35,
                                       ),
                                     ),
                             ),
@@ -211,7 +164,7 @@ appBar: AppBar(
                                     ),
                                   ),
 
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 6),
 
                                   // BUYER
                                   Text(
@@ -222,23 +175,23 @@ appBar: AppBar(
                                     ),
                                   ),
 
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 4),
 
                                   // PAYMENT METHOD
                                   Text(
-                                    "Payment Method: ${data['payment_method'] ?? ''}",
+                                    "Payment Method: ${data['payment_method'] ?? 'N/A'}",
                                   ),
 
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 6),
 
                                   // TOTAL
                                   Text(
-                                 "Total: ₱ ${orderTotal.toStringAsFixed(2)}",
+                                    "Total: ₱ ${pesoFormat.format(orderTotal)}",
                                     style: const TextStyle(
                                       color: Colors.green,
                                       fontWeight:
                                           FontWeight.bold,
-                                      fontSize: 15,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ],
@@ -252,11 +205,20 @@ appBar: AppBar(
                 ),
               ),
 
-              // TOTAL SALES
+              // TOTAL SALES BOTTOM
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                color: Colors.blueGrey.shade50,
+                padding: const EdgeInsets.all(18),
+
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 5,
+                    ),
+                  ],
+                ),
 
                 child: Column(
                   children: [
@@ -265,15 +227,16 @@ appBar: AppBar(
                       "Overall Total Sales",
                       style: TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
 
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 8),
 
                     Text(
-                      "₱ ${totalSales.toStringAsFixed(2)}",
+                      "₱ ${pesoFormat.format(totalSales)}",
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),

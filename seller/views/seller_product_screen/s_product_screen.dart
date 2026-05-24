@@ -202,7 +202,7 @@ class SProductsScreen extends StatelessWidget {
                                 .doc(product.id)
                                 .update({
                               'p_name': nameController.text,
-                              'p_price': double.parse(
+                              'p_price': int.parse(
                                   priceController.text),
                               'p_quantity': int.parse(
                                   qtyController.text),

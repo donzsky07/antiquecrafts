@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/consts/colors.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final dynamic product;
@@ -9,9 +10,11 @@ class ProductDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: white,
       appBar: AppBar(
+    
         title: Text(product['p_name'] ?? "Product Details"),
-        backgroundColor: Colors.green,
+       backgroundColor: softBlueGreen,
       ),
 
       body: SingleChildScrollView(
@@ -82,7 +85,7 @@ class ProductDetailPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                product['history'] ?? "No history available for this product.",
+                product['historical_background'] ?? "No history available for this product.",
                 style: const TextStyle(fontSize: 14),
               ),
             ),
@@ -104,7 +107,7 @@ class ProductDetailPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                product['artist'] ?? "Unknown artist",
+                product['featured_artist'] ?? "Unknown artist",
                 style: const TextStyle(fontSize: 14),
               ),
             ),
@@ -115,7 +118,7 @@ class ProductDetailPage extends StatelessWidget {
             Center(
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                   backgroundColor: softBlueGreen,
                   padding: const EdgeInsets.symmetric(
                       horizontal: 40, vertical: 14),
                 ),
@@ -124,12 +127,12 @@ class ProductDetailPage extends StatelessWidget {
                   Get.snackbar(
                     "Added",
                     "Product added to cart",
-                    backgroundColor: Colors.green,
                     colorText: Colors.white,
                   );
                 },
                 icon: const Icon(Icons.shopping_cart),
                 label: const Text("Add to Cart"),
+             
               ),
             ),
 

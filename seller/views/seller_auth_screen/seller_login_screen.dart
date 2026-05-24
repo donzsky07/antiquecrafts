@@ -30,7 +30,7 @@ class SellerLoginScreen extends StatelessWidget {
               "Seller Login to $appname"
                   .text
                   .fontFamily(bold)
-                  .white
+                  .black
                   .size(22)
                   .make(),
               const SizedBox(height: 15),

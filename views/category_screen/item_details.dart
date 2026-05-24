@@ -19,12 +19,20 @@ class ItemDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-final ProductController controller = Get.find();
+    final ProductController controller = Get.find();
     var feedbackController = Get.put(FeedbackController());
     final textController = TextEditingController();
 
     controller.setProductPrice(int.parse(data['p_price'].toString()));
     controller.listenToStock(data.id);
+
+
+    final price = data['p_price'];
+    final discount = data['product_discount'];
+
+   Text(
+  "₱${price - (price * discount ~/ 100)}",
+);
 
     return PopScope(
       canPop: true,
@@ -393,30 +401,36 @@ Obx(() => feedbackController.isLoading.value
                 title: "Add to cart",
                 onPress: () async {
 
-                  int qty = controller.quantity.value;
-                  int price = int.parse(data['p_price'].toString());
+  int qty = controller.quantity.value;
 
-                  if (qty <= 0) {
-                    VxToast.show(context, msg: "Minimum 1 product is required");
-                    return;
-                  }
+  int price = int.parse(data['p_price'].toString());
+  int discount = int.parse(data['product_discount'].toString());
 
-                  int total = price * qty;
+  if (qty <= 0) {
+    VxToast.show(context, msg: "Minimum 1 product is required");
+    return;
+  }
 
-                  await controller.addToCart(
-                    color: data['p_colors'][controller.colorIndex.value].toString(),
-                    context: context,
-                    vendorID: data['vendor_id'],
-                    img: data['p_imgs'][0],
-                    qty: qty,
-                    sellername: data['p_seller'],
-                    title: data['p_name'],
-                    tprice: total,
-                    productId: data.id,
-                  );
+  // 🔥 COMPUTE DISCOUNTED PRICE
+  int finalPrice = price - (price * discount ~/ 100);
 
-                  Get.to(() => CartScreen());
-                },
+  // 🔥 TOTAL BASED ON DISCOUNTED PRICE
+  int total = finalPrice * qty;
+
+  await controller.addToCart(
+    color: data['p_colors'][controller.colorIndex.value].toString(),
+    context: context,
+    vendorID: data['vendor_id'],
+    img: data['p_imgs'][0],
+    qty: qty,
+    sellername: data['p_seller'],
+    title: data['p_name'],
+    tprice: total,
+    productId: data.id,
+  );
+
+  Get.to(() => CartScreen());
+},
               ),
             )
           ],

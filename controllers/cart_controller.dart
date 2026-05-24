@@ -168,6 +168,7 @@ class CartController extends GetxController {
   bool hasSelected() {
     return selectedItems.values.any((v) => v == true);
   }
+  
 
 }
 

@@ -9,9 +9,3 @@ Widget sLoadingIndicator({circleColor = purpleColor}) {
   );
 }
 
-/*Widget loadingIndicator() {
-  return const CircularProgressIndicator(
-    valueColor: AlwaysStoppedAnimation(purpleColor),
-  );
-
-}*/

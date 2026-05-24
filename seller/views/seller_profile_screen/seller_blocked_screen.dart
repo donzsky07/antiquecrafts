@@ -127,39 +127,89 @@ class _UsersManagementScreenState
                 title: Text(user['name'] ?? "No name"),
                 subtitle: Text(user['email'] ?? ""),
 
-                trailing: blocked
-                    ? IconButton(
-                        icon: const Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                        ),
-                        onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(user['id'])
-                              .update({
-                            'isBlocked': false,
-                            'blockedAt': null,
-                            'blockedReason': null,
-                          });
-                        },
-                      )
-                    : IconButton(
-                        icon: const Icon(
-                          Icons.block,
-                          color: Colors.black,
-                        ),
-                        onPressed: () async {
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(user['id'])
-                              .update({
-                            'isBlocked': true,
-                            'blockedAt': FieldValue.serverTimestamp(),
-                            'blockedReason': 'Blocked by seller',
-                          });
-                        },
-                      ),
+               trailing: Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+
+    /// 🚨 REPORT USER
+    IconButton(
+      icon: const Icon(
+        Icons.report,
+        color: Colors.orange,
+      ),
+
+      onPressed: () async {
+
+        await FirebaseFirestore.instance
+            .collection('reports')
+            .add({
+
+          'reportedUserId': user['id'],
+          'reportedUserName': user['name'],
+          'reason': 'Reported by seller',
+
+          'reportedBy': 'Seller',
+
+          'timestamp':
+              FieldValue.serverTimestamp(),
+        });
+
+        ScaffoldMessenger.of(context)
+            .showSnackBar(
+          const SnackBar(
+            content: Text(
+              "User reported successfully",
+            ),
+          ),
+        );
+      },
+    ),
+
+    /// 🚫 BLOCK / UNBLOCK
+    blocked
+        ? IconButton(
+            icon: const Icon(
+              Icons.check_circle,
+              color: Colors.green,
+            ),
+
+            onPressed: () async {
+
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user['id'])
+                  .update({
+
+                'isBlocked': false,
+                'blockedAt': null,
+                'blockedReason': null,
+              });
+            },
+          )
+        : IconButton(
+            icon: const Icon(
+              Icons.block,
+              color: Colors.black,
+            ),
+
+            onPressed: () async {
+
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user['id'])
+                  .update({
+
+                'isBlocked': true,
+                'blockedAt':
+                    FieldValue.serverTimestamp(),
+
+                'blockedReason':
+                    'Blocked by seller',
+              });
+            },
+          ),
+  ],
+),
               ),
             );
           },

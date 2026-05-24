@@ -4,7 +4,12 @@ import 'package:projects/consts/consts.dart';
 import 'package:projects/consts/lists.dart';
 import 'package:projects/controllers/home_controller.dart';
 import 'package:projects/services/firestore_services.dart';
+import 'package:projects/views/category_screen/flashsale_screen.dart';
 import 'package:projects/views/category_screen/item_details.dart';
+import 'package:projects/views/category_screen/todays_deal.dart';
+import 'package:projects/views/category_screen/top_brand.dart';
+import 'package:projects/views/category_screen/top_categories.dart';
+import 'package:projects/views/category_screen/top_seller.dart';
 import 'package:projects/views/home_screen/components/featured_category_page.dart';
 import 'package:projects/views/home_screen/components/historical_screen.dart';
 import 'package:projects/widget/home_button.dart';
@@ -115,19 +120,29 @@ class HomeScreen extends StatelessWidget {
                         }),
                     10.heightBox,
 
-                    // DEALS BUTTONS
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        2,
-                        (index) => homeButton(
-                          height: context.screenHeight * 0.15,
-                          width: context.screenWidth / 2.5,
-                          icon: index == 0 ? icTodaysDeal : icFlashDeal,
-                          title: index == 0 ? todayDeal : flashsale,
-                        ),
-                      ),
-                    ),
+                  Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: List.generate(
+    2,
+    (index) => InkWell(
+      onTap: () {
+        if (index == 0) {
+     
+          Get.to(() => TodaysDealScreen());
+        } else {
+       
+           Get.to(() => FlashSaleScreen());
+        }
+      },
+      child: homeButton(
+        height: context.screenHeight * 0.15,
+        width: context.screenWidth / 2.5,
+        icon: index == 0 ? icTodaysDeal : icFlashDeal,
+        title: index == 0 ? todayDeal : flashsale,
+      ),
+    ),
+  ),
+),
 
                     // SECOND SWIPER
                     10.heightBox,
@@ -149,28 +164,59 @@ class HomeScreen extends StatelessWidget {
                               .make();
                         }),
 
-                    // CATEGORY BUTTONS
-                    10.heightBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(
-                        3,
-                        (index) => homeButton(
-                          height: context.screenHeight * 0.15,
-                          width: context.screenWidth / 3.5,
-                          icon: index == 0
-                              ? icTopCategories
-                              : index == 1
-                                  ? icBrands
-                                  : icTopSeller,
-                          title: index == 0
-                              ? topCategories
-                              : index == 1
-                                  ? topBrand
-                                  : topSellers,
-                        ),
-                      ),
-                    ),
+                   // CATEGORY BUTTONS
+10.heightBox,
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: List.generate(
+    3,
+    (index) => InkWell(
+     onTap: () {
+  if (index == 0) {
+   Navigator.push(
+  context,
+  MaterialPageRoute(
+      builder: (context) => const TopCategoriesScreen(
+        categoryName: "Handwoven",
+      ),
+    ),
+);
+  } else if (index == 1) {Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => const TopBrandScreen(
+      brandName: "TechCare",
+    ),
+  ),
+);
+  } else {Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => TopSellerScreen(
+      sellerId: "rsKYOv84Xmdufari9kAMxX7IChR2",
+      sellerName: "TechCare",
+    ),
+  ),
+);
+  }
+},
+      child: homeButton(
+        height: context.screenHeight * 0.15,
+        width: context.screenWidth / 3.5,
+        icon: index == 0
+            ? icTopCategories
+            : index == 1
+                ? icBrands
+                : icTopSeller,
+        title: index == 0
+            ? topCategories
+            : index == 1
+                ? topBrand
+                : topSellers,
+      ),
+    ),
+  ),
+),
 
                     // FEATURED CATEGORIES
 

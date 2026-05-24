@@ -22,5 +22,7 @@ const productsCollection = "products";
 const chatsCollection = "chats";
 const messageCollection = "message";
 const ordersCollection = "orders";
+const usersCollection = "users";
 
 const ratingsCollection = "ratings";
+const reportsCollection = "reports";

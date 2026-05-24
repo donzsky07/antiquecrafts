@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget {
               "Log in to $appname"
                   .text
                   .fontFamily(bold)
-                  .white
+                  .black
                   .size(22)
                   .make(),
 
